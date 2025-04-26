@@ -1,0 +1,208 @@
+---
+title: "Bioinformatics HW 6"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(impute)
+#setwd("/Users/ryangallagher/Desktop/MedicalCollegeofWisconsin/Bioinformatics/HW6")
+```
+
+## 1) Use the dataset "120217_cellCycleData.txt" and perform KNN imputation. Use only the alpha-factor synchronized data (the 6th to 23rd columns) in the dataset.
+
+```{r}
+dat = read.table('~/Desktop/MedicalCollegeofWisconsin/Bioinformatics/HW6/120217_W7_cellCycleData.txt', sep='\t', header=TRUE)
+labs = dat %>% select(1, length(dat)) %>% rename('gene_name' = row.names)
+dat = dat %>% select(c(6:23))
+
+dat.knn = impute.knn(as.matrix(dat))
+dat.df = as.data.frame(dat.knn$data)
+```
+
+### a) Project the 800 genes onto two-dimensional space using PCA or MDS respectively. Label the genes of different functional annotation ("G1", "S", "S/G2", "G2/M", "M/G1") with different colors (col=1\~5) and text symbols (1\~5)
+
+```{r}
+#PCA results
+dat.pca = prcomp(dat.df, scale. = TRUE)
+dat.pca = as.data.frame(dat.pca$x[,1:2])
+dat.pca = cbind(labs, dat.pca)
+
+#MDS results
+dat.dist = dist(dat.knn$data, method = 'euclidean')
+dat.mds = cmdscale(dat.dist, k=2)
+dat.mds = as.data.frame(dat.mds)
+dat.mds = cbind(labs, dat.mds)
+names(dat.mds) = c("gene_name", "peak", 'Dim1', 'Dim2')
+
+```
+
+```{r}
+## PCA Plots
+ggplot(dat.pca, aes(x = PC1, y = PC2, color=peak)) +
+  geom_point() +
+  xlab("Principal Component 1") +
+  ylab("Principal Component 2") +
+  ggtitle("PCA of Genes") + 
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+```{r}
+### MDS Plots
+
+ggplot(dat.mds, aes(x = Dim1, y = Dim2, color=peak)) +
+  geom_point() +
+  xlab("Dimension 1") +
+  ylab("Dimension 2") +
+  ggtitle("MDS of Genes") +
+  theme(plot.title = element_text(hjust=0.5))
+
+```
+
+### b) Perform hierarchical clustering (K=5) and K-means (K=5). Compare clustering result from each algorithm to the truth given in the last column of the data ("G1", "S1", ...). Calculate adjusted Rand indexes ("adjustedRandIndex" in "mclust" package) for the comparisons. Which is better? Summarize what you observe.
+
+I'm a little confused at how the indexes are related to the labeling from our orginial dataset. I would assume that theyre alphabetical: G1=1, G2/M=2, M/G1=3, S=4, S/G2=5 - since this is how theyre orgnaized in this provided dataset. However, I'm getting a RandIndex near 0 for both methods. I can't tell if it's a result of the algorithms, or I'm misunderstanding the index to label relationship.
+
+```{r}
+set.seed(218)
+hc = hclust(dat.dist, method = 'complete')
+clusters = cutree(hc, k=5)
+cluster_names = setNames(unique(labs$peak), 1:5)
+named_clusters = cluster_names[as.character(clusters)]
+
+kmeans_result = kmeans(dat.df, centers = 5, nstart = 25)
+named_clisters2 = cluster_names[as.character(kmeans_result$cluster)]
+
+dat.df2 = cbind(labs, dat.df)
+dat.df2$cluster_pred = named_clusters
+dat.df2$kmeans_pred = named_clisters2
+
+library(mclust)
+#clustering method
+adjustedRandIndex(dat.df2$peak, dat.df2$cluster_pred)
+
+#kmeans method
+adjustedRandIndex(dat.df2$peak, dat.df2$kmeans_pred)
+
+```
+
+### c) Plot the heatmap of cluster patterns from each method
+
+```{r}
+library(pheatmap)
+#heatmap(as.matrix(dat.knn$data), Rowv = as.dendrogram(hc), Colv = NA, scale='row')
+pheatmap(dat.knn$data, cluster_rows = hc, scale='row')
+
+ordered_km = dat.knn$data[order(kmeans_result$cluster), ]
+pheatmap(ordered_km, scale='row')
+
+
+```
+
+
+## 2) In this problem we are going to practice pathway analysis. Let's re-use the DE analysis results from HW4 1e. For pathway database, load in the GO gene set from file 'c5.all.v2.5.symbols.gmt'. In order to convert the identifier in Golub_Merge to gene symbol, you need to download the package 'hu6800' from Bioconductor. Use function 'hu6800SYMBOL' to achieve this goal.
+
+### a) How many gene sets are available from 'c5.all.v2.5.symbols.gmt'? Overlap genes available in this file and Golub_Merge which is used in HW4. How many genes are overlapped? Update the gene sets by dropping genes that do not appear in Golub_Merge.
+
+```{r, results='hide'}
+library(golubEsets)
+library(GSA)
+library(hu6800.db)
+
+data(Golub_Merge)
+golub = Golub_Merge
+pheno_data = pData(Golub_Merge)
+expn = exprs(golub)
+
+gmt_file = GSA.read.gmt('/Users/ryangallagher/Desktop/MedicalCollegeofWisconsin/Bioinformatics/HW6/c5_all_v2_5_symbols.gmt')
+
+## Get names
+feature_id = featureNames(golub)
+gene_symbols = mget(feature_id, hu6800SYMBOL, ifnotfound=NA)
+gene_symbols_df = data.frame(ProbeID = names(gene_symbols), 
+                              GeneSymbol = unlist(gene_symbols), 
+                              stringsAsFactors = FALSE)
+
+## Get only genes in .gmt that are in golub
+gmt_names = as.data.frame(unlist(gmt_file$genesets))
+colnames(gmt_names) = c('names')
+
+gmt_filtered = gmt_names %>%
+  filter(names %in% gene_symbols_df$GeneSymbol)
+
+## relist them
+filtered_genesets = lapply(gmt_file$genesets, function(geneset) {
+  intersect(geneset, gene_symbols_df$GeneSymbol)
+})
+
+new_gmt = gmt_file 
+new_gmt$genesets = filtered_genesets
+```
+
+```{r}
+## Output
+print(paste("There are", length(gmt_file$genesets), "gene sets in the .gmt file"))
+
+print(paste("There are", nrow(unique(gmt_filtered)), "overlap genes"))
+```
+
+### b) Filter out any gene sets that contain less than 5 genes or more than 200 genes. How many gene sets are left?
+
+```{r}
+# Filter out gene sets with less than 5 or more than 200 genes
+new_gmt$genesets = Filter(function(geneset) {
+  len = length(geneset)
+  len >= 5 && len <= 200
+}, new_gmt$genesets)
+
+print(paste(length(new_gmt$genesets), 'left after filtering.'))
+```
+
+### c) Perform Fisher's exact test for each gene set on the DE genes derived in HW4 1(e). Pay attention to the background gene that you use. How many pathways are significant? List the top 10 pathways. Comment on the results
+
+```{r}
+## Find DE genes like in Hw4
+library(golubEsets)
+library(limma)
+exprs_data = exprs(Golub_Merge)
+class_labels = pData(Golub_Merge)$ALL.AML
+
+design = model.matrix(~class_labels)
+fit = lmFit(exprs_data, design)
+fit = eBayes(fit)
+tab = topTable(fit, coef=2, number=Inf, p.value=0.01)
+
+## Identify DE gene names
+tab$name = row.names(tab)
+tab$gene_names = unlist(mget(tab$name, hu6800SYMBOL, ifnotfound=NA))
+
+```
+
+```{r}
+tab = tab %>% mutate(significant = ifelse(P.Value < 0.5,1,0)) %>% filter(gene_names %in% gene_symbols_df$GeneSymbol)
+
+results = lapply(new_gmt$genesets, function(gene_set) {
+  #build contigency table elements
+  significant_in_set = sum(gene_set %in% tab$name[tab$significant])
+  significant_not_in_set = sum(!gene_set %in% tab$name[tab$significant])
+  not_significant_in_set = sum(gene_set %in% tab$name[!tab$significant])
+  not_significant_not_in_set = sum(!gene_set %in% tab$name[!tab$significant])
+
+  matrix = matrix(c(significant_in_set, significant_not_in_set, 
+                     not_significant_in_set, not_significant_not_in_set), 
+                   nrow = 2, byrow = TRUE)
+
+  fisher.test(matrix)$p.value
+})
+
+p_values = unlist(results)
+significant_gene_sets = which(p_values < 0.05)
+
+```
+
+A little confused on the values for this table. I imagine we'd extract a p_value based on the FDR from the golub data, then compare it to the gene set in someway via a 2x2 table.

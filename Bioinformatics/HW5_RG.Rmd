@@ -1,0 +1,302 @@
+---
+title: "Bioinformatics HW5"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(golubEsets)
+library(tidyverse)
+library(gtsummary)
+library(FactoMineR)
+library(factoextra)
+```
+
+## Use the same data set 'Golub_Merge' as from HW 4.
+
+### a) Perform gene selection by selecting the top 50 genes with the largest t-statistics comparing ALL and AML in *all 72 samples.* With the 50 selected genes, use the first 34 samples as the training set to construct a prediction model and test on the remaining 38 samples. What is the error rate (confusion matrix) for LDA, KNN, random forest, and SVM methods? Which is better?
+
+```{r get golub}
+data(Golub_Merge)
+dat = Golub_Merge
+
+pheno_data = pData(Golub_Merge)
+exprs_data = exprs(Golub_Merge)
+class = pheno_data$ALL.AML
+
+t_stats = apply(exprs_data, 1, function(gene_expression) {
+    all_group = gene_expression[class == "ALL"]
+    aml_group = gene_expression[class == "AML"]
+    
+    mean_diff = mean(all_group) - mean(aml_group)
+    pooled_sd = sqrt(((var(all_group) / length(all_group)) + (var(aml_group) / length(aml_group))))
+    t_stat = mean_diff / pooled_sd
+    return(t_stat)
+})
+
+top_genes_indices = order(abs(t_stats), decreasing = TRUE)[1:50]
+selected_genes = rownames(exprs_data)[top_genes_indices]
+```
+
+```{r split data}
+# Split data
+train_data = exprs_data[selected_genes, 1:34]
+train_data = t(train_data)
+train_labels = class[1:34]
+
+test_data = exprs_data[selected_genes, 35:72]
+test_data = t(test_data)
+test_labels = class[35:72]
+
+```
+
+```{r ML packages, include=FALSE}
+library(MASS)
+library(class)
+library(randomForest)
+library(e1071)
+set.seed(199)
+```
+
+```{r models}
+#LDA
+lda_model = lda(train_data, train_labels)
+lda_pred = predict(lda_model, test_data)$class
+```
+
+```{r}
+#KNN
+# Range of k values to try
+k_values = 1:20
+cv_errors = numeric(length(k_values))
+
+# Perform cross-validation for each k
+for (i in seq_along(k_values)) {
+  cv_results = knn.cv(train = train_data, cl = train_labels, k = k_values[i])
+  cv_errors[i] = sum(cv_results != train_labels) / length(train_labels)
+}
+
+# Find the best k value
+best_k = k_values[which.min(cv_errors)]
+
+# Now train and test using the best k value
+knn_pred_cv = knn_pred = knn(train = train_data, test = test_data, cl = train_labels, k = best_k)
+knn_pred = knn(train = train_data, test = test_data, cl = train_labels, k = 3)
+```
+
+```{r}
+# Random Forest
+rf_model = randomForest(train_data, as.factor(train_labels), ntree = 100)
+rf_pred = predict(rf_model, test_data)
+```
+
+```{r}
+# SVM
+svm_model = svm(train_data, train_labels, type = 'C-classification', kernel = 'linear')
+svm_pred = predict(svm_model, test_data)
+```
+
+```{r}
+# Evaluate models
+# Confusion matrices and error rates
+conf_matrix_lda = table(Predicted = lda_pred, Actual = test_labels)
+conf_matrix_knn = table(Predicted = knn_pred, Actual = test_labels)
+conf_matrix_knn_cv = table(Predicted = knn_pred_cv, Actual = test_labels)
+conf_matrix_rf = table(Predicted = rf_pred, Actual = test_labels)
+conf_matrix_svm = table(Predicted = svm_pred, Actual = test_labels)
+
+error_rate_lda = 1 - sum(diag(conf_matrix_lda)) / sum(conf_matrix_lda)
+error_rate_knn = 1 - sum(diag(conf_matrix_knn)) / sum(conf_matrix_knn)
+error_rate_knn_cv = 1 - sum(diag(conf_matrix_knn_cv)) / sum(conf_matrix_knn_cv)
+error_rate_rf = 1 - sum(diag(conf_matrix_rf)) / sum(conf_matrix_rf)
+error_rate_svm = 1 - sum(diag(conf_matrix_svm)) / sum(conf_matrix_svm)
+
+# Compare error rates
+error_rates = c(LDA = error_rate_lda, KNN = error_rate_knn, KNN_cv = error_rate_knn_cv, RF = error_rate_rf, SVM = error_rate_svm)
+error_rates
+```
+It appears that the method with the lowest test error rate is KNN with cross-validation.
+
+### a) Perform gene selection by selecting the top 50 genes with the largest t-statistics comparing ALL and AML in *the first 34 samples.* With the 50 selected genes, use the first 34 samples as the training set to construct a prediction model and test on the remaining 38 samples. What is the error rate (confusion matrix) for LDA, KNN, random forest, and SVM methods? Which is better?
+
+```{r}
+data(Golub_Merge)
+dat = Golub_Merge
+
+pheno_data = pData(Golub_Merge)[1:34, ]
+exprs_data = exprs(Golub_Merge)[, 1:34]
+class = pheno_data$ALL.AML
+
+t_stats = apply(exprs_data, 1, function(gene_expression) {
+    all_group = gene_expression[class == "ALL"]
+    aml_group = gene_expression[class == "AML"]
+    
+    mean_diff = mean(all_group) - mean(aml_group)
+    pooled_sd = sqrt(((var(all_group) / length(all_group)) + (var(aml_group) / length(aml_group))))
+    t_stat = mean_diff / pooled_sd
+    return(t_stat)
+})
+
+
+top_genes_indices = order(abs(t_stats), decreasing = TRUE)[1:50]
+selected_genes = rownames(exprs_data)[top_genes_indices]
+```
+
+```{r  split data2}
+pheno_data = pData(Golub_Merge)
+exprs_data = exprs(Golub_Merge)
+class = pheno_data$ALL.AML
+
+# Split data
+train_data = exprs_data[selected_genes, 1:34]
+train_data = t(train_data)
+train_labels = class[1:34]
+
+test_data = exprs_data[selected_genes, 35:72]
+test_data = t(test_data)
+test_labels = class[35:72]
+
+```
+
+```{r models2}
+#LDA
+lda_model = lda(train_data, train_labels)
+lda_pred = predict(lda_model, test_data)$class
+```
+
+```{r}
+#KNN
+# Range of k values to try
+k_values = 1:20
+cv_errors = numeric(length(k_values))
+
+# Perform cross-validation for each k
+for (i in seq_along(k_values)) {
+  cv_results = knn.cv(train = train_data, cl = train_labels, k = k_values[i])
+  cv_errors[i] = sum(cv_results != train_labels) / length(train_labels)
+}
+
+# Find the best k value
+best_k = k_values[which.min(cv_errors)]
+
+# Now train and test using the best k value
+knn_pred_cv = knn_pred = knn(train = train_data, test = test_data, cl = train_labels, k = best_k)
+knn_pred = knn(train = train_data, test = test_data, cl = train_labels, k = 3)
+```
+
+```{r}
+# Random Forest
+rf_model = randomForest(train_data, as.factor(train_labels), ntree = 100)
+rf_pred = predict(rf_model, test_data)
+```
+
+```{r}
+# SVM
+svm_model = svm(train_data, train_labels, type = 'C-classification', kernel = 'linear')
+svm_pred = predict(svm_model, test_data)
+```
+
+```{r}
+# Evaluate models
+# Confusion matrices and error rates
+conf_matrix_lda = table(Predicted = lda_pred, Actual = test_labels)
+conf_matrix_knn = table(Predicted = knn_pred, Actual = test_labels)
+conf_matrix_knn_cv = table(Predicted = knn_pred_cv, Actual = test_labels)
+conf_matrix_rf = table(Predicted = rf_pred, Actual = test_labels)
+conf_matrix_svm = table(Predicted = svm_pred, Actual = test_labels)
+
+error_rate_lda = 1 - sum(diag(conf_matrix_lda)) / sum(conf_matrix_lda)
+error_rate_knn = 1 - sum(diag(conf_matrix_knn)) / sum(conf_matrix_knn)
+error_rate_knn_cv = 1 - sum(diag(conf_matrix_knn_cv)) / sum(conf_matrix_knn_cv)
+error_rate_rf = 1 - sum(diag(conf_matrix_rf)) / sum(conf_matrix_rf)
+error_rate_svm = 1 - sum(diag(conf_matrix_svm)) / sum(conf_matrix_svm)
+
+# Compare error rates
+error_rates = c(LDA = error_rate_lda, KNN = error_rate_knn, KNN_cv = error_rate_knn_cv, RF = error_rate_rf, SVM = error_rate_svm)
+error_rates
+```
+Now, Random Forest performed the best and all test MSE are decreased from part (a).
+
+### (c) Compare the results in (a) and (b), which is more appropriate? Why?
+
+We find in part (a) that KNN is our best classifier, with a distinct difference from the other methods. In part (b), however, we find that Random Forest is our best method, though all methods are relatively reliable. This leads me to think that the method from part (b) is the most appropriate. Perhaps this method protects against overfitting, and so our models are more effictive in the test-cases here. 
+
+### (d) Instead of pre-specified 34 training and 38 test samples, repeat (b) but use 10-fold cross validation for all 72 samples instead. 
+
+```{r get golub3}
+data(Golub_Merge)
+dat = Golub_Merge
+
+pheno_data = pData(Golub_Merge)
+exprs_data = exprs(Golub_Merge)
+class = pheno_data$ALL.AML
+
+t_stats = apply(exprs_data, 1, function(gene_expression) {
+    all_group = gene_expression[class == "ALL"]
+    aml_group = gene_expression[class == "AML"]
+    
+    mean_diff = mean(all_group) - mean(aml_group)
+    pooled_sd = sqrt(((var(all_group) / length(all_group)) + (var(aml_group) / length(aml_group))))
+    t_stat = mean_diff / pooled_sd
+    return(t_stat)
+})
+
+top_genes_indices = order(abs(t_stats), decreasing = TRUE)[1:50]
+selected_genes = rownames(exprs_data)[top_genes_indices]
+```
+
+```{r split data3}
+# Split data
+library(caret)
+dat = t(exprs_data[selected_genes,])
+control = trainControl(method = "cv", number = 10)
+labels = class
+```
+
+```{r cv models}
+lda_model_cv <- train(x = t(exprs_data[selected_genes, ]),
+                      y = class,
+                      method = "lda",
+                      trControl = control)
+
+knn_model_cv <- train(x = t(exprs_data[selected_genes, ]),
+                      y = class,
+                      method = "knn",
+                      tuneGrid = expand.grid(k = 3),
+                      trControl = control)
+
+rf_model_cv <- train(x = t(exprs_data[selected_genes, ]),
+                     y = as.factor(class),
+                     method = "rf",
+                     trControl = control)
+
+svm_model_cv <- train(x = t(exprs_data[selected_genes, ]),
+                      y = class,
+                      method = "svmLinear",
+                      trControl = control)
+
+```
+
+```{r cverrors}
+# Extracting average error rates from cross-validated models
+error_rate_lda_cv = lda_model_cv$results$Accuracy
+error_rate_knn_cv = knn_model_cv$results$Accuracy
+error_rate_rf_cv = rf_model_cv$results$Accuracy
+error_rate_svm_cv = svm_model_cv$results$Accuracy
+
+# Calculate error rates as 1 - Accuracy
+error_rate_lda_cv = 1 - error_rate_lda_cv
+error_rate_knn_cv = 1 - error_rate_knn_cv
+error_rate_rf_cv = 1 - error_rate_rf_cv
+error_rate_svm_cv = 1 - error_rate_svm_cv
+
+# Compare error rates
+error_rates_cv = c(LDA = error_rate_lda_cv, KNN = error_rate_knn_cv, RF = error_rate_rf_cv, SVM = error_rate_svm_cv)
+error_rates_cv
+
+```
+This time, we find that SVM is our best classifier.

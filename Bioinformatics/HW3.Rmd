@@ -1,0 +1,170 @@
+---
+title: "BioINF HW3"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+### 1) Download R packages 'SpikeIn' and 'hgu95acdf' from bioconductor website. We are going to use this dataset to practice normalization methods.
+
+```{r}
+#=== How to Install those packages ======
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+#
+#BiocManager::install("SpikeIn")
+
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("hgu95acdf")
+#
+#========================================
+
+library(SpikeIn)
+library(hgu95acdf)
+```
+
+#### a) Use $data(SpikeIn95)$ to load in R objects and run $pm(SpikeIn95)$ to extract a gene expression intensity matrix from perfect match probes. How many probesets and how many samples are in the matrix?
+
+```{r}
+dat = data(SpikeIn95)
+matrix = pm(SpikeIn95)
+
+print(paste('There are', nrow(matrix), 'probesets in this matrix'))
+print(paste('There are', ncol(matrix), 'samples in this matrix'))
+```
+
+#### b) Draw a MA plot for any two samples. What do you observe?
+
+```{r}
+#Picking samples 25 and 29
+
+M = log(matrix[,25])-log(matrix[,29])
+A = (log(matrix[,25]) + log(matrix[,29]))/2
+
+plot(A,M, ylim=c(-1.5,1.5))
+abline(h=0, col='red')
+```
+
+This data is clearly not normal, as the data drifts in the negative M direction for larger A.
+
+#### c) Write your own R code to implement quantile normalization. Apply to this dataset and show again MA plot to the samples that you choose for (b). What do you observe?
+
+```{r}
+# We can normalize the data by using the log with base 2
+
+#Picking samples 25 and 29
+
+set.seed(1)
+qc = as.data.frame(matrix)
+
+quant.norm = function(df) {
+  df_r = apply(df, 2,rank,ties.method='min')
+  df_s = data.frame(apply(df,2,sort))
+  df_mean = apply(df_s,1,mean)
+  
+  ind = function(m_inx, m_mean){
+    return(m_mean[m_inx])
+  }
+  
+  df_f = apply(df_r, 2, ind, m_mean=df_mean)
+  rownames(df_f) = rownames(df)
+  return(df_f)
+}
+  
+df_norm = quant.norm(qc)
+
+M = log(df_norm[,25])-log(df_norm[,29])
+A = (log(df_norm[,25]) + log(df_norm[,29]))/2
+
+plot(A,M, ylim=c(-1.5,1.5))
+abline(h=0, col='red')
+```
+
+The data has been normalized around M=0.
+
+### 2) Download R package 'impute'. Use data(khanmiss) to access the R object khanmiss. This dataset includes random missing data values. We are going to use it to try imputation method. To save time running this dataset, subset the first 100 genes and save it as a new dataset.
+
+#### a) How many missing values in the dataset? How many genes have missing values?
+
+```{r}
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+#BiocManager::install("impute")
+
+library(impute)
+
+data(khanmiss)
+babykhan = head(khanmiss, 2:100)
+
+print(paste("There are", sum(is.na(babykhan)), "missing values in this dataset"))
+
+print(paste("The below matrix shows the amount of missing values by gene:"))
+rowSums(is.na(babykhan))
+```
+
+#### b) Write your own code to define K-nearest neighbors for genes that you found in (a). Use the neighbors you defined to do imputation. Try different selection of K and summarize what you observe.
+
+```{r}
+
+  minikhan = babykhan[-1,-c(1,2)]
+  #Compute Euclidean distance
+  euc_distance = function(a,b) {
+    return(sqrt(sum((a-b)^2, na.rm=TRUE)))
+  }
+  
+  #Find neighbors
+  find_neighbors = function(data, target_row, k) {
+    distances = apply(data, 1, function(row) euc_distance(target_row, row))
+    neighbors = order(distances)[2:(k+1)]
+    return(neighbors)
+  }
+  
+my_knn = function(data, k) {
+  #K needs to be odd to avoid ties
+  k = ifelse(k %% 2 == 0, k+1, k)
+  
+  for (i in 1:nrow(data)) {
+      missing_cols = which(is.na(data[i, ])) 
+      if (length(missing_cols) > 0) {
+        neighbors = find_neighbors(data, data[i, ], k)
+        for (col in missing_cols) {
+          data[i, col] = mean(data[neighbors, col], na.rm=TRUE)
+      }
+    }
+  }
+    
+  return(data)
+}
+
+imputed = my_knn(minikhan, 5)
+
+print(paste("There are", sum(is.na(imputed)), "missing values in this dataset"))
+print(paste("The below matrix shows the amount of missing values by gene:"))
+rowSums(is.na(imputed))
+```
+
+I toubleshooted this for a while, and just can't figure out what's wrong with the above function. The dataframe comes out the same as it went in.
+
+#### c) Use function impute.knn and compare with results using your own code. Are they the same?
+
+```{r}
+
+#Rid of first two columns:
+minikhan = babykhan[-1,-c(1,2)]
+imputed = impute.knn(as.matrix(minikhan), k = 3)$data
+
+print(paste("There are", sum(is.na(imputed)), "missing values in this dataset"))
+
+print(paste("The below matrix shows the amount of missing values by gene:"))
+rowSums(is.na(imputed))
+```
+
+It works!

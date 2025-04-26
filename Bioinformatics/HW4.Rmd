@@ -1,0 +1,292 @@
+---
+title: "Bioinformatics HW 4"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1) Download and read in a data package "golubEsets" into R. Read in the dataset "Golub_Merge". This is a leukemia dataset.
+
+```{r, include=FALSE}
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("golubEsets")
+library(golubEsets)
+library(tidyverse)
+library(gtsummary)
+library(FactoMineR)
+library(factoextra)
+data(Golub_Merge)
+dat = Golub_Merge
+```
+
+### a) How many genes and how many samples are in the data set? How many acute lymphoblastic leukemia (ALL) patients and how many acute myeloid leukemia (ALM) patients in the dataset? How many male, female, and unknown patients?
+
+
+* There are `r nrow(dat)` genes in the dataset. \
+* There are `r ncol(dat)` samples in the dataset. \
+* There are 47 patients with acute lymphoblastic leukemia (ALL) \
+* There are 25 patients with acute myeloid leukemia (AML) \
+* Gender is distributed as: `r table(Golub_Merge$Gender)` \
++ With 'NA' accounting for `r sum(is.na(Golub_Merge$Gender))`
+
+```{r}
+table(Golub_Merge$Gender)
+```
+### b) Use all genes and do dimension redution PCA. Color ALL and AML patients on the plot.
+
+```{r}
+pheno_data = pData(Golub_Merge)
+expression_mat = exprs(Golub_Merge)
+
+pca = prcomp(t(expression_mat), scale.=TRUE)
+
+pca_dat = data.frame(PC1 = pca$x[,1],
+                     PC2 = pca$x[,2],
+                     Type = factor(pheno_data$ALL.AML))
+
+ggplot(pca_dat, aes(x=PC1, PC2, color=Type)) + geom_point() +
+  theme_minimal() + 
+  labs(title="PCA Plot", x="PC1", y="PC2", color="Type") +
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+### c) Use "samr" package in R to detect differentially expressed genes (use random seed 12345) between ALL and AML patients. You will have the read the document from the package to learn how to use the function correctly. How many ALL up-regulated and down-regulated genes are identified when FDR threshold is 5%? How about when FDR is 1%? List the top 10 up-regulated and down-regulared DE genes respectively. Plot a heatmap for identified DE genes at 1% threshold. 
+
+```{r, results='hide'}
+#install.packages('samr')
+library(samr)
+set.seed(12345)
+class_vec = factor(pData(Golub_Merge)$ALL.AML)
+
+sam_dat = list(x = expression_mat,
+               y = class_vec,
+               logged2=TRUE)
+
+samr_o = samr(data = sam_dat,
+              resp.type = "Two class unpaired",
+              nperms = 100)
+
+```
+
+Finding how many ALL up-regulated and down-regulated genes are identified when FDR threshold is 5%:
+```{r, results='hide'}
+delta.table = samr.compute.delta.table(samr_o)
+
+### use delta.table to find which delta yields median FDR of 0.01 or 0.05
+
+#delta = 0.88
+siggenes.table = samr.compute.siggenes.table(samr_o, del=0.88, sam_dat, delta.table)
+
+low_tab = siggenes.table$genes.lo
+low_tab = low_tab[as.numeric(low_tab[,8])<1,]
+
+high_tab = siggenes.table$genes.up
+high_tab = high_tab[as.numeric(high_tab[,8])<1,]
+
+up = nrow(high_tab)
+lo = nrow(low_tab)
+```
+There are `r up` up-regulated genes for 5% threshold. \
+There are `r lo` down-regulated genes for 5% threshold. 
+
+Top 10 up_regulated
+```{r}
+head(as.data.frame(high_tab)$`Gene ID`, 10)
+```
+Top 10 down-regulared
+```{r}
+head(as.data.frame(low_tab)$`Gene ID`, 10)
+```
+
+
+```{r, results='hide'}
+delta.table = samr.compute.delta.table(samr_o)
+siggenes.table = samr.compute.siggenes.table(samr_o, del=1.23, sam_dat, delta.table)
+
+low_tab = siggenes.table$genes.lo
+low_tab = low_tab[as.numeric(low_tab[,8])<1,]
+
+high_tab = siggenes.table$genes.up
+high_tab = high_tab[as.numeric(high_tab[,8])<1,]
+
+up = nrow(high_tab)
+lo = nrow(low_tab)
+```
+There are `r up` up-regulated genes for 1% threshold. \
+There are `r lo` down-regulated genes for 1% threshold. 
+
+Top 10 up_regulated
+```{r}
+head(as.data.frame(high_tab)$`Gene ID`, 10)
+```
+Top 10 down-regulared
+```{r}
+head(as.data.frame(low_tab)$`Gene ID`, 10)
+```
+
+```{r}
+heatmap.data=sam_dat$x[as.numeric(c(high_tab[,1], low_tab[,1])),]
+heatmap(heatmap.data, Rowv=NA, Colv=NA) 
+B=16
+heatmap(heatmap.data, Rowv=NA, Colv=NA, col= rgb(c(rep(0, B), (0:B)/B), c((B:0)/16, rep(0, B)), rep(0, 2*B+1)))  
+
+
+```
+
+### d) Use t-test with Benjamini-Hochberg correction to detect differentially expressed genes under FDR=1%. How many differentially expressed genes are detected? Also plot a heatmap for these DE genes. How does the result compare to (c) and which method is more powerful?
+
+```{r}
+
+low_tab = siggenes.table$genes.lo
+low_tab = as.data.frame(low_tab) %>% 
+  mutate(q = as.numeric(`q-value(%)`)) %>% 
+           arrange(q) %>%
+  mutate(benj = p.adjust(q, 'hochberg'))
+  
+low_tab = low_tab[as.numeric(low_tab[,10])<1,]
+
+high_tab = siggenes.table$genes.up
+high_tab = as.data.frame(high_tab) %>% 
+  mutate(q = as.numeric(`q-value(%)`)) %>% 
+           arrange(q) %>%
+  mutate(benj = p.adjust(q, 'hochberg'))  
+
+high_tab = high_tab[as.numeric(high_tab[,10])<1,]
+
+up = nrow(high_tab)
+lo = nrow(high_tab)
+
+```
+There are `r up+lo` DE genes expressed in this method
+```{r}
+
+heatmap.data=sam_dat$x[as.numeric(c(high_tab[,1], low_tab[,1])),]
+heatmap(heatmap.data, Rowv=NA, Colv=NA) 
+B=16
+heatmap(heatmap.data, Rowv=NA, Colv=NA, col= rgb(c(rep(0, B), (0:B)/B), c((B:0)/16, rep(0, B)), rep(0, 2*B+1)))  
+
+
+```
+These results are much more conservative than (c). We find that using the Hochberg method yields a less powerful results.
+
+### (e) Use DE genes detected by either sam or t-test at FDR=1% and do dimension reduction by PCA. Compare to (b). What's your observation?
+```{r}
+pca = prcomp(t(sam_dat$x[as.numeric(c(high_tab[,1], low_tab[,1])),]), scale.=TRUE)
+
+pca_dat = data.frame(PC1 = pca$x[,1],
+                     PC2 = pca$x[,2],
+                     Type = factor(pheno_data$ALL.AML))
+
+ggplot(pca_dat, aes(x=PC1, PC2, color=Type)) + geom_point() +
+  theme_minimal() + 
+  labs(title="PCA Plot", x="PC1", y="PC2", color="Type") +
+  theme(plot.title = element_text(hjust=0.5))
+```
+These appear quite similar
+
+
+## 2) Download R package 'impute'. Use data(khanmiss) to access the R object khanmiss. This dataset includes random missing data values. We are going to use it to try imputation methods. To save time running this dataset, subset the first 100 genes and save it as a new dataset. 
+
+
+### a) How many missing values in the dataset? How many genes have missing values?
+
+```{r}
+library(impute)
+
+data(khanmiss)
+babykhan = as.data.frame(khanmiss[2:100,-c(1,2)])
+babykhan =  data.frame(lapply(babykhan, function(x) as.numeric(as.character(x))))
+
+rows_with_na = apply(babykhan, 1, function(x) any(is.na(x)))
+babykhan[rows_with_na, 1:5]
+print(paste("There are", sum(is.na(babykhan)), "missing values in this dataset"))
+```
+We find that there are 43 missing values in our dataset. We also find that 7 genes have missing data.
+
+### b) Write your own code to define K-nearest neighbors for genes that you found in (a). Use the neighbors you defined to do imputation. Try different selection of K and summarize what you observe.
+
+```{r}
+
+knn_impute = function(dataset, k = 3) {
+
+  
+    #dataset = data.frame(lapply(dataset, function(x) as.numeric(as.character(x))))
+
+    distance = function(row1, row2) {
+        valid_columns = !is.na(row1) & !is.na(row2)
+        sum((row1[valid_columns] - row2[valid_columns])^2)
+    }
+    imputed_data = dataset
+    for (i in 1:nrow(dataset)) {
+        # Find rows with missing data
+        na_columns = which(is.na(dataset[i, ]))
+        for (col in na_columns) {
+            distances = apply(dataset[-i, , drop = FALSE], 1, function(x) distance(dataset[i, ], x))
+            
+            nearest_indices = order(distances)[1:k]
+            imputed_data[i, col] = mean(dataset[nearest_indices, col], na.rm = TRUE)
+        }
+    }
+
+    return(imputed_data)
+}
+```
+
+```{r}
+khan_5 = knn_impute(babykhan, k = 2)
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44,60,67,84), 1:5]
+```
+
+```{r}
+khan_5 = knn_impute(babykhan, k = 3)
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44,60,67,84), 1:5]
+```
+
+```{r}
+khan_5 = knn_impute(babykhan, k = 5)
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44,60,67,84), 1:5]
+```
+
+```{r}
+khan_5 = knn_impute(babykhan, k = 10)
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44,60,67,84), 1:5]
+```
+
+### c) Use the function impute.knn and compare with results using your own ocde. Are they the same?
+
+```{r}
+khan_5 = impute.knn(as.matrix(babykhan), k = 2)$data
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44, 60, 67, 84), 1:5]
+```
+
+```{r}
+khan_5 = impute.knn(as.matrix(babykhan), k = 3)$data
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44, 60, 67, 84), 1:5]
+```
+
+```{r}
+khan_5 = impute.knn(as.matrix(babykhan), k = 5)$data
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44, 60, 67, 84), 1:5]
+```
+```{r}
+khan_5 = impute.knn(as.matrix(babykhan), k = 10)$data
+print(paste("There are", sum(is.na(khan_5)), "missing values in this dataset"))
+khan_5[c(19, 28, 40, 44, 60, 67, 84), 1:5]
+```
+
+Comparing my code with the function, and looking at k=2. We see that the imputed values from my code is 1.488, while the function yields 1.68. These are clearly not the same!
