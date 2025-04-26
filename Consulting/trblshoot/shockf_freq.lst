@@ -1,0 +1,110 @@
+                                                                           1
+                                            13:42 Thursday, October 12, 2023
+
+                             The FREQ Procedure
+
+      Table of I_cardiac_arrest_rhythm by Change_in_ECG_Classification
+
+                  I_cardiac_arrest_rhythm
+                                 Change_in_ECG_Classification(Change in ECG 
+                                                              Classification
+                                                              ? 
+(Most 
+                                                              Ischemic 
+                                                              out-of-hospita
+                                                              l 12-lead 
+                                                              compared to 
+                                                              the last ED 
+                                                              12-lead))
+
+                  Frequency     |
+                  Percent       |
+                  Row Pct       |
+                  Col Pct       |No      |Yes Incr|  Total
+                                |        |eased   |
+                  --------------+--------+--------+
+                  Non_Shockable |     36 |      3 |     39
+                                |  63.16 |   5.26 |  68.42
+                                |  92.31 |   7.69 |
+                                |  80.00 |  25.00 |
+                  --------------+--------+--------+
+                  Shockable     |      9 |      9 |     18
+                                |  15.79 |  15.79 |  31.58
+                                |  50.00 |  50.00 |
+                                |  20.00 |  75.00 |
+                  --------------+--------+--------+
+                  Total               45       12       57
+                                   78.95    21.05   100.00
+
+                           Frequency Missing = 9
+
+
+            Statistics for Table of I_cardiac_arrest_rhythm by 
+                        Change_in_ECG_Classification
+
+                       Odds Ratio and Relative Risks
+ 
+     Statistic                        Value       95% Confidence Limits
+     ------------------------------------------------------------------
+     Odds Ratio                     12.0000        2.6857       53.6163
+     Relative Risk (Column 1)        1.8462        1.1530        2.9561
+     Relative Risk (Column 2)        0.1538        0.0472        0.5013
+
+                              Sample Size = 57
+ 
+/home/rgallagher/04222/Project1-Aufderheide/shockf_freq.sas                 
+                                                                           2
+                                            13:42 Thursday, October 12, 2023
+
+                             The FREQ Procedure
+ 
+            Statistics for Table of I_cardiac_arrest_rhythm by 
+                        Change_in_ECG_Classification
+
+                           Frequency Missing = 9
+
+                   WARNING: 14% of the data are missing.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/shockf_freq.sas                 

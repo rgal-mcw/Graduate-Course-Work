@@ -1,0 +1,173 @@
+1                                                          The SAS System                           13:42 Thursday, October 12, 2023
+
+NOTE: Copyright (c) 2016 by SAS Institute Inc., Cary, NC, USA. 
+NOTE: SAS (r) Proprietary Software 9.4 (TS1M7) 
+      Licensed to MEDICAL COLLEGE OF WISCONSIN - T&R SFA, Site 70183647.
+NOTE: This session is executing on the Linux 3.10.0-514.10.2.el7.x86_64 (LIN X64) platform.
+
+
+
+NOTE: Analytical products:
+      
+      SAS/STAT 15.2
+      SAS/ETS 15.2
+      SAS/OR 15.2
+      SAS/IML 15.2
+      SAS/QC 15.2
+
+NOTE: Additional host information:
+
+ Linux LIN X64 3.10.0-514.10.2.el7.x86_64 #1 SMP Fri Mar 3 00:04:05 UTC 2017 x86_64 CentOS Linux release 7.6.1810 (Core)  
+
+NOTE: SAS initialization used:
+      real time           0.02 seconds
+      cpu time            0.02 seconds
+      
+
+NOTE: AUTOEXEC processing beginning; file is /home/rgallagher/autoexec.sas.
+
+NOTE: You have called the macro _FN, 2022-12-26.
+NOTE: Copyright (c) 2001-2022 Rodney Sparapani
+ 
+MPRINT(_FN):   filename fn 
+"/home/rgallagher/04222/Project1-Aufderheide/shockf_freq.sas";
+MPRINT(_FN):   filename fn;
+NOTE: Fileref FN has been deassigned.
+NOTE: You have called the macro _EXIST, 2012-07-11.
+NOTE: Copyright (c) 2001-2012 Rodney Sparapani
+ 
+NOTE: You have called the macro _TAIL, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _DIRCHAR, 2007-07-24.
+NOTE: Copyright (c) 2004-2007 Rodney Sparapani
+ 
+NOTE: You have called the macro _UNWIND, 2004-11-23.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _COUNT, 2022-06-07.
+NOTE: Copyright (c) 2001-2022 Rodney Sparapani
+ 
+NOTE: You have called the macro _SUBSTR, 2004-03-29.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _HEAD, 2004-03-30.
+2                              The SAS System
+                                            13:42 Thursday, October 12, 2023
+
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+FN=shockf_freq.sas
+FNROOT=shockf_freq
+FNPATH=/home/rgallagher/04222/Project1-Aufderheide/shockf_freq.sas
+FNDIR=/home/rgallagher/04222/Project1-Aufderheide/
+FNTEXT=shockf_freq.txt
+FNHTML=shockf_freq.html
+NOTE: You have called the macro _LJ, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _PAD, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+MPRINT(_LJ):   "/home/rgallagher/04222/Project1-Aufderheide/shockf_freq.sas"
+MPRINT(_PAD):   
+"202020202020202020202020202020202020202020202020202020202020202020202020202
+020202020202020202020202020202020202020202020202020"X
+ 
+*** SGANNO macros are now available ***
+     NOTE: SGANNO macros (except SGANNO_HELP) should be used within data 
+step.
+ 
+ 
+ Following macros are available 
+ 
+     %SGANNO_HELP 
+     %SGARROW 
+     %SGIMAGE 
+     %SGLINE 
+     %SGOVAL 
+     %SGPOLYCONT 
+     %SGPOLYGON 
+     %SGPOLYLINE 
+     %SGRECTANGLE 
+     %SGTEXT 
+     %SGTEXTCONT 
+ 
+ Enter %SGANNO_HELP(macroname) for details on each SGANNO macro,
+    or %SGANNO_HELP(ALL) for details on all SGANNO macros.
+ 
+MPRINT(SGANNO):  ;
+ 
+*** ANNOTATE macros are now available ***
+ 
+ For further information on ANNOTATE macros, enter,
+    %HELPANO(macroname), (for specific macros)
+    %HELPANO(ALL), (for information on all macros)
+ or %HELPANO (for a list of macro names)
+ 
+NOTE: Libref CWD was successfully assigned as follows: 
+3                              The SAS System
+                                            13:42 Thursday, October 12, 2023
+
+      Engine:        V9 
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide
+NOTE: Libref PWD refers to the same physical library as CWD.
+NOTE: Libref PWD was successfully assigned as follows: 
+      Engine:        V9 
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide
+
+NOTE: AUTOEXEC processing completed.
+
+1          libname auf 'auf';
+NOTE: Libref AUF was successfully assigned as follows: 
+      Engine:        V9 
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide/auf
+2          
+3          data nonisch;
+4              set auf.dn;
+5          
+6              if Prehospital_Non_Ischemic = "Y";
+7          
+8              if Change_in_ECG_Classification = "Yes Increased" then j=1;
+9              if Change_in_ECG_Classification = "No" then j=0;
+10         
+11             aged10 = age/10;
+12             Time_betwn_prehos_ED_ECG = Time_btwn_prehosp_ED_ECG/10;
+13         
+14             If Initial_cardiac_arrest_rhythm = "PEA"|
+15                 Initial_cardiac_arrest_rhythm = "Asystole" |
+16                 Initial_cardiac_arrest_rhythm = "AED" then
+16       ! I_cardiac_arrest_rhythm = "Non_Shockable";
+17             If Initial_cardiac_arrest_rhythm = "VF/VT" then
+17       ! I_cardiac_arrest_rhythm = "Shockable";
+18         run;
+
+NOTE: Format $D_RANK was not found or could not be loaded.
+NOTE: There were 176 observations read from the data set AUF.DN.
+NOTE: The data set WORK.NONISCH has 66 observations and 35 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+19         
+20         proc freq data=nonisch;
+21             tables I_cardiac_arrest_rhythm*Change_in_ECG_Classification /
+21       !  or;
+22         run;
+
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE FREQ printed pages 1-2.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.00 seconds
+4                              The SAS System
+                                            13:42 Thursday, October 12, 2023
+
+      cpu time            0.02 seconds
+      
+
+NOTE: SAS Institute Inc., SAS Campus Drive, Cary, NC USA 27513-2414
+NOTE: The SAS System used:
+      real time           0.14 seconds
+      cpu time            0.14 seconds
+      

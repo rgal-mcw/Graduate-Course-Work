@@ -1,0 +1,4028 @@
+                                           13:14 Monday, October 9, 2023   1
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              64.471         66.465
+                   SC               66.661         70.845
+                   -2 Log L         62.471         62.465
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   2
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.0054        1         0.9412
+          Score                    0.0056        1         0.9403
+          Wald                     0.0052        1         0.9423
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                   Standard          Wald
+    Parameter    DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+    Intercept     1      1.3458      1.1941        1.2701        0.2597
+    aged10        1     -0.0137      0.1886        0.0052        0.9423
+
+
+                            Odds Ratio Estimates
+                                      
+                              Point          95% Wald
+                 Effect    Estimate      Confidence Limits
+
+                 aged10       0.986       0.682       1.428
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     47.9    Somers' D    -.018
+             Percent Discordant     49.7    Gamma        -.018
+             Percent Tied            2.3    Tau-a        -.006
+             Pairs                   728    c            0.491
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+              Odds Ratio    Estimate    95% Confidence Limits
+
+              aged10           0.986       0.682        1.428
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   3
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                --- p-Value ---
+             Effect   Test          Statistic    Exact      Mid
+
+             aged10   Score           0.00931   0.9254   0.9217
+                      Probability     0.00746   0.9477   0.9440
+
+
+                             Exact Odds Ratios
+ 
+                               95% Confidence
+     Parameter   Estimate          Limits          p-Value   Type
+
+     aged10         0.982      0.671      1.424     0.9303   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   4
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              64.608         54.203
+                   SC               66.798         58.582
+                   -2 Log L         62.608         50.203
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   5
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio        12.4052        1         0.0004
+          Score                   15.2753        1         <.0001
+          Wald                     9.8989        1         0.0017
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     2.0611     0.4371      22.2332       <.0001
+ Prehospital_defibril    1    -0.6539     0.2078       9.8989       0.0017
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Prehospital_defibril       0.520       0.346       0.782
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     65.0    Somers' D    0.534
+             Percent Discordant     11.5    Gamma        0.698
+             Percent Tied           23.5    Tau-a        0.181
+             Pairs                   728    c            0.767
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+      Odds Ratio                     Estimate    95% Confidence Limits
+
+      Prehospital_defibrillations       0.520       0.346        0.782
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   6
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Prehospital_defibril   Score           14.4026   0.0003   0.0002
+                             Probability    0.000162   0.0003   0.0002
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Prehospital_defibril      0.508      0.327      0.752     0.0005   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   7
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              67.293         69.290
+                   SC               69.483         73.669
+                   -2 Log L         65.293         65.290
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   8
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.0033        1         0.9542
+          Score                    0.0057        1         0.9398
+          Wald                     0.0019        1         0.9654
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard          Wald
+Parameter             DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+Intercept              1      1.2589      0.3003       17.5781        <.0001
+ED_defibrillations     1      0.0343      0.7925        0.0019        0.9654
+
+
+                            Odds Ratio Estimates
+                                      
+                                    Point          95% Wald
+           Effect                Estimate      Confidence Limits
+
+           ED_defibrillations       1.035       0.219       4.892
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant      3.8    Somers' D    0.038
+             Percent Discordant      0.0    Gamma        1.000
+             Percent Tied           96.2    Tau-a        0.013
+             Pairs                   728    c            0.519
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+          Odds Ratio            Estimate    95% Confidence Limits
+
+          ED_defibrillations       1.035       0.219        4.892
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023   9
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                      --- p-Value ---
+       Effect               Test          Statistic    Exact      Mid
+
+       ED_defibrillations   Score            0.4348   0.8303   0.5212
+                            Probability      0.6182   1.0000   0.6909
+
+
+                             Exact Odds Ratios
+ 
+                                    95% Confidence
+Parameter            Estimate           Limits          p-Value   Type
+
+ED_defibrillations      0.815*      0.380   Infinity     0.3091   MidP(0.5)
+
+   NOTE: * indicates a median unbiased estimate and a one-sided p-value.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  10
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              64.510         66.443
+                   SC               66.700         70.823
+                   -2 Log L         62.510         62.443
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  11
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.0666        1         0.7964
+          Score                    0.0696        1         0.7920
+          Wald                     0.0644        1         0.7996
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.3640     0.5018       7.3895       0.0066
+ Prehospital_epinephr    1    -0.0483     0.1903       0.0644       0.7996
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Prehospital_epinephr       0.953       0.656       1.384
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     45.2    Somers' D    0.076
+             Percent Discordant     37.6    Gamma        0.091
+             Percent Tied           17.2    Tau-a        0.026
+             Pairs                   728    c            0.538
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+     Odds Ratio                      Estimate    95% Confidence Limits
+
+     Prehospital_epinephrine_dose       0.953       0.656        1.384
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  12
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Prehospital_epinephr   Score            0.0495   0.8484   0.8116
+                             Probability      0.0735   0.8484   0.8116
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Prehospital_epinephr      0.958      0.658      1.411     0.8150   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  13
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              64.460         56.681
+                   SC               66.650         61.060
+                   -2 Log L         62.460         52.681
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  14
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         9.7797        1         0.0018
+          Score                   12.1408        1         0.0005
+          Wald                     8.1309        1         0.0044
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.9374     0.4173      21.5523       <.0001
+ Total_defibrillation    1    -0.5264     0.1846       8.1309       0.0044
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Total_defibrillation       0.591       0.411       0.848
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     63.9    Somers' D    0.516
+             Percent Discordant     12.2    Gamma        0.679
+             Percent Tied           23.9    Tau-a        0.175
+             Pairs                   728    c            0.758
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+         Odds Ratio               Estimate    95% Confidence Limits
+
+         Total_defibrillations       0.591       0.411        0.848
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  15
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Total_defibrillation   Score           11.3254   0.0013   0.0010
+                             Probability    0.000557   0.0013   0.0010
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Total_defibrillation      0.580      0.394      0.823     0.0020   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  16
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              64.348         63.825
+                   SC               66.537         68.204
+                   -2 Log L         62.348         59.825
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  17
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         2.5228        1         0.1122
+          Score                    3.2436        1         0.0717
+          Wald                     2.3358        1         0.1264
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.5052     0.3478      18.7310       <.0001
+ ED_epinephrine_push_    1    -0.2376     0.1554       2.3358       0.1264
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          ED_epinephrine_push_       0.789       0.581       1.069
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     32.0    Somers' D    0.136
+             Percent Discordant     18.4    Gamma        0.270
+             Percent Tied           49.6    Tau-a        0.046
+             Pairs                   728    c            0.568
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+       Odds Ratio                  Estimate    95% Confidence Limits
+
+       ED_epinephrine_push_dose       0.789       0.581        1.069
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  18
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      ED_epinephrine_push_   Score            2.6158   0.1015   0.0961
+                             Probability      0.0108   0.0964   0.0910
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+ED_epinephrine_push_      0.789      0.579      1.077     0.1290   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  19
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              63.545         64.025
+                   SC               65.735         68.404
+                   -2 Log L         61.545         60.025
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  20
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.5203        1         0.2176
+          Score                    1.6898        1         0.1936
+          Wald                     1.4695        1         0.2254
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.6868     0.4762      12.5465       0.0004
+ Total_epinephrine_pu    1    -0.1358     0.1120       1.4695       0.2254
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Total_epinephrine_pu       0.873       0.701       1.087
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     54.3    Somers' D    0.218
+             Percent Discordant     32.4    Gamma        0.252
+             Percent Tied           13.3    Tau-a        0.074
+             Pairs                   728    c            0.609
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+      Odds Ratio                     Estimate    95% Confidence Limits
+
+      Total_epinephrine_push_dose       0.873       0.701        1.087
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  21
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Total_epinephrine_pu   Score            1.4885   0.2349   0.2291
+                             Probability      0.0116   0.2283   0.2225
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Total_epinephrine_pu      0.874      0.701      1.094     0.2316   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  22
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              67.076         68.827
+                   SC               69.266         73.206
+                   -2 Log L         65.076         64.827
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  23
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.2494        1         0.6175
+          Score                    0.2699        1         0.6034
+          Wald                     0.2432        1         0.6219
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.3499     0.3498      14.8968       0.0001
+ Prehospital_rearrest    1    -0.3284     0.6659       0.2432       0.6219
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Prehospital_rearrest       0.720       0.195       2.656
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     22.0    Somers' D    0.055
+             Percent Discordant     16.5    Gamma        0.143
+             Percent Tied           61.5    Tau-a        0.019
+             Pairs                   728    c            0.527
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+         Odds Ratio               Estimate    95% Confidence Limits
+
+         Prehospital_rearrests       0.720       0.195        2.656
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  24
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Prehospital_rearrest   Score            0.1786   0.7298   0.6090
+                             Probability      0.2415   0.7298   0.6090
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Prehospital_rearrest      0.753      0.200      3.213     0.6708   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  25
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              65.382         65.532
+                   SC               67.572         69.911
+                   -2 Log L         63.382         61.532
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  26
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.8506        1         0.1737
+          Score                    3.3438        1         0.0675
+          Wald                     1.1961        1         0.2741
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                     Standard          Wald
+   Parameter       DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+   Intercept        1      1.3956      0.3197       19.0580        <.0001
+   ED_rearrests     1     -0.2883      0.2636        1.1961        0.2741
+
+
+                            Odds Ratio Estimates
+                                      
+                                 Point          95% Wald
+              Effect          Estimate      Confidence Limits
+
+              ED_rearrests       0.750       0.447       1.257
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     19.5    Somers' D    0.081
+             Percent Discordant     11.4    Gamma        0.262
+             Percent Tied           69.1    Tau-a        0.028
+             Pairs                   728    c            0.541
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+             Odds Ratio      Estimate    95% Confidence Limits
+
+             ED_rearrests       0.750       0.447        1.257
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  27
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                   --- p-Value ---
+          Effect         Test          Statistic    Exact      Mid
+
+          ED_rearrests   Score            2.0228   0.1469   0.1243
+                         Probability      0.0453   0.2328   0.2102
+
+
+                             Exact Odds Ratios
+ 
+                                 95% Confidence
+    Parameter      Estimate          Limits          p-Value   Type
+
+    ED_rearrests      0.717      0.394      1.246     0.2485   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  28
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              65.317         65.171
+                   SC               67.507         69.550
+                   -2 Log L         63.317         61.171
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  29
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         2.1462        1         0.1429
+          Score                    3.5011        1         0.0613
+          Wald                     1.4509        1         0.2284
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                      Standard          Wald
+ Parameter          DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+ Intercept           1      1.4858      0.3491       18.1112        <.0001
+ Total_rearrests     1     -0.3187      0.2646        1.4509        0.2284
+
+
+                           Odds Ratio Estimates
+                                     
+                                  Point          95% Wald
+            Effect             Estimate      Confidence Limits
+
+            Total_rearrests       0.727       0.433       1.221
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     35.2    Somers' D    0.146
+             Percent Discordant     20.6    Gamma        0.261
+             Percent Tied           44.2    Tau-a        0.049
+             Pairs                   728    c            0.573
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+            Odds Ratio         Estimate    95% Confidence Limits
+
+            Total_rearrests       0.727       0.433        1.221
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  30
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                    --- p-Value ---
+        Effect            Test          Statistic    Exact      Mid
+
+        Total_rearrests   Score            2.4093   0.1411   0.1212
+                          Probability      0.0399   0.1411   0.1212
+
+
+                             Exact Odds Ratios
+ 
+                                  95% Confidence
+  Parameter         Estimate          Limits          p-Value   Type
+
+  Total_rearrests      0.692      0.379      1.189     0.1922   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  31
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          59
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            47
+                           2            1            12
+
+                        Probability modeled is j=0.
+
+NOTE: 7 observations were deleted due to missing values for the response or 
+      explanatory variables.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  32
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              52.562         53.977
+                   SC               54.639         58.132
+                   -2 Log L         50.562         49.977
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.5848        1         0.4444
+          Score                    0.8653        1         0.3523
+          Wald                     0.4533        1         0.5008
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.5031     0.4272      12.3791       0.0004
+ Time_from_ROSC_to_EC    1    -0.0200     0.0297       0.4533       0.5008
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Time_from_ROSC_to_EC       0.980       0.925       1.039
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     53.7    Somers' D    0.124
+             Percent Discordant     41.3    Gamma        0.131
+             Percent Tied            5.0    Tau-a        0.041
+             Pairs                   564    c            0.562
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  33
+
+                           The LOGISTIC Procedure
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+         Odds Ratio               Estimate    95% Confidence Limits
+
+         Time_from_ROSC_to_ECG       0.980       0.925        1.039
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  34
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Time_from_ROSC_to_EC   Score            0.3705   0.5833   0.5796
+                             Probability     0.00741   0.3206   0.3169
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Time_from_ROSC_to_EC      0.982      0.926      1.048     0.5164   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  35
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              62.418         64.411
+                   SC               64.608         68.790
+                   -2 Log L         60.418         60.411
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  36
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.0071        1         0.9326
+          Score                    0.0092        1         0.9237
+          Wald                     0.0057        1         0.9398
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.2847     0.4095       9.8427       0.0017
+ Time_betwn_prehos_ED    1   -0.00499     0.0660       0.0057       0.9398
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Time_betwn_prehos_ED       0.995       0.874       1.132
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     52.2    Somers' D    0.056
+             Percent Discordant     46.6    Gamma        0.057
+             Percent Tied            1.2    Tau-a        0.019
+             Pairs                   728    c            0.528
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+       Odds Ratio                  Estimate    95% Confidence Limits
+
+       Time_betwn_prehos_ED_ECG       0.995       0.874        1.132
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  37
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Time_betwn_prehos_ED   Score            0.0489   0.8402   0.8388
+                             Probability     0.00288   0.7413   0.7399
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Time_betwn_prehos_ED      1.016      0.890      1.208     0.9734   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  38
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              60.556         61.205
+                   SC               62.746         65.584
+                   -2 Log L         58.556         57.205
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  39
+
+                           The LOGISTIC Procedure
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.3511        1         0.2451
+          Score                    2.0788        1         0.1494
+          Wald                     0.9679        1         0.3252
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.6670     0.5025      11.0073       0.0009
+ Duration_of_prehospi    1    -0.0236     0.0240       0.9679       0.3252
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Duration_of_prehospi       0.977       0.932       1.024
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     49.0    Somers' D    0.019
+             Percent Discordant     47.1    Gamma        0.020
+             Percent Tied            3.8    Tau-a        0.007
+             Pairs                   728    c            0.510
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+      Odds Ratio                     Estimate    95% Confidence Limits
+
+      Duration_of_prehospital_CPR       0.977       0.932        1.024
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  40
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Duration_of_prehospi   Score            1.3339   0.2493   0.2472
+                             Probability     0.00410   0.2003   0.1983
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Duration_of_prehospi      0.975      0.927      1.024     0.3044   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  41
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                              Design
+                       Class      Value     Variables
+
+                       Gender     F                 0
+                                  M                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  42
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              66.768         68.425
+                   SC               68.957         72.804
+                   -2 Log L         64.768         64.425
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.3430        1         0.5581
+          Score                    0.3525        1         0.5527
+          Wald                     0.3305        1         0.5654
+
+
+                         Type 3 Analysis of Effects
+ 
+                                         Wald
+                 Effect      DF    Chi-Square    Pr > ChiSq
+
+                 Gender       1        0.3305        0.5654
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                    Standard          Wald
+   Parameter      DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+   Intercept       1      1.0986      0.4020        7.4679        0.0063
+   Gender    M     1      0.3438      0.5980        0.3305        0.5654
+
+
+                           Odds Ratio Estimates
+                                     
+                                 Point          95% Wald
+             Effect           Estimate      Confidence Limits
+
+             Gender M vs F       1.410       0.437       4.553
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  43
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     29.7    Somers' D    0.091
+             Percent Discordant     20.6    Gamma        0.180
+             Percent Tied           49.7    Tau-a        0.031
+             Pairs                   728    c            0.545
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+             Odds Ratio       Estimate    95% Confidence Limits
+
+             Gender M vs F       1.410       0.437        4.553
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  44
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                --- p-Value ---
+             Effect   Test          Statistic    Exact      Mid
+
+             Gender   Score            0.3571   0.7642   0.6649
+                      Probability      0.1986   0.7642   0.6649
+
+
+                             Exact Odds Ratios
+ 
+                                95% Confidence
+    Parameter     Estimate          Limits          p-Value   Type
+
+    Gender    M      1.432      0.426      5.001     0.5656   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  45
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                      Design
+               Class                Value           Variables
+
+               Witnessed_status     Bystander        1      0
+                                    EMS              0      1
+                                    Unwitnessed      0      0
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  46
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              66.345         70.108
+                   SC               68.535         76.677
+                   -2 Log L         64.345         64.108
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.2370        2         0.8883
+          Score                    0.2535        2         0.8810
+          Wald                     0.2296        2         0.8916
+
+
+                         Type 3 Analysis of Effects
+ 
+                                              Wald
+            Effect                DF    Chi-Square    Pr > ChiSq
+
+            Witnessed_status       2        0.2296        0.8916
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                            Standard        Wald
+Parameter                     DF  Estimate     Error  Chi-Square  Pr > ChiSq
+
+Intercept                      1    1.0360    0.5086      4.1500      0.0416
+Witnessed_status Bystander     1    0.2908    0.6781      0.1840      0.6680
+Witnessed_status EMS           1    0.3139    0.8006      0.1537      0.6950
+
+
+                            Odds Ratio Estimates
+                                      
+                                                Point         95% Wald
+ Effect                                      Estimate     Confidence Limits
+
+ Witnessed_status Bystander vs Unwitnessed      1.338      0.354      5.052
+ Witnessed_status EMS       vs Unwitnessed      1.369      0.285      6.573
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  47
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     36.1    Somers' D    0.077
+             Percent Discordant     28.4    Gamma        0.119
+             Percent Tied           35.4    Tau-a        0.026
+             Pairs                   728    c            0.538
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+Odds Ratio                                   Estimate  95% Confidence Limits
+
+Witnessed_status Bystander vs EMS               0.977     0.219        4.367
+Witnessed_status Bystander vs Unwitnessed       1.338     0.354        5.052
+Witnessed_status EMS vs Unwitnessed             1.369     0.285        6.573
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  48
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                     --- p-Value ---
+        Effect             Test          Statistic    Exact      Mid
+
+        Witnessed_status   Score            0.2522   0.8610   0.8277
+                           Probability      0.0666   0.8610   0.8277
+
+
+                             Exact Odds Ratios
+ 
+                                        95% Confidence
+  Parameter                  Estimate       Limits       p-Value Type
+
+  Witnessed_status Bystander    1.326    0.320    5.349   0.6875 MidP(0.5)
+  Witnessed_status EMS          1.430    0.275    8.529   0.6846 MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  49
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                 Design
+                   Class             Value     Variables
+
+                   Bystander_CPR     N                 0
+                                     Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  50
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              66.845         68.493
+                   SC               69.035         72.872
+                   -2 Log L         64.845         64.493
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.3519        1         0.5531
+          Score                    0.3697        1         0.5432
+          Wald                     0.3436        1         0.5578
+
+
+                        Type 3 Analysis of Effects
+ 
+                                            Wald
+             Effect             DF    Chi-Square    Pr > ChiSq
+
+             Bystander_CPR       1        0.3436        0.5578
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                      Standard          Wald
+ Parameter          DF    Estimate       Error    Chi-Square    Pr > ChiSq
+
+ Intercept           1      1.4009      0.3875       13.0725        0.0003
+ Bystander_CPR Y     1     -0.3550      0.6055        0.3436        0.5578
+
+
+                            Odds Ratio Estimates
+                                      
+                                     Point          95% Wald
+          Effect                  Estimate      Confidence Limits
+
+          Bystander_CPR Y vs N       0.701       0.214       2.298
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  51
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     28.0    Somers' D    0.082
+             Percent Discordant     19.8    Gamma        0.172
+             Percent Tied           52.2    Tau-a        0.028
+             Pairs                   728    c            0.541
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+         Odds Ratio              Estimate    95% Confidence Limits
+
+         Bystander_CPR Y vs N       0.701       0.214        2.298
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  52
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                   --- p-Value ---
+         Effect          Test          Statistic    Exact      Mid
+
+         Bystander_CPR   Score            0.3189   0.7552   0.6526
+                         Probability      0.2052   0.7552   0.6526
+
+
+                             Exact Odds Ratios
+ 
+                                  95% Confidence
+  Parameter         Estimate          Limits          p-Value   Type
+
+  Bystander_CPR Y      0.710      0.208      2.503     0.5813   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  53
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          57
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            45
+                           2            1            12
+
+                        Probability modeled is j=0.
+
+NOTE: 9 observations were deleted due to missing values for the response or 
+      explanatory variables.
+
+
+                          Class Level Information
+ 
+                                                          Design
+          Class                       Value             Variables
+
+          I_cardiac_arrest_rhythm     Non_Shockable             0
+                                      Shockable                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  54
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              57.672         47.523
+                   SC               59.715         51.609
+                   -2 Log L         55.672         43.523
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio        12.1489        1         0.0005
+          Score                   13.3456        1         0.0003
+          Wald                    10.1153        1         0.0015
+
+
+                         Type 3 Analysis of Effects
+ 
+                                                Wald
+          Effect                    DF    Chi-Square    Pr > ChiSq
+
+          I_cardiac_arrest_rhy       1       10.1153        0.0015
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                                      Standard         Wald
+ Parameter                            DF   Estimate      Error   Chi-Square
+
+ Intercept                             1     2.3445     0.5667      17.1169
+ I_cardiac_arrest_rhy Shockable        1    -2.3444     0.7371      10.1153
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+              Parameter                            Pr > ChiSq
+
+              Intercept                                <.0001
+              I_cardiac_arrest_rhy Shockable           0.0015
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  55
+
+                           The LOGISTIC Procedure
+
+                           Odds Ratio Estimates
+                                     
+                                                              Point
+        Effect                                             Estimate
+
+        I_cardiac_arrest_rhy Shockable vs Non_Shockable       0.096
+
+                           Odds Ratio Estimates
+                                     
+                                                           95% Wald
+  Effect                                               Confidence Limits
+
+  I_cardiac_arrest_rhy Shockable vs Non_Shockable       0.023       0.407
+
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     60.0    Somers' D    0.550
+             Percent Discordant      5.0    Gamma        0.846
+             Percent Tied           35.0    Tau-a        0.186
+             Pairs                   540    c            0.775
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+                                                                      95%
+                                                                  Confidence
+Odds Ratio                                               Estimate   Limits
+
+I_cardiac_arrest_rhythm Shockable vs Non_Shockable          0.096      0.023
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+                                                                 95%
+                                                             Confidence
+     Odds Ratio                                                Limits
+
+     I_cardiac_arrest_rhythm Shockable vs Non_Shockable          0.407
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  56
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      I_cardiac_arrest_rhy   Score           13.0308   0.0007   0.0004
+                             Probability    0.000628   0.0007   0.0004
+
+
+                             Exact Odds Ratios
+ 
+                                          95% Confidence
+Parameter                      Estimate       Limits       p-Value Type
+
+I_cardiac_arrest_rhy Shockable    0.088    0.016    0.379   0.0007 MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  57
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                     Design
+                Class                    Value     Variables
+
+                Epinephrine_infusion     N                 0
+                                         Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  58
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              68.247         70.062
+                   SC               70.437         74.442
+                   -2 Log L         66.247         66.062
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.1849        1         0.6672
+          Score                    0.2441        1         0.6213
+          Wald                     0.1587        1         0.6903
+
+
+                         Type 3 Analysis of Effects
+ 
+                                                Wald
+          Effect                    DF    Chi-Square    Pr > ChiSq
+
+          Epinephrine_infusion       1        0.1587        0.6903
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                         Standard         Wald
+Parameter                DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+Intercept                 1     1.2993     0.3095      17.6221       <.0001
+Epinephrine_infusion Y    1    -0.4518     1.1342       0.1587       0.6903
+
+
+                           Odds Ratio Estimates
+                                     
+                                        Point          95% Wald
+      Effect                         Estimate      Confidence Limits
+
+      Epinephrine_infusion Y vs N       0.636       0.069       5.877
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  59
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant      6.7    Somers' D    0.014
+             Percent Discordant      5.4    Gamma        0.114
+             Percent Tied           87.9    Tau-a        0.005
+             Pairs                   728    c            0.507
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+      Odds Ratio                     Estimate    95% Confidence Limits
+
+      Epinephrine_infusion Y vs N       0.636       0.069        5.877
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  60
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Epinephrine_infusion   Score            0.0360   1.0000   0.7854
+                             Probability      0.4293   1.0000   0.7854
+
+
+                             Exact Odds Ratios
+ 
+                                      95% Confidence
+ Parameter               Estimate        Limits         p-Value  Type
+
+ Epinephrine_infusion Y     0.799     0.078    22.493    0.8194  MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  61
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                        Design
+             Class                          Value     Variables
+
+             Prehospital_norepinephrine     N                 0
+                                            Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  62
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              68.909         69.722
+                   SC               71.098         74.101
+                   -2 Log L         66.909         65.722
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.1869        1         0.2760
+          Score                    2.1074        1         0.1466
+          Wald                     0.8561        1         0.3548
+
+
+                         Type 3 Analysis of Effects
+ 
+                                                Wald
+          Effect                    DF    Chi-Square    Pr > ChiSq
+
+          Prehospital_norepine       1        0.8561        0.3548
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                         Standard         Wald
+Parameter                DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+Intercept                 1     1.3389     0.3081      18.8793       <.0001
+Prehospital_norepine Y    1    -1.3392     1.4474       0.8561       0.3548
+
+
+                           Odds Ratio Estimates
+                                     
+                                        Point          95% Wald
+      Effect                         Estimate      Confidence Limits
+
+      Prehospital_norepine Y vs N       0.262       0.015       4.471
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  63
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant      7.0    Somers' D    0.052
+             Percent Discordant      1.8    Gamma        0.594
+             Percent Tied           91.2    Tau-a        0.018
+             Pairs                   728    c            0.526
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+   Odds Ratio                           Estimate    95% Confidence Limits
+
+   Prehospital_norepinephrine Y vs N       0.262       0.015        4.471
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  64
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                       --- p-Value ---
+      Effect                 Test          Statistic    Exact      Mid
+
+      Prehospital_norepine   Score            1.0073   0.3818   0.2121
+                             Probability      0.3394   0.3818   0.2121
+
+
+                             Exact Odds Ratios
+ 
+                                      95% Confidence
+ Parameter               Estimate        Limits         p-Value  Type
+
+ Prehospital_norepine Y     0.262     0.006    10.682    0.4242  MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  65
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                   Design
+                 Class                 Value     Variables
+
+                 ED_norepinephrine     N                 0
+                                       Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  66
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              66.801         66.920
+                   SC               68.991         71.299
+                   -2 Log L         64.801         62.920
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.8811        1         0.1702
+          Score                    1.9682        1         0.1606
+          Wald                     1.8020        1         0.1795
+
+
+                        Type 3 Analysis of Effects
+ 
+                                              Wald
+           Effect                 DF    Chi-Square    Pr > ChiSq
+
+           ED_norepinephrine       1        1.8020        0.1795
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+  Parameter             DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+  Intercept              1     1.6397     0.4341      14.2709       0.0002
+  ED_norepinephrine Y    1    -0.8094     0.6030       1.8020       0.1795
+
+
+                            Odds Ratio Estimates
+                                      
+                                       Point          95% Wald
+        Effect                      Estimate      Confidence Limits
+
+        ED_norepinephrine Y vs N       0.445       0.137       1.451
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  67
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     36.3    Somers' D    0.206
+             Percent Discordant     15.7    Gamma        0.397
+             Percent Tied           48.1    Tau-a        0.070
+             Pairs                   728    c            0.603
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+       Odds Ratio                  Estimate    95% Confidence Limits
+
+       ED_norepinephrine Y vs N       0.445       0.137        1.451
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  68
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                     --- p-Value ---
+       Effect              Test          Statistic    Exact      Mid
+
+       ED_norepinephrine   Score            1.9078   0.2232   0.1764
+                           Probability      0.0936   0.2232   0.1764
+
+
+                             Exact Odds Ratios
+ 
+                                    95% Confidence
+Parameter             Estimate          Limits          p-Value   Type
+
+ED_norepinephrine Y      0.438      0.124      1.481     0.1846   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  69
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                    Design
+                 Class                  Value     Variables
+
+                 Any_norepinephrine     N                 0
+                                        Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  70
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              66.801         66.920
+                   SC               68.991         71.299
+                   -2 Log L         64.801         62.920
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         1.8811        1         0.1702
+          Score                    1.9682        1         0.1606
+          Wald                     1.8020        1         0.1795
+
+
+                         Type 3 Analysis of Effects
+ 
+                                               Wald
+           Effect                  DF    Chi-Square    Pr > ChiSq
+
+           Any_norepinephrine       1        1.8020        0.1795
+
+
+            Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+ Parameter              DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+ Intercept               1     1.6397     0.4341      14.2709       0.0002
+ Any_norepinephrine Y    1    -0.8094     0.6030       1.8020       0.1795
+
+
+                           Odds Ratio Estimates
+                                     
+                                       Point          95% Wald
+       Effect                       Estimate      Confidence Limits
+
+       Any_norepinephrine Y vs N       0.445       0.137       1.451
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  71
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     36.3    Somers' D    0.206
+             Percent Discordant     15.7    Gamma        0.397
+             Percent Tied           48.1    Tau-a        0.070
+             Pairs                   728    c            0.603
+
+
+             Odds Ratio Estimates and Wald Confidence Intervals
+ 
+       Odds Ratio                   Estimate    95% Confidence Limits
+
+       Any_norepinephrine Y vs N       0.445       0.137        1.451
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  72
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                      --- p-Value ---
+       Effect               Test          Statistic    Exact      Mid
+
+       Any_norepinephrine   Score            1.9078   0.2232   0.1764
+                            Probability      0.0936   0.2232   0.1764
+
+
+                             Exact Odds Ratios
+ 
+                                     95% Confidence
+Parameter              Estimate          Limits          p-Value   Type
+
+Any_norepinephrine Y      0.438      0.124      1.481     0.1846   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  73
+
+                           The LOGISTIC Procedure
+
+                             Model Information
+
+           Data Set                      WORK.NONISCH           
+           Response Variable             j                      
+           Number of Response Levels     2                      
+           Model                         binary logit           
+           Optimization Technique        Fisher's scoring       
+           Likelihood Penalty            Firth's bias correction
+
+
+                  Number of Observations Read          66
+                  Number of Observations Used          66
+
+
+                              Response Profile
+ 
+                     Ordered                      Total
+                       Value            j     Frequency
+
+                           1            0            52
+                           2            1            14
+
+                        Probability modeled is j=0.
+
+
+                          Class Level Information
+ 
+                                                   Design
+                 Class                 Value     Variables
+
+                 Dopamine_infusion     N                 0
+                                       Y                 1
+
+
+                   Intercept-Only Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+                          Model Convergence Status
+
+               Convergence criterion (GCONV=1E-8) satisfied.          
+
+
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  74
+
+                           The LOGISTIC Procedure
+
+                            Model Fit Statistics
+ 
+                                                Intercept
+                                 Intercept            and
+                   Criterion          Only     Covariates
+
+                   AIC              67.874         69.110
+                   SC               70.064         73.490
+                   -2 Log L         65.874         65.110
+
+
+                  Testing Global Null Hypothesis: BETA=0
+ 
+          Test                 Chi-Square       DF     Pr > ChiSq
+
+          Likelihood Ratio         0.7643        1         0.3820
+          Score                    0.9744        1         0.3236
+          Wald                     0.7126        1         0.3986
+
+
+                        Type 3 Analysis of Effects
+ 
+                                              Wald
+           Effect                 DF    Chi-Square    Pr > ChiSq
+
+           Dopamine_infusion       1        0.7126        0.3986
+
+
+             Analysis of Penalized Maximum Likelihood Estimates
+ 
+                                        Standard         Wald
+  Parameter             DF   Estimate      Error   Chi-Square   Pr > ChiSq
+
+  Intercept              1     1.3558     0.3198      17.9704       <.0001
+  Dopamine_infusion Y    1    -0.7682     0.9100       0.7126       0.3986
+
+
+                            Odds Ratio Estimates
+                                      
+                                       Point          95% Wald
+        Effect                      Estimate      Confidence Limits
+
+        Dopamine_infusion Y vs N       0.464       0.078       2.761
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  75
+
+                           The LOGISTIC Procedure
+
+       Association of Predicted Probabilities and Observed Responses
+
+             Percent Concordant     13.2    Somers' D    0.066
+             Percent Discordant      6.6    Gamma        0.333
+             Percent Tied           80.2    Tau-a        0.022
+             Pairs                   728    c            0.533
+
+
+            Odds Ratio Estimates and Wald Confidence Intervals
+ 
+       Odds Ratio                  Estimate    95% Confidence Limits
+
+       Dopamine_infusion Y vs N       0.464       0.078        2.761
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       
+                                           13:14 Monday, October 9, 2023  76
+
+                           The LOGISTIC Procedure
+ 
+                         Exact Conditional Analysis
+
+                          Exact Conditional Tests
+ 
+                                                     --- p-Value ---
+       Effect              Test          Statistic    Exact      Mid
+
+       Dopamine_infusion   Score            0.5714   0.5995   0.4640
+                           Probability      0.2711   0.5995   0.4640
+
+
+                             Exact Odds Ratios
+ 
+                                    95% Confidence
+Parameter             Estimate          Limits          p-Value   Type
+
+Dopamine_infusion Y      0.506      0.080      4.348     0.4798   MidP(0.5)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04222/Project1-Aufderheide/check.sas                       

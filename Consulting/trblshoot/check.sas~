@@ -1,0 +1,237 @@
+libname auf 'auf';
+
+
+data nonisch;
+    set auf.dn;
+
+    if Prehospital_Non_Ischemic = "Y";
+
+    if Change_in_ECG_Classification = "Yes Increased" then j=1;
+    if Change_in_ECG_Classification = "No" then j=0;
+
+    aged10 = age/10;
+    Time_betwn_prehos_ED_ECG = Time_btwn_prehosp_ED_ECG/10;
+
+    If Initial_cardiac_arrest_rhythm = "PEA"|
+        Initial_cardiac_arrest_rhythm = "Asystole" |
+        Initial_cardiac_arrest_rhythm = "AED" then I_cardiac_arrest_rhythm = "Non_Shockable";
+    If Initial_cardiac_arrest_rhythm = "VF/VT" then I_cardiac_arrest_rhythm = "Shockable";
+run;
+
+%macro logi(var= , group=, cont='no', refer=);
+
+    %if ~%sysfunc(exist(work.tbls)) %then %do;
+        data tbls;
+            length Parameter $100.;
+        run;
+    %end;
+
+    proc logistic data=&group;
+        ods output ExactOddsRatio=otter;
+
+        %if &cont='yes' %then %do;
+            class &var(ref=&refer) / param=ref;
+        %end;
+
+    /* exact statement? change table output*/
+    /* Exact statement will create a new table (maybe just rename oddsratiowald)
+       This will make me have to go through the macro again if any changes are necessary */
+    
+        model j=&var / orpvalue firth;
+        oddsratio &var;
+        exact &var / estimate=odds cltype=midp;
+    run;
+
+    data tbls;
+        set tbls otter;
+    run;
+%mend;
+
+%let cont_list = aged10 Prehospital_defibrillations Ed_defibrillations Prehospital_epinephrine_dose
+    Total_defibrillations ED_epinephrine_push_dose Total_epinephrine_push_dose
+    Prehospital_rearrests ED_rearrests Total_rearrests Time_from_ROSC_to_ECG Time_betwn_prehos_ED_ECG
+    Duration_of_prehospital_CPR;
+%let cont_num = %sysfunc(countw(&cont_list));
+
+/* All categorical variables with their reference groups */
+%let cat_list = Gender Witnessed_status Bystander_CPR I_cardiac_arrest_rhythm Epinephrine_infusion
+    Prehospital_norepinephrine ED_norepinephrine Any_norepinephrine Dopamine_infusion;
+%let ref_list = F Unwitnessed N Shockable N N N N N;
+%let cat_num = %sysfunc(countw(&cat_list));
+
+
+%macro cont_NONisch;
+%do i=1 %to &cont_num;
+    %let c_var = %scan(&cont_list, &i);
+    %logi(var=&c_var, group=nonisch);
+%end;
+%mend;
+
+%macro cat_NONisch;
+%do i=1 %to &cat_num;
+    %let c_var = %scan(&cat_list, &i);
+    %let c_ref = %scan(&ref_list, &i);
+    %logi(var=&c_var, group=nonisch, cont='yes', refer="&c_ref");
+%end;
+%mend;
+
+%cont_nonisch;
+%cat_nonisch;
+
+data OR_nonisch;
+    set tbls;
+
+    
+    if not missing(Parameter);
+
+    
+    if _N_=16 then Parameter = "Witnessed Status - Unwitnessed vs Bystander";
+    if _N_=17 then Parameter = "Witnessed Status - Unwitnessed vs EMS";
+run;
+
+
+
+proc format;
+    value $y_labs
+    "aged10" = "Greater age"
+    "Gender" = "Male Gender"
+    "Witnessed_status EMS vs Unwitnessed" = "Bystander witnessed arrest"
+    "Witnessed_status Bystander vs Unwitnesse" = "Witnessed Status - Bystander vs Unwitnessed"
+    "Witnessed_status Bystander vs EMS" = "Witnessed Status - Bystander vs EMS"
+    "Bystander_CPR" = "Bystander CPR"
+    "I_cardiac_arrest_rhy" = "Initial shockable rhythm"
+    "Prehospital_defibril" = "Greater OOH defibrillations"
+    "ED_defibrillations" = "Greater ED defibrillations"
+        "Total_defibrillation" = "Greater total defibrillations"
+        "Prehospital_epinephr" = "Greater OOH epinephrine dose"
+        "ED_epinephrine_push_" = "Greater ED epinephrine dose"
+        "Total_epinephrine_pu" = "Greater total epinephrine dose"
+        "Prehospital_norepine" = "Greater incidence of OOH norepinephrine"
+        "ED_norepinephrine" = "Greater incidence of ED norepinephrine"
+        "Any_norepinephrine" = "Greater incidence of any norepinephrine"
+        "Epinephrine_infusion" = "Greater incidence of epinephrine infusion"
+        "Dopamine_infusion" = "Greater incidence of dopamine infusion"
+        "Prehospital_rearrest" = "Greater OOH rearrests"
+       "ED_rearrests" = "Greater ED rearrests"
+       "Total_rearrests" = "Greater total rearrests"
+       "Time_from_ROSC_to_EC" = "Greater time from ROSC to OOH ECG acquisition"
+        "Time_betwn_prehos_ED" = "Less time between OOH and ED ECG acquisiton"
+        "Duration_of_prehospi" = "Greater time form EMS arrival to first ROSC"
+        ;
+
+    value $order
+        "aged10" = '01'
+        "Gender" = '02'
+    "Witnessed Status - Unwitnessed vs Bystander" = '03'
+    "Witnessed Status - Unwitnessed vs EMS" = '04'
+    "Witnessed Status - Bystander vs EMS" = '05'
+    "Bystander_CPR" = '06'
+    "I_cardiac_arrest_rhy" = '07'
+    "Prehospital_defibril" = '08'
+    "ED_defibrillations" = '09'
+        "Total_defibrillation" = '10'
+        "Prehospital_epinephr" = '11'
+        "ED_epinephrine_push_" = '12'
+        "Total_epinephrine_pu" = '13'
+        "Prehospital_norepine" = '15'
+        "ED_norepinephrine" = '16'
+        "Any_norepinephrine" = '17'
+        "Epinephrine_infusion" = '14'
+        "Dopamine_infusion" = '18'
+        "Prehospital_rearrest" = '19'
+       "ED_rearrests" = '20'
+       "Total_rearrests" = '21'
+       "Time_from_ROSC_to_EC" = '22'
+       "Time_betwn_prehos_ED" = '23'
+       "Duration_of_prehospi" = '24'
+        ;
+run;
+
+data OR_nonisch;
+    length Parameter $50.;
+    format Parameter $y_labs.;
+    set OR_nonisch;
+
+    order = put(Parameter, order.);
+run;
+
+proc sort data=OR_nonisch;
+    by order;
+run;
+
+
+data OR_nonisch;
+    set OR_nonisch;
+
+    /* HELP WITH ED DEFIB */
+    *if OddsRatioEst < 900;
+    
+    
+    lowercl_r = round(lowercl, 0.01);
+    uppercl_r = round(uppercl, 0.01);
+    est_r = round(Estimate, 0.01);
+
+    if missing(uppercl_r) then uppercl_r = 10;
+
+    OR_CI = cat(est_r, ' (', lowercl_r, ' to ', uppercl_r, ')');
+    if Parameter = "Witnessed Status - Unwitnessed vs EMS" then delete;
+     
+run;
+
+
+data arrowsannoNONISCH;
+    length function $40.;
+    length label $40.;
+    x1=62;
+    x2=43;
+    y1=2.5;
+    y2=2.5;
+    function = 'arrow';
+    shape = 'filled';
+    linecolor='black';
+    output;
+
+    x1=53.5;
+    y1=1;
+    function='text';
+    label='Sustained Non-Ischemia';
+    width=200;
+    textsize=7.8;
+    output;
+
+    x1=69;
+    x2=92;
+    y1=2.5;
+    y2=2.5;
+    function='arrow';
+    shape='filled';
+    linecolor='black';
+    output;
+
+    x1=80;
+    y1=1;
+    function='text';
+    label='Evolution to Ischemic or STEM I';
+    width=250;
+    textsize=7.8;
+    output;
+run;
+
+
+ods graphics on / imagename = 'forest_NONISCH_v2' width=10in height=8in;
+proc sgplot data=OR_nonisch sganno=arrowsannoNONISCH noautolegend;
+    refline 1 / axis=x;
+    scatter x=Estimate y=Parameter / markerattrs=or (symbol=DiamondFilled size=8);
+
+    highlow y=Parameter low=lowercl high=uppercl / Clipcap clipcapshape=closedarrow;
+
+    yaxistable OR_CI / nolabel location=inside position=right Title = "Odds Ratio (95% CI)" titleattrs=(size=8 weight=Bold);
+    
+    
+    yaxis label=' ' colorbands=odd colorbandsattrs=(color=gray transparency=0.7) discreteorder=data reverse;
+    xaxis label=" " min=0.05 max=10 type=log;
+    
+    title "Out-of-hospital Nonischemic Subjects";
+run;
+
+ods graphics off;

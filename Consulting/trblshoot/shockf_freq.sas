@@ -1,0 +1,22 @@
+libname auf 'auf';
+
+data nonisch;
+    set auf.dn;
+
+    if Prehospital_Non_Ischemic = "Y";
+
+    if Change_in_ECG_Classification = "Yes Increased" then j=1;
+    if Change_in_ECG_Classification = "No" then j=0;
+
+    aged10 = age/10;
+    Time_betwn_prehos_ED_ECG = Time_btwn_prehosp_ED_ECG/10;
+
+    If Initial_cardiac_arrest_rhythm = "PEA"|
+        Initial_cardiac_arrest_rhythm = "Asystole" |
+        Initial_cardiac_arrest_rhythm = "AED" then I_cardiac_arrest_rhythm = "Non_Shockable";
+    If Initial_cardiac_arrest_rhythm = "VF/VT" then I_cardiac_arrest_rhythm = "Shockable";
+run;
+
+proc freq data=nonisch;
+    tables I_cardiac_arrest_rhythm*Change_in_ECG_Classification / or;
+run;

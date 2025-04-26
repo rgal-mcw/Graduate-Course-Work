@@ -1,0 +1,55 @@
+---
+title: "HW3"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+data('iris')
+library(gtsummary)
+library(tidyverse)
+```
+
+This is a simple example of automatic report generation from R. Analyses were performed using R version 4.3.1 (2023-06-16 ucrt)
+
+## Analysis Methods
+
+Fisher's iris data set that is available as `iris` within R is analyzed. The 150 flower measurements were summarized using mean and standard deviation within each species, and compares between groups using ANOVA.
+
+```{r echo=FALSE}
+iris %>% select(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, Species) %>%
+  tbl_summary(by = Species, 
+              statistic=all_continuous() ~ "{mean} ({sd})") %>%
+  add_p(test = everything() ~ "aov") %>%
+  add_overall()
+```
+
+## Relationship between petal length and width
+```{r echo=FALSE}
+ggplot(data=iris, aes(x=Petal.Length, y=Petal.Width)) + 
+  geom_point() + 
+  stat_smooth(method='lm',
+              formula= y ~ x,
+              geom="smooth") +
+  labs(x="Petal length, mm", y="Petal width, mm")
+```
+\
+Figure 1: Scatterplot of petal width vs petal length 
+\
+Simple linear regression was used to evaluate the relationship between petal length and petal width using the model:
+$$\text{Petal Width} = \alpha + \beta(\text{Petal Length}) + \epsilon$$
+where $\epsilon$ ~ $N(0, \sigma^2)$.
+\
+
+<center> 
+#### Table 1. \
+Simple Linear Regression estimates predicting petal width based on petal length across all species 
+</center>
+
+```{r echo=FALSE}
+reg = glm(Petal.Width ~ Petal.Length, data=iris) 
+reg %>% tbl_regression(intercept=1)
+```
+Based on the regression model, we estimate that petal length explaines 92.7% of variability in petal width.

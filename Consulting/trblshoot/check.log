@@ -1,0 +1,1311 @@
+1                                                          The SAS System                              13:14 Monday, October 9, 2023
+
+NOTE: Copyright (c) 2016 by SAS Institute Inc., Cary, NC, USA. 
+NOTE: SAS (r) Proprietary Software 9.4 (TS1M7) 
+      Licensed to MEDICAL COLLEGE OF WISCONSIN - T&R SFA, Site 70183647.
+NOTE: This session is executing on the Linux 3.10.0-514.10.2.el7.x86_64 (LIN X64) platform.
+
+
+
+NOTE: Analytical products:
+      
+      SAS/STAT 15.2
+      SAS/ETS 15.2
+      SAS/OR 15.2
+      SAS/IML 15.2
+      SAS/QC 15.2
+
+NOTE: Additional host information:
+
+ Linux LIN X64 3.10.0-514.10.2.el7.x86_64 #1 SMP Fri Mar 3 00:04:05 UTC 2017 x86_64 CentOS Linux release 7.6.1810 (Core)  
+
+NOTE: SAS initialization used:
+      real time           0.02 seconds
+      cpu time            0.02 seconds
+      
+
+NOTE: AUTOEXEC processing beginning; file is /home/rgallagher/autoexec.sas.
+
+NOTE: You have called the macro _FN, 2022-12-26.
+NOTE: Copyright (c) 2001-2022 Rodney Sparapani
+ 
+MPRINT(_FN):   filename fn 
+"/home/rgallagher/04222/Project1-Aufderheide/check.sas";
+MPRINT(_FN):   filename fn;
+NOTE: Fileref FN has been deassigned.
+NOTE: You have called the macro _EXIST, 2012-07-11.
+NOTE: Copyright (c) 2001-2012 Rodney Sparapani
+ 
+NOTE: You have called the macro _TAIL, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _DIRCHAR, 2007-07-24.
+NOTE: Copyright (c) 2004-2007 Rodney Sparapani
+ 
+NOTE: You have called the macro _UNWIND, 2004-11-23.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _COUNT, 2022-06-07.
+NOTE: Copyright (c) 2001-2022 Rodney Sparapani
+ 
+NOTE: You have called the macro _SUBSTR, 2004-03-29.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _HEAD, 2004-03-30.
+2                              The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+FN=check.sas
+FNROOT=check
+FNPATH=/home/rgallagher/04222/Project1-Aufderheide/check.sas
+FNDIR=/home/rgallagher/04222/Project1-Aufderheide/
+FNTEXT=check.txt
+FNHTML=check.html
+NOTE: You have called the macro _LJ, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+NOTE: You have called the macro _PAD, 2004-03-30.
+NOTE: Copyright (c) 2001-2004 Rodney Sparapani
+ 
+MPRINT(_LJ):   "/home/rgallagher/04222/Project1-Aufderheide/check.sas"
+MPRINT(_PAD):   
+"202020202020202020202020202020202020202020202020202020202020202020202020202
+020202020202020202020202020202020202020202020202020202020202020"X
+ 
+*** SGANNO macros are now available ***
+     NOTE: SGANNO macros (except SGANNO_HELP) should be used within data 
+step.
+ 
+ 
+ Following macros are available 
+ 
+     %SGANNO_HELP 
+     %SGARROW 
+     %SGIMAGE 
+     %SGLINE 
+     %SGOVAL 
+     %SGPOLYCONT 
+     %SGPOLYGON 
+     %SGPOLYLINE 
+     %SGRECTANGLE 
+     %SGTEXT 
+     %SGTEXTCONT 
+ 
+ Enter %SGANNO_HELP(macroname) for details on each SGANNO macro,
+    or %SGANNO_HELP(ALL) for details on all SGANNO macros.
+ 
+MPRINT(SGANNO):  ;
+ 
+*** ANNOTATE macros are now available ***
+ 
+ For further information on ANNOTATE macros, enter,
+    %HELPANO(macroname), (for specific macros)
+    %HELPANO(ALL), (for information on all macros)
+ or %HELPANO (for a list of macro names)
+ 
+NOTE: Libref CWD was successfully assigned as follows: 
+      Engine:        V9 
+3                              The SAS System  13:14 Monday, October 9, 2023
+
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide
+NOTE: Libref PWD refers to the same physical library as CWD.
+NOTE: Libref PWD was successfully assigned as follows: 
+      Engine:        V9 
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide
+
+NOTE: AUTOEXEC processing completed.
+
+1          libname auf 'auf';
+NOTE: Libref AUF was successfully assigned as follows: 
+      Engine:        V9 
+      Physical Name: /home/rgallagher/04222/Project1-Aufderheide/auf
+2          
+3          
+4          data nonisch;
+5              set auf.dn;
+6          
+7              if Prehospital_Non_Ischemic = "Y";
+8          
+9              if Change_in_ECG_Classification = "Yes Increased" then j=1;
+10             if Change_in_ECG_Classification = "No" then j=0;
+11         
+12             aged10 = age/10;
+13             Time_betwn_prehos_ED_ECG = Time_btwn_prehosp_ED_ECG/10;
+14         
+15             If Initial_cardiac_arrest_rhythm = "PEA"|
+16                 Initial_cardiac_arrest_rhythm = "Asystole" |
+17                 Initial_cardiac_arrest_rhythm = "AED" then
+17       ! I_cardiac_arrest_rhythm = "Non_Shockable";
+18             If Initial_cardiac_arrest_rhythm = "VF/VT" then
+18       ! I_cardiac_arrest_rhythm = "Shockable";
+19         run;
+
+NOTE: Format $D_RANK was not found or could not be loaded.
+NOTE: There were 176 observations read from the data set AUF.DN.
+NOTE: The data set WORK.NONISCH has 66 observations and 35 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+20         
+21         
+22         %macro logi(var= , group=, cont='no', refer=);
+23         
+24             %if ~%sysfunc(exist(work.tbls)) %then %do;
+25                 data tbls;
+26                     length Parameter $100.;
+27                 run;
+28             %end;
+29         
+30             proc logistic data=&group;
+4                              The SAS System  13:14 Monday, October 9, 2023
+
+31                 ods output ExactOddsRatio=otter;
+32         
+33                 %if &cont='yes' %then %do;
+34                     class &var(ref=&refer) / param=ref;
+35                 %end;
+36         
+37             /* exact statement? change table output*/
+38             /* Exact statement will create a new table (maybe just rename
+38       !  oddsratiowald)
+39                This will make me have to go through the macro again if
+39       ! any changes are necessary */
+40         
+41                 model j=&var / orpvalue firth;
+42                 oddsratio &var;
+43                 exact &var / estimate=odds cltype=midp;
+44             run;
+45         
+46             data tbls;
+47                 set tbls otter;
+48             run;
+49         %mend;
+50         
+51         %let cont_list = aged10 Prehospital_defibrillations
+51       ! Ed_defibrillations Prehospital_epinephrine_dose
+52             Total_defibrillations ED_epinephrine_push_dose
+52       ! Total_epinephrine_push_dose
+53             Prehospital_rearrests ED_rearrests Total_rearrests
+53       ! Time_from_ROSC_to_ECG Time_betwn_prehos_ED_ECG
+54             Duration_of_prehospital_CPR;
+55         %let cont_num = %sysfunc(countw(&cont_list));
+56         
+57         /* All categorical variables with their reference groups */
+58         %let cat_list = Gender Witnessed_status Bystander_CPR
+58       ! I_cardiac_arrest_rhythm Epinephrine_infusion
+59             Prehospital_norepinephrine ED_norepinephrine
+59       ! Any_norepinephrine Dopamine_infusion;
+60         %let ref_list = F Unwitnessed N Non_Shockable N N N N N;
+61         %let cat_num = %sysfunc(countw(&cat_list));
+62         
+63         
+64         %macro cont_NONisch;
+65         %do i=1 %to &cont_num;
+66             %let c_var = %scan(&cont_list, &i);
+67             %logi(var=&c_var, group=nonisch);
+68         %end;
+69         %mend;
+70         
+71         %macro cat_NONisch;
+72         %do i=1 %to &cat_num;
+73             %let c_var = %scan(&cat_list, &i);
+74             %let c_ref = %scan(&ref_list, &i);
+75             %logi(var=&c_var, group=nonisch, cont='yes', refer="&c_ref");
+5                              The SAS System  13:14 Monday, October 9, 2023
+
+76         %end;
+77         %mend;
+78         
+79         %cont_nonisch;
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   length Parameter $100.;
+MPRINT(LOGI):   run;
+
+NOTE: Variable Parameter is uninitialized.
+NOTE: The data set WORK.TBLS has 1 observations and 1 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=aged10 / orpvalue firth;
+MPRINT(LOGI):   oddsratio aged10;
+MPRINT(LOGI):   exact aged10 / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 1-3.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.10 seconds
+      cpu time            0.11 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 1 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 2 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+6                              The SAS System  13:14 Monday, October 9, 2023
+
+MPRINT(LOGI):   model j=Prehospital_defibrillations / orpvalue firth;
+MPRINT(LOGI):   oddsratio Prehospital_defibrillations;
+MPRINT(LOGI):   exact Prehospital_defibrillations / estimate=odds 
+cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 4-6.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 2 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 3 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Ed_defibrillations / orpvalue firth;
+MPRINT(LOGI):   oddsratio Ed_defibrillations;
+MPRINT(LOGI):   exact Ed_defibrillations / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 7-9.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+7                              The SAS System  13:14 Monday, October 9, 2023
+
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 3 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 4 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Prehospital_epinephrine_dose / orpvalue firth;
+MPRINT(LOGI):   oddsratio Prehospital_epinephrine_dose;
+MPRINT(LOGI):   exact Prehospital_epinephrine_dose / estimate=odds 
+cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 10-12.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.02 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 4 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 5 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+8                              The SAS System  13:14 Monday, October 9, 2023
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Total_defibrillations / orpvalue firth;
+MPRINT(LOGI):   oddsratio Total_defibrillations;
+MPRINT(LOGI):   exact Total_defibrillations / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 13-15.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 5 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 6 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=ED_epinephrine_push_dose / orpvalue firth;
+MPRINT(LOGI):   oddsratio ED_epinephrine_push_dose;
+MPRINT(LOGI):   exact ED_epinephrine_push_dose / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+9                              The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: The PROCEDURE LOGISTIC printed pages 16-18.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 6 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 7 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Total_epinephrine_push_dose / orpvalue firth;
+MPRINT(LOGI):   oddsratio Total_epinephrine_push_dose;
+MPRINT(LOGI):   exact Total_epinephrine_push_dose / estimate=odds 
+cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 19-21.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 7 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 8 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+10                             The SAS System  13:14 Monday, October 9, 2023
+
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Prehospital_rearrests / orpvalue firth;
+MPRINT(LOGI):   oddsratio Prehospital_rearrests;
+MPRINT(LOGI):   exact Prehospital_rearrests / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 22-24.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.03 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 8 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 9 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=ED_rearrests / orpvalue firth;
+MPRINT(LOGI):   oddsratio ED_rearrests;
+MPRINT(LOGI):   exact ED_rearrests / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+11                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 25-27.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 9 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 10 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Total_rearrests / orpvalue firth;
+MPRINT(LOGI):   oddsratio Total_rearrests;
+MPRINT(LOGI):   exact Total_rearrests / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 28-30.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 10 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 11 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+12                             The SAS System  13:14 Monday, October 9, 2023
+
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Time_from_ROSC_to_ECG / orpvalue firth;
+MPRINT(LOGI):   oddsratio Time_from_ROSC_to_ECG;
+MPRINT(LOGI):   exact Time_from_ROSC_to_ECG / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 31-34.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.02 seconds
+      cpu time            0.03 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 11 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 12 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Time_betwn_prehos_ED_ECG / orpvalue firth;
+MPRINT(LOGI):   oddsratio Time_betwn_prehos_ED_ECG;
+MPRINT(LOGI):   exact Time_betwn_prehos_ED_ECG / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+13                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 35-37.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.10 seconds
+      cpu time            0.11 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 12 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 13 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   model j=Duration_of_prehospital_CPR / orpvalue firth;
+MPRINT(LOGI):   oddsratio Duration_of_prehospital_CPR;
+MPRINT(LOGI):   exact Duration_of_prehospital_CPR / estimate=odds 
+cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 9 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 38-40.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.05 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 13 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 14 observations and 9 variables.
+14                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CONT_NONISCH):  ;
+80         %cat_nonisch;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Gender(ref="F") / param=ref;
+MPRINT(LOGI):   model j=Gender / orpvalue firth;
+MPRINT(LOGI):   oddsratio Gender;
+MPRINT(LOGI):   exact Gender / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 41-44.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 14 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 15 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Witnessed_status(ref="Unwitnessed") / param=ref;
+MPRINT(LOGI):   model j=Witnessed_status / orpvalue firth;
+MPRINT(LOGI):   oddsratio Witnessed_status;
+MPRINT(LOGI):   exact Witnessed_status / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+15                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 2 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 45-48.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.02 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+WARNING: Multiple lengths were specified for the variable ClassVal0 by 
+         input data set(s). This can cause truncation of data.
+NOTE: There were 15 observations read from the data set WORK.TBLS.
+NOTE: There were 2 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 17 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Bystander_CPR(ref="N") / param=ref;
+MPRINT(LOGI):   model j=Bystander_CPR / orpvalue firth;
+MPRINT(LOGI):   oddsratio Bystander_CPR;
+MPRINT(LOGI):   exact Bystander_CPR / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 49-52.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+16                             The SAS System  13:14 Monday, October 9, 2023
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 17 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 18 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class I_cardiac_arrest_rhythm(ref="Non_Shockable") / 
+param=ref;
+MPRINT(LOGI):   model j=I_cardiac_arrest_rhythm / orpvalue firth;
+MPRINT(LOGI):   oddsratio I_cardiac_arrest_rhythm;
+MPRINT(LOGI):   exact I_cardiac_arrest_rhythm / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 53-56.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+WARNING: Multiple lengths were specified for the variable ClassVal0 by 
+         input data set(s). This can cause truncation of data.
+NOTE: There were 18 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 19 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+17                             The SAS System  13:14 Monday, October 9, 2023
+
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Epinephrine_infusion(ref="N") / param=ref;
+MPRINT(LOGI):   model j=Epinephrine_infusion / orpvalue firth;
+MPRINT(LOGI):   oddsratio Epinephrine_infusion;
+MPRINT(LOGI):   exact Epinephrine_infusion / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 57-60.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 19 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 20 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Prehospital_norepinephrine(ref="N") / param=ref;
+MPRINT(LOGI):   model j=Prehospital_norepinephrine / orpvalue firth;
+MPRINT(LOGI):   oddsratio Prehospital_norepinephrine;
+MPRINT(LOGI):   exact Prehospital_norepinephrine / estimate=odds 
+cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+18                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 61-64.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.02 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 20 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 21 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class ED_norepinephrine(ref="N") / param=ref;
+MPRINT(LOGI):   model j=ED_norepinephrine / orpvalue firth;
+MPRINT(LOGI):   oddsratio ED_norepinephrine;
+MPRINT(LOGI):   exact ED_norepinephrine / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 65-68.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 21 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 22 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+19                             The SAS System  13:14 Monday, October 9, 2023
+
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Any_norepinephrine(ref="N") / param=ref;
+MPRINT(LOGI):   model j=Any_norepinephrine / orpvalue firth;
+MPRINT(LOGI):   oddsratio Any_norepinephrine;
+MPRINT(LOGI):   exact Any_norepinephrine / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 69-72.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.02 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 22 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 23 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+MPRINT(LOGI):   proc logistic data=nonisch;
+MPRINT(LOGI):   ods output ExactOddsRatio=otter;
+MPRINT(LOGI):   class Dopamine_infusion(ref="N") / param=ref;
+MPRINT(LOGI):   model j=Dopamine_infusion / orpvalue firth;
+MPRINT(LOGI):   oddsratio Dopamine_infusion;
+MPRINT(LOGI):   exact Dopamine_infusion / estimate=odds cltype=midp;
+MPRINT(LOGI):   run;
+
+NOTE: The ORPVALUE option is ignored when the FIRTH option is specified.
+NOTE: PROC LOGISTIC is modeling the probability that j=0. One way to change 
+      this to model the probability that j=1 is to specify the response 
+20                             The SAS System  13:14 Monday, October 9, 2023
+
+      variable option EVENT='1'.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied for the intercept-only 
+      model.
+NOTE: Convergence criterion (GCONV=1E-8) satisfied.
+NOTE: The data set WORK.OTTER has 1 observations and 10 variables.
+NOTE: There were 66 observations read from the data set WORK.NONISCH.
+NOTE: The PROCEDURE LOGISTIC printed pages 73-76.
+NOTE: PROCEDURE LOGISTIC used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.02 seconds
+      
+
+MPRINT(LOGI):   data tbls;
+MPRINT(LOGI):   set tbls otter;
+MPRINT(LOGI):   run;
+
+NOTE: There were 23 observations read from the data set WORK.TBLS.
+NOTE: There were 1 observations read from the data set WORK.OTTER.
+NOTE: The data set WORK.TBLS has 24 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+MPRINT(CAT_NONISCH):  ;
+81         
+82         data OR_nonisch;
+83             set tbls;
+84         
+85         
+86             if not missing(Parameter);
+87         
+88         
+89             if _N_=16 then Parameter = "Witnessed Status - Unwitnessed vs
+89       !  Bystander";
+90             if _N_=17 then Parameter = "Witnessed Status - Unwitnessed vs
+90       !  EMS";
+91         run;
+
+NOTE: There were 24 observations read from the data set WORK.TBLS.
+NOTE: The data set WORK.OR_NONISCH has 23 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+92         
+93         
+94         
+95         proc format;
+96             value $y_labs
+97             "aged10" = "Greater age"
+21                             The SAS System  13:14 Monday, October 9, 2023
+
+98             "Gender" = "Male Gender"
+99             "Witnessed_status EMS vs Unwitnessed" = "Bystander witnessed
+99       ! arrest"
+100            "Witnessed_status Bystander vs Unwitnesse" = "Witnessed
+100      ! Status - Bystander vs Unwitnessed"
+101            "Witnessed_status Bystander vs EMS" = "Witnessed Status -
+101      ! Bystander vs EMS"
+102            "Bystander_CPR" = "Bystander CPR"
+103            "I_cardiac_arrest_rhy" = "Initial shockable rhythm"
+104            "Prehospital_defibril" = "Greater OOH defibrillations"
+105            "ED_defibrillations" = "Greater ED defibrillations"
+106                "Total_defibrillation" = "Greater total defibrillations"
+107                "Prehospital_epinephr" = "Greater OOH epinephrine dose"
+108                "ED_epinephrine_push_" = "Greater ED epinephrine dose"
+109                "Total_epinephrine_pu" = "Greater total epinephrine dose"
+110                "Prehospital_norepine" = "Greater incidence of OOH
+110      ! norepinephrine"
+111                "ED_norepinephrine" = "Greater incidence of ED
+111      ! norepinephrine"
+112                "Any_norepinephrine" = "Greater incidence of any
+112      ! norepinephrine"
+113                "Epinephrine_infusion" = "Greater incidence of
+113      ! epinephrine infusion"
+114                "Dopamine_infusion" = "Greater incidence of dopamine
+114      ! infusion"
+115                "Prehospital_rearrest" = "Greater OOH rearrests"
+116               "ED_rearrests" = "Greater ED rearrests"
+117               "Total_rearrests" = "Greater total rearrests"
+118               "Time_from_ROSC_to_EC" = "Greater time from ROSC to OOH
+118      ! ECG acquisition"
+119                "Time_betwn_prehos_ED" = "Less time between OOH and ED
+119      ! ECG acquisiton"
+120                "Duration_of_prehospi" = "Greater time form EMS arrival
+120      ! to first ROSC"
+121                ;
+NOTE: Format $Y_LABS has been output.
+122        
+123            value $order
+124                "aged10" = '01'
+125                "Gender" = '02'
+126            "Witnessed Status - Unwitnessed vs Bystander" = '03'
+127            "Witnessed Status - Unwitnessed vs EMS" = '04'
+128            "Witnessed Status - Bystander vs EMS" = '05'
+129            "Bystander_CPR" = '06'
+130            "I_cardiac_arrest_rhy" = '07'
+131            "Prehospital_defibril" = '08'
+132            "ED_defibrillations" = '09'
+133                "Total_defibrillation" = '10'
+134                "Prehospital_epinephr" = '11'
+135                "ED_epinephrine_push_" = '12'
+136                "Total_epinephrine_pu" = '13'
+137                "Prehospital_norepine" = '15'
+22                             The SAS System  13:14 Monday, October 9, 2023
+
+138                "ED_norepinephrine" = '16'
+139                "Any_norepinephrine" = '17'
+140                "Epinephrine_infusion" = '14'
+141                "Dopamine_infusion" = '18'
+142                "Prehospital_rearrest" = '19'
+143               "ED_rearrests" = '20'
+144               "Total_rearrests" = '21'
+145               "Time_from_ROSC_to_EC" = '22'
+146               "Time_betwn_prehos_ED" = '23'
+147               "Duration_of_prehospi" = '24'
+148                ;
+NOTE: Format $ORDER has been output.
+149        run;
+
+NOTE: PROCEDURE FORMAT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.01 seconds
+      
+
+150        
+151        data OR_nonisch;
+152            length Parameter $50.;
+153            format Parameter $y_labs.;
+154            set OR_nonisch;
+155        
+156            order = put(Parameter, order.);
+157        run;
+
+WARNING: Multiple lengths were specified for the variable Parameter by 
+         input data set(s). This can cause truncation of data.
+NOTE: There were 23 observations read from the data set WORK.OR_NONISCH.
+NOTE: The data set WORK.OR_NONISCH has 23 observations and 11 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+158        
+159        proc sort data=OR_nonisch;
+160            by order;
+161        run;
+
+NOTE: There were 23 observations read from the data set WORK.OR_NONISCH.
+NOTE: The data set WORK.OR_NONISCH has 23 observations and 11 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+162        
+163        
+164        data OR_nonisch;
+23                             The SAS System  13:14 Monday, October 9, 2023
+
+165            set OR_nonisch;
+166        
+167            /* HELP WITH ED DEFIB */
+168            *if OddsRatioEst < 900;
+169        
+170        
+171            lowercl_r = round(lowercl, 0.01);
+172            uppercl_r = round(uppercl, 0.01);
+173            est_r = round(Estimate, 0.01);
+174        
+175            if missing(uppercl_r) then uppercl_r = 10;
+176        
+177            OR_CI = cat(est_r, ' (', lowercl_r, ' to ', uppercl_r, ')');
+178            if Parameter = "Witnessed Status - Unwitnessed vs EMS" then
+178      ! delete;
+179        
+180        run;
+
+NOTE: Missing values were generated as a result of performing an operation 
+      on missing values.
+      Each place is given by: (Number of times) at (Line):(Column).
+      1 at 172:17   
+NOTE: There were 23 observations read from the data set WORK.OR_NONISCH.
+NOTE: The data set WORK.OR_NONISCH has 22 observations and 15 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+181        
+182        
+183        data arrowsannoNONISCH;
+184            length function $40.;
+185            length label $40.;
+186            x1=62;
+187            x2=43;
+188            y1=2.5;
+189            y2=2.5;
+190            function = 'arrow';
+191            shape = 'filled';
+192            linecolor='black';
+193            output;
+194        
+195            x1=53.5;
+196            y1=1;
+197            function='text';
+198            label='Sustained Non-Ischemia';
+199            width=200;
+200            textsize=7.8;
+201            output;
+202        
+203            x1=69;
+24                             The SAS System  13:14 Monday, October 9, 2023
+
+204            x2=92;
+205            y1=2.5;
+206            y2=2.5;
+207            function='arrow';
+208            shape='filled';
+209            linecolor='black';
+210            output;
+211        
+212            x1=80;
+213            y1=1;
+214            function='text';
+215            label='Evolution to Ischemic or STEM I';
+216            width=250;
+217            textsize=7.8;
+218            output;
+219        run;
+
+NOTE: The data set WORK.ARROWSANNONONISCH has 4 observations and 10 
+      variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+220        
+221        
+222        ods graphics on / imagename = 'forest_NONISCH_v2' width=10in
+222      ! height=8in;
+223        proc sgplot data=OR_nonisch sganno=arrowsannoNONISCH noautolegend
+223      ! ;
+224            refline 1 / axis=x;
+225            scatter x=Estimate y=Parameter / markerattrs=or
+225      ! (symbol=DiamondFilled size=8);
+226        
+227            highlow y=Parameter low=lowercl high=uppercl / Clipcap
+227      ! clipcapshape=closedarrow;
+228        
+229            yaxistable OR_CI / nolabel location=inside position=right
+229      ! Title = "Odds Ratio (95% CI)" titleattrs=(size=8 weight=Bold);
+230        
+231        
+232            yaxis label=' ' colorbands=odd colorbandsattrs=(color=gray
+232      ! transparency=0.7) discreteorder=data reverse;
+233            xaxis label=" " min=0.05 max=10 type=log;
+234        
+235            title "Out-of-hospital Nonischemic Subjects";
+236        run;
+
+NOTE: PROCEDURE SGPLOT used (Total process time):
+      real time           2.62 seconds
+      cpu time            0.09 seconds
+      
+25                             The SAS System  13:14 Monday, October 9, 2023
+
+NOTE: The style element 'OR' in the option MARKERATTRS is invalid.  The 
+      default will be used.
+NOTE: Listing image output written to 
+      /home/rgallagher/04222/Project1-Aufderheide/forest_NONISCH_v2.png.
+NOTE: There were 22 observations read from the data set WORK.OR_NONISCH.
+
+237        
+238        ods graphics off;
+NOTE: SAS Institute Inc., SAS Campus Drive, Cary, NC USA 27513-2414
+NOTE: The SAS System used:
+      real time           3.40 seconds
+      cpu time            0.86 seconds
+      
