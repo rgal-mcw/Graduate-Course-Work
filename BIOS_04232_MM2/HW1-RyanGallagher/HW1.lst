@@ -1,0 +1,918 @@
+                                   H0 Q3                                   1
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H0 Q3                                   2
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+ 
+                         Dependent Variable: CPM   
+
+                                     Sum of
+ Source                    DF       Squares   Mean Square  F Value  Pr > F
+
+ Model                      3    6.04705779    2.01568593    11.97  <.0001
+
+ Error                     29    4.88161518    0.16833156                 
+
+ Corrected Total           32   10.92867297                               
+
+
+             R-Square     Coeff Var      Root MSE      CPM Mean
+
+             0.553320      13.21063      0.410282      3.105697
+
+
+ Source                    DF     Type I SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.51212398    1.51212398     8.98  0.0055
+ SPA                        1    0.38225491    0.38225491     2.27  0.1426
+ ALF                        1    4.15267891    4.15267891    24.67  <.0001
+
+
+ Source                    DF   Type III SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.14980787    1.14980787     6.83  0.0141
+ SPA                        1    2.22266847    2.22266847    13.20  0.0011
+ ALF                        1    4.15267891    4.15267891    24.67  <.0001
+
+
+                                       Standard
+     Parameter         Estimate           Error    t Value    Pr > |t|
+
+     Intercept      7.721524762      0.79762045       9.68      <.0001
+     UTL           -0.138502323      0.05299406      -2.61      0.0141
+     SPA           -3.503566343      0.96417479      -3.63      0.0011
+     ALF           -6.203140418      1.24890731      -4.97      <.0001
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H1 Q3                                   3
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H1 Q3                                   4
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+ 
+                         Dependent Variable: CPM   
+
+                                     Sum of
+ Source                    DF       Squares   Mean Square  F Value  Pr > F
+
+ Model                      4    6.57115408    1.64278852    10.56  <.0001
+
+ Error                     28    4.35751889    0.15562567                 
+
+ Corrected Total           32   10.92867297                               
+
+
+             R-Square     Coeff Var      Root MSE      CPM Mean
+
+             0.601276      12.70228      0.394494      3.105697
+
+
+ Source                    DF     Type I SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.51212398    1.51212398     9.72  0.0042
+ ASL                        1    0.24733190    0.24733190     1.59  0.2178
+ SPA                        1    0.17083275    0.17083275     1.10  0.3037
+ ALF                        1    4.64086546    4.64086546    29.82  <.0001
+
+
+ Source                    DF   Type III SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.66382597    1.66382597    10.69  0.0029
+ ASL                        1    0.52409629    0.52409629     3.37  0.0771
+ SPA                        1    2.57511918    2.57511918    16.55  0.0004
+ ALF                        1    4.64086546    4.64086546    29.82  <.0001
+
+
+                                       Standard
+     Parameter         Estimate           Error    t Value    Pr > |t|
+
+     Intercept      8.595525050      0.90277548       9.52      <.0001
+     UTL           -0.212815723      0.06508642      -3.27      0.0029
+     ASL            0.332768932      0.18133342       1.84      0.0771
+     SPA           -4.950301373      1.21695241      -4.07      0.0004
+     ALF           -7.211373248      1.32056295      -5.46      <.0001
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                Q3 proc reg                                5
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+                          Dependent Variable: CPM 
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+
+
+                           Analysis of Variance
+ 
+                                   Sum of          Mean
+ Source                  DF       Squares        Square   F Value   Pr > F
+
+ Model                    4       6.57115       1.64279     10.56   <.0001
+ Error                   28       4.35752       0.15563                   
+ Corrected Total         32      10.92867                                 
+
+
+            Root MSE              0.39449    R-Square     0.6013
+            Dependent Mean        3.10570    Adj R-Sq     0.5443
+            Coeff Var            12.70228                       
+
+
+                            Parameter Estimates
+ 
+                         Parameter       Standard
+    Variable     DF       Estimate          Error    t Value    Pr > |t|
+
+    Intercept     1        8.59553        0.90278       9.52      <.0001
+    UTL           1       -0.21282        0.06509      -3.27      0.0029
+    ASL           1        0.33277        0.18133       1.84      0.0771
+    SPA           1       -4.95030        1.21695      -4.07      0.0004
+    ALF           1       -7.21137        1.32056      -5.46      <.0001
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                Q3 proc reg                                6
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+
+                 Test 1 Results for Dependent Variable CPM
+ 
+                                         Mean
+         Source             DF         Square    F Value    Pr > F
+
+         Numerator           1        0.52410       3.37    0.0771
+         Denominator        28        0.15563                     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H0 Q4                                   7
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H0 Q4                                   8
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+ 
+                         Dependent Variable: CPM   
+
+                                     Sum of
+ Source                    DF       Squares   Mean Square  F Value  Pr > F
+
+ Model                      1    1.51212398    1.51212398     4.98  0.0330
+
+ Error                     31    9.41654899    0.30375964                 
+
+ Corrected Total           32   10.92867297                               
+
+
+             R-Square     Coeff Var      Root MSE      CPM Mean
+
+             0.138363      17.74622      0.551144      3.105697
+
+
+ Source                    DF     Type I SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.51212398    1.51212398     4.98  0.0330
+
+
+ Source                    DF   Type III SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.51212398    1.51212398     4.98  0.0330
+
+
+                                       Standard
+     Parameter         Estimate           Error    t Value    Pr > |t|
+
+     Intercept      4.413442153      0.59393100       7.43      <.0001
+     UTL           -0.150017698      0.06723785      -2.23      0.0330
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H1 Q4                                   9
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                   H1 Q4                                  10
+                                              15:12 Monday, February 6, 2023
+
+                             The GLM Procedure
+ 
+                         Dependent Variable: CPM   
+
+                                     Sum of
+ Source                    DF       Squares   Mean Square  F Value  Pr > F
+
+ Model                      3    1.93028863    0.64342954     2.07  0.1255
+
+ Error                     29    8.99838434    0.31028912                 
+
+ Corrected Total           32   10.92867297                               
+
+
+             R-Square     Coeff Var      Root MSE      CPM Mean
+
+             0.176626      17.93594      0.557036      3.105697
+
+
+ Source                    DF     Type I SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    1.51212398    1.51212398     4.87  0.0353
+ ASL                        1    0.24733190    0.24733190     0.80  0.3793
+ SPA                        1    0.17083275    0.17083275     0.55  0.4641
+
+
+ Source                    DF   Type III SS   Mean Square  F Value  Pr > F
+
+ UTL                        1    0.46162120    0.46162120     1.49  0.2324
+ ASL                        1    0.03590974    0.03590974     0.12  0.7362
+ SPA                        1    0.17083275    0.17083275     0.55  0.4641
+
+
+                                       Standard
+     Parameter         Estimate           Error    t Value    Pr > |t|
+
+     Intercept      4.343927044      0.64528874       6.73      <.0001
+     UTL           -0.107015082      0.08773753      -1.22      0.2324
+     ASL           -0.079208594      0.23283564      -0.34      0.7362
+     SPA           -1.029466417      1.38742620      -0.74      0.4641
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                Q4 proc reg                               11
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+                          Dependent Variable: CPM 
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+
+
+                           Analysis of Variance
+ 
+                                   Sum of          Mean
+ Source                  DF       Squares        Square   F Value   Pr > F
+
+ Model                    3       1.93029       0.64343      2.07   0.1255
+ Error                   29       8.99838       0.31029                   
+ Corrected Total         32      10.92867                                 
+
+
+            Root MSE              0.55704    R-Square     0.1766
+            Dependent Mean        3.10570    Adj R-Sq     0.0914
+            Coeff Var            17.93594                       
+
+
+                            Parameter Estimates
+ 
+                         Parameter       Standard
+    Variable     DF       Estimate          Error    t Value    Pr > |t|
+
+    Intercept     1        4.34393        0.64529       6.73      <.0001
+    UTL           1       -0.10702        0.08774      -1.22      0.2324
+    ASL           1       -0.07921        0.23284      -0.34      0.7362
+    SPA           1       -1.02947        1.38743      -0.74      0.4641
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                Q4 proc reg                               12
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+
+                 Test 1 Results for Dependent Variable CPM
+ 
+                                         Mean
+         Source             DF         Square    F Value    Pr > F
+
+         Numerator           2        0.20908       0.67    0.5176
+         Denominator        29        0.31029                     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                     Q5   15:12 Monday, February 6, 2023  13
+
+                             The REG Procedure
+                               Model: MODEL1
+                          Dependent Variable: CPM 
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+
+
+                           Analysis of Variance
+ 
+                                   Sum of          Mean
+ Source                  DF       Squares        Square   F Value   Pr > F
+
+ Model                    4       6.57115       1.64279     10.56   <.0001
+ Error                   28       4.35752       0.15563                   
+ Corrected Total         32      10.92867                                 
+
+
+            Root MSE              0.39449    R-Square     0.6013
+            Dependent Mean        3.10570    Adj R-Sq     0.5443
+            Coeff Var            12.70228                       
+
+
+                            Parameter Estimates
+ 
+                         Parameter       Standard
+    Variable     DF       Estimate          Error    t Value    Pr > |t|
+
+    Intercept     1        8.59553        0.90278       9.52      <.0001
+    UTL           1       -0.21282        0.06509      -3.27      0.0029
+    ASL           1        0.33277        0.18133       1.84      0.0771
+    SPA           1       -4.95030        1.21695      -4.07      0.0004
+    ALF           1       -7.21137        1.32056      -5.46      <.0001
+
+
+                          Covariance of Estimates
+ 
+      Variable          Intercept               UTL               ASL
+
+      Intercept      0.8150035617      -0.041135518      0.0863623614
+      UTL            -0.041135518      0.0042362421      -0.007343111
+      ASL            0.0863623614      -0.007343111      0.0328818092
+      SPA            -0.654961878      0.0195499147      -0.142955849
+      ALF            -1.028140431       0.025585184      -0.099626246
+
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                     Q5   15:12 Monday, February 6, 2023  14
+
+                             The REG Procedure
+                               Model: MODEL1
+                          Dependent Variable: CPM 
+
+                          Covariance of Estimates
+ 
+               Variable                SPA               ALF
+
+               Intercept      -0.654961878      -1.028140431
+               UTL            0.0195499147       0.025585184
+               ASL            -0.142955849      -0.099626246
+               SPA            1.4809731757       0.948153832
+               ALF             0.948153832      1.7438865075
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                     Q5   15:12 Monday, February 6, 2023  15
+
+                             The REG Procedure
+                               Model: MODEL1
+
+                 Test 1 Results for Dependent Variable CPM
+ 
+                                         Mean
+         Source             DF         Square    F Value    Pr > F
+
+         Numerator           1        0.59887       3.85    0.0598
+         Denominator        28        0.15563                     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                 Q6 - test                                16
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+                          Dependent Variable: CPM 
+
+                  Number of Observations Read          33
+                  Number of Observations Used          33
+
+
+                           Analysis of Variance
+ 
+                                   Sum of          Mean
+ Source                  DF       Squares        Square   F Value   Pr > F
+
+ Model                    4       6.57115       1.64279     10.56   <.0001
+ Error                   28       4.35752       0.15563                   
+ Corrected Total         32      10.92867                                 
+
+
+            Root MSE              0.39449    R-Square     0.6013
+            Dependent Mean        3.10570    Adj R-Sq     0.5443
+            Coeff Var            12.70228                       
+
+
+                            Parameter Estimates
+ 
+                         Parameter       Standard
+    Variable     DF       Estimate          Error    t Value    Pr > |t|
+
+    Intercept     1        8.59553        0.90278       9.52      <.0001
+    UTL           1       -0.21282        0.06509      -3.27      0.0029
+    ASL           1        0.33277        0.18133       1.84      0.0771
+    SPA           1       -4.95030        1.21695      -4.07      0.0004
+    ALF           1       -7.21137        1.32056      -5.46      <.0001
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
+                                 Q6 - test                                17
+                                              15:12 Monday, February 6, 2023
+
+                             The REG Procedure
+                               Model: MODEL1
+
+                 Test 1 Results for Dependent Variable CPM
+ 
+                                         Mean
+         Source             DF         Square    F Value    Pr > F
+
+         Numerator           1        0.07155       0.46    0.5033
+         Denominator        28        0.15563                     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+/home/rgallagher/04232/sas/HW1.sas                                          
