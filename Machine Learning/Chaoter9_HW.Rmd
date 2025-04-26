@@ -1,0 +1,340 @@
+---
+title: 'Chapter 9: HW'
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## 3. Here we explore the maximal margin classifier on a toy data set.
+
+### (a) We are given $n=7$ observations in $p=2$ dimensions. For each observations, there is an associated class label.
+
+![](Desktop/Screenshot 2023-11-06 at 3.38.20 PM.png){width="373"}
+
+```{r}
+x1 = c(3,2,4,1,2,4,4)
+x2 = c(4,2,4,4,1,3,1)
+y = c(1,1,1,1,0,0,0)
+dat = data.frame(x1=x1, x2=x2, y=as.factor(y))
+
+ggplot(data=dat, aes(x=x1, y=x2, col=y)) + geom_point() + 
+  labs(title="My sketched points") + theme(plot.title = element_text(hjust=0.5), legend.position = 'none') 
+```
+
+### (b) Sketch the optimal separating hyperplane, and provide the equation for this hyperplane (of the form (9.1))
+
+```{r}
+library(e1071)
+svm.model = svm(y ~., data=dat, kernel='linear', scale=FALSE)
+summary(svm.model)
+
+w = t(svm.model$coefs) %*% svm.model$SV
+w1 = w[1]
+w2 = w[2]
+b = -svm.model$rho
+
+print(w)
+print(b)
+
+# Calculate slope (m) and intercept (c) for the equation
+m = -w1 / w2
+c = -b / w2
+
+ggplot(data=dat, aes(x=x1, y=x2, col=y)) + geom_point() + 
+  labs(title="My sketched points") + theme(plot.title = element_text(hjust=0.5), legend.position = 'none')+
+  geom_abline(slope = m, intercept = c, color = "blue")+xlim(-5,5)+ylim(-5,5)
+
+```
+
+Equation for this line is:
+
+$$
+-0.80999X_1 +0.830433X_2 + 0.0046707 = 0
+$$
+
+### (c) Describe the classification rule for the maximal margin classifier. It should be something along the lines of "Classify to Red if ...". Provide the values for $\beta_0$ , $\beta_1$, and $\beta_2$  
+
+We find that:
+
+$$
+\beta_0 = 0.0046 $$
+$$
+\beta_1 = -0.80999$$  $$\beta_2 = 0.8304
+$$
+
+I.E, if $$
+-0.80999X_1 +0.830433X_2 + 0.0046707 > 0
+$$
+
+Then classify to red, if
+
+$$
+-0.80999X_1 +0.830433X_2 + 0.0046707 < 0
+$$
+
+Then classify to blue.
+
+### (d) On your sketch, indicate the margin for the maximal margin hyperplane.
+
+```{r}
+w_norm = sqrt(sum(w ** 2))
+margin = 2/w_norm
+
+upper = c + (margin / sqrt(w1^2 + w2^2))
+lower = c - (margin / sqrt(w1^2 + w2^2))
+
+ p = ggplot(data=dat, aes(x=x1, y=x2, col=y)) + geom_point() + 
+  labs(title="My sketched points") + theme(plot.title = element_text(hjust=0.5), legend.position = 'none')  + geom_abline(slope = m, intercept = c, color = "blue") + geom_abline(slope = m, intercept = upper, linetype='dashed', color='red') + geom_abline(slope = m, intercept = lower, linetype='dashed', color='red') + xlim(c(0,5)) + ylim(c(-2, 8))
+ 
+ p
+```
+
+### (e) Indicate the support vectors for the maximal margin classifier.
+
+```{r}
+svm.model$index
+```
+
+### (f) Argue that a slight movement of the seventh observation (4,1) would not affect the maximal margin hyperplane.
+
+Since this point at X1 = 4, X2 = 1 is not a support vector, a slight movement in it would not affect the hyperplane. This is because it's not a point that the line drawn relies on, and a **slight** movement in it wouldn't affect the model at all. If there was a big movement, it would affect it much more.
+
+### (e) Draw an additional observation on the plot so that the two classes are no longer separable by a hyperplane. 
+
+```{r}
+x1 = c(3,2,4,1,2,4,4,3)
+x2 = c(4,2,4,4,1,3,1,0)
+y = c(1,1,1,1,0,0,0,1)
+dat = cbind(x1,x2,y)
+dat = as.data.frame(dat)
+
+ggplot(data=dat, aes(x=x1, y=x2, col=y)) + geom_point() + 
+  labs(title="My sketched points (red=blue, blue=black) - Non-seperable") + theme(plot.title = element_text(hjust=0.5), legend.position = 'none') 
+```
+
+## 7. In this problem, you will use support vector approaches in order to predicts whether a given car gets high or low gas mileage based on the `Auto` data set.
+
+### (a) Create a binary variable that takes on a 1 for cars with gas mileage above the median, and a 0 for cars with gas mileage below the median
+
+```{r}
+library(ISLR2)
+library(tidyverse)
+attach(Auto)
+
+med = median(Auto$mpg)
+my.auto = Auto %>% mutate(mpg.above.med = if_else(mpg > med, 1, 0))
+my.auto = my.auto %>% select(-c(mpg, name))
+my.auto$mpg.above.med = as.factor(my.auto$mpg.above.med)
+```
+
+### (b) Fit a support vector classifier to the data with various values of `cost`, in order to predict whether a car gets high or low gas mileage. Report the cross-validation errors associated with different values of this parameter. Comment on your results. Note you will need to fit the classifier without the gas mileage variable to produce sensible results.
+
+```{r}
+costs = 10^seq(-5, 5, by=0.5)
+
+tune.out = tune(svm, mpg.above.med~., data=my.auto, kernel='linear',
+                ranges =list(costs))
+
+```
+
+```{r}
+summary(tune.out)
+best.class = tune.out$best.model
+
+```
+
+Cost = 1 appears to be the best, but they all produce the same errors.
+
+### (c) Now repeat (b), this time using SVMs with radial and polynomial basis kernels, with different values of `gamma` and `degree` and `cost`. Comment on your results.
+
+```{r}
+
+costs = 10^seq(-2, 2, by=0.5)
+gammas = 10^seq(-2, 2, by=0.5)
+degrees = seq(2, 5, by=1) 
+
+# SVM with radial basis kernel
+tune.result.radial = tune(svm, mpg.above.med ~ ., data = my.auto,
+                           kernel = "radial",
+                           ranges = list(cost = costs, gamma = gammas),
+)
+
+# SVM with polynomial kernel
+tune.result.poly = tune(svm, mpg.above.med ~ ., data = my.auto,
+                         kernel = "polynomial",
+                         ranges = list(cost = costs, degree = degrees),
+)
+
+print(tune.result.radial$best.model)
+print(tune.result.poly$best.model)
+
+
+```
+
+### (d) Make some plots to back up your assertions in (b) and (c)
+
+**NOTE**: These are kind of a paint to make, so I won't do more than three per part.
+
+#### Part (b) Plots
+
+##### Weight & Horsepower
+
+```{r}
+svmfit = svm(mpg.above.med ~ weight + horsepower, data=my.auto, kernel='linear',
+             cost = 1, scale=FALSE)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$weight), max(my.auto$weight), length = 100)
+x2 <- seq(min(my.auto$horsepower), max(my.auto$horsepower), length = 100)
+grid <- expand.grid(weight = x1, horsepower = x2)
+
+# Predict the class labels for the grid points
+grid$mpg.above.med <- predict(svmfit, newdata = grid)
+
+
+plot(my.auto$weight, my.auto$horsepower, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary",cex = 0.75)
+points(grid$weight, grid$horsepower, col = grid$mpg.above.med, pch = ".", cex = 2.5)
+```
+
+##### Weight & Acceleration
+
+```{r}
+svmfit = svm(mpg.above.med ~ weight + acceleration, data=my.auto, kernel='linear',
+             cost = 1, scale=FALSE)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$weight), max(my.auto$weight), length = 100)
+x2 <- seq(min(my.auto$acceleration), max(my.auto$acceleration), length = 100)
+grid <- expand.grid(weight = x1, acceleration = x2)
+
+# Predict the class labels for the grid points
+grid$mpg.above.med <- predict(svmfit, newdata = grid)
+
+
+plot(my.auto$weight, my.auto$acceleration, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary",cex = 0.75)
+points(grid$weight, grid$acceleration, col = grid$mpg.above.med, pch = ".", cex = 2.5)
+```
+
+##### Horsepower & year
+
+```{r}
+svmfit = svm(mpg.above.med ~ horsepower + year, data=my.auto, kernel='linear',
+             cost = 1, scale=FALSE)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$horsepower), max(my.auto$horsepower), length = 100)
+x2 <- seq(min(my.auto$year), max(my.auto$year), length = 100)
+grid <- expand.grid(horsepower = x1, year = x2)
+
+# Predict the class labels for the grid points
+grid$mpg.above.med <- predict(svmfit, newdata = grid)
+
+
+plot(my.auto$horsepower, my.auto$year, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary",cex = 0.75)
+points(grid$horsepower, grid$year, col = grid$mpg.above.med, pch = ".", cex = 2.5)
+```
+
+#### Part (c) Plots
+
+##### Weight & Horsepower
+
+```{r}
+best.rad = svm(mpg.above.med ~ weight + horsepower, 
+                          data = my.auto,
+                          kernel = "radial",
+                          cost = 1
+)
+
+best.poly = svm( mpg.above.med ~ weight + horsepower, 
+                         data = my.auto,
+                         kernel = "polynomial",
+                         cost = 31.62278, 
+                         degree = 3
+)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$weight), max(my.auto$weight), length = 100)
+x2 <- seq(min(my.auto$horsepower), max(my.auto$horsepower), length = 100)
+grid1 <- expand.grid(weight = x1, horsepower = x2)
+grid2 = expand.grid(weight = x1, horsepower = x2)
+# Predict the class labels for the grid points
+grid1$mpg.above.med <- predict(best.rad, newdata = grid1)
+grid2$mpg.above.med = predict(best.poly, newdata=grid2)
+
+plot(my.auto$weight, my.auto$horsepower, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Radial",cex = 0.75)
+points(grid1$weight, grid1$horsepower, col = grid1$mpg.above.med, pch = ".", cex = 2.5)
+
+plot(my.auto$weight, my.auto$horsepower, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Polynomial",cex = 0.75)
+points(grid2$weight, grid2$horsepower, col = grid2$mpg.above.med, pch = ".", cex = 2.5)
+```
+
+##### Weight & Acceleration
+
+```{r}
+best.rad = svm(mpg.above.med ~ weight + acceleration, 
+                          data = my.auto,
+                          kernel = "radial",
+                          cost = 1
+)
+
+best.poly = svm( mpg.above.med ~ weight + acceleration, 
+                         data = my.auto,
+                         kernel = "polynomial",
+                         cost = 31.62278, 
+                         degree = 3
+)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$weight), max(my.auto$weight), length = 100)
+x2 <- seq(min(my.auto$acceleration), max(my.auto$acceleration), length = 100)
+grid1 <- expand.grid(weight = x1, acceleration = x2)
+grid2 = expand.grid(weight = x1, acceleration = x2)
+# Predict the class labels for the grid points
+grid1$mpg.above.med <- predict(best.rad, newdata = grid1)
+grid2$mpg.above.med = predict(best.poly, newdata=grid2)
+
+plot(my.auto$weight, my.auto$acceleration, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Radial",cex = 0.75)
+points(grid1$weight, grid1$acceleration, col = grid1$mpg.above.med, pch = ".", cex = 2.5)
+
+plot(my.auto$weight, my.auto$acceleration, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Polynomial",cex = 0.75)
+points(grid2$weight, grid2$acceleration, col = grid2$mpg.above.med, pch = ".", cex = 2.5)
+```
+
+##### Horsepower & year
+
+```{r}
+best.rad = svm(mpg.above.med ~ horsepower + year, 
+                          data = my.auto,
+                          kernel = "radial",
+                          cost = 1
+)
+
+best.poly = svm( mpg.above.med ~ horsepower + year, 
+                         data = my.auto,
+                         kernel = "polynomial",
+                         cost = 31.62278, 
+                         degree = 3
+)
+
+# Create a grid of points for plotting
+x1 <- seq(min(my.auto$horsepower), max(my.auto$year), length = 100)
+x2 <- seq(min(my.auto$horsepower), max(my.auto$year), length = 100)
+grid1 <- expand.grid(horsepower = x1, year = x2)
+grid2 = expand.grid(horsepower = x1, year = x2)
+# Predict the class labels for the grid points
+grid1$mpg.above.med <- predict(best.rad, newdata = grid1)
+grid2$mpg.above.med = predict(best.poly, newdata=grid2)
+
+plot(my.auto$horsepower, my.auto$year, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Radial",cex = 0.75)
+points(grid1$horsepower, grid1$year, col = grid1$mpg.above.med, pch = ".", cex = 2.5)
+
+plot(my.auto$horsepower, my.auto$year, col = my.auto$mpg.above.med, pch = 16, main = "SVM Decision Boundary - Polynomial",cex = 0.75)
+points(grid2$horsepower, grid2$year, col = grid2$mpg.above.med, pch = ".", cex = 2.5)
+```

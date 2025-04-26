@@ -1,0 +1,351 @@
+---
+title: "Chapter8_HW"
+author: "Ryan Gallagher"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 3. Consider the Gini index, classification error, and entropy in a single classification setting with two classes. Create a single plot that displays each of these quantiles as a function of $\hat{p}_{m1}$. The x-axis should display $\hat{p}_{m1}$, ranging from 0 to 1, and the y-axis should display the value of the Gini index, classification error, and entropy.
+
+```{r}
+library(ggplot2)
+#sim data
+p = seq(0, 1, length.out = 500)
+
+#pm1 = 1-pm2
+
+# calculate values
+gini = 1 - (p^2) - ((1 - p)^2)
+classification_error = 1 - pmax(p, 1 - p)
+entropy = - (p * ifelse(p == 0, 0, log2(p)) + (1 - p) * ifelse((1 - p) == 0, 0, log2(1 - p)))
+data = data.frame(p, gini, classification_error, entropy)
+
+#plot it
+ggplot(data, aes(x = p)) +
+  geom_line(aes(y = gini, color = "Gini Index")) +
+  geom_line(aes(y = classification_error, color = "Classification Error")) +
+  geom_line(aes(y = entropy, color = "Entropy")) +
+  labs(title = "Gini Index, Classification Error, and Entropy vs Probability",
+       x = expression(hat(p)[m1]),
+       y = "Measure Value") +
+  theme_minimal() +
+  scale_color_manual(values = c("Gini Index" = "red", "Classification Error" = "blue", "Entropy" = "green"))
+
+```
+
+## 7. In the lab, we applied random forests to the *Boston* data using $mtry=6$ and using $ntree=25$ and $ntree=500$. Create a plot displaying the test error resulting from random forests on this data set for a more comprehensive range of values for $mtry$ and $ntree$. You can model your plot after figure 8.10. Describe the results obtained.
+
+8.10 has the y-axis as the Test Classification Error and the x-axis as the number of trees (ntree). There are lines colored by the value of m (mtry).
+
+```{r}
+library(ISLR2)
+library(randomForest)
+
+set.seed(1)
+train = sample(1:nrow(Boston), nrow(Boston) / 2)
+boston.test = Boston$medv[-train]
+
+ntree_seq = seq(25,500, by=25)
+mtry_seq = 1:12
+
+results = data.frame(ntree=integer(), mtry=integer(), test_error=numeric())
+
+for(ntree in ntree_seq){
+  for (mtry in mtry_seq){
+    set.seed(1)
+    rf.boston = randomForest(medv ~ ., data = Boston, 
+                              mtry = mtry,
+                              ntree = ntree, 
+                              subset = train)
+    
+    yhat.bag = predict(rf.boston, 
+                        newdata = Boston[-train, ])
+    
+    test_error = mean((yhat.bag - boston.test)^2)
+    
+    # store results
+    results = rbind(results, data.frame(ntree, mtry, test_error))
+  }
+}
+
+ggplot(results, aes(x = ntree, y = test_error, color = as.factor(mtry))) +
+  geom_line() +
+  labs(title = "Test Error vs. Number of Trees",
+       x = "Number of Trees (ntree)",
+       y = "Test Error",
+       color = "mtry") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust=0.5))
+```
+
+## 9. This problem involves the $OJ$ data set which is a part of the $ISLR2$ package.
+
+### (a) Create a training set containing a random sample of 800 observations, and a test set containing the remaining observations.
+
+```{r}
+library(ISLR2)
+library(tree)
+train_idx = sample(1:nrow(OJ), 800)
+train = OJ[train_idx, ]
+test = OJ[-train_idx, ]
+```
+
+### (b) Fit a tree to the training data, with *Purchase* as the response and the other variables as predictors. Use the *summary()* function to produce summary statistics about the tree, and describe the results obtained. What is the training error rate? How many terminal nodes does the tree have?
+
+```{r}
+tree.train = tree(Purchase~., data=train)
+summary(tree.train)
+```
+
+This tree has a training error rate of 0.1762 with 9 terminal nodes.
+
+### (c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes and interpret the information displayed.
+
+```{r}
+tree.train
+```
+
+Well the initial node splits the purchase decision based on how loyal the customer is to Citrus Hill. Looking at all the outcomes for those with a loyalty value less than 0.48285, they always choose Minute Maid. For more loyal Citrus Hill drinkers, there is a decision made based on the price difference between CH and MM, as well as any discount considerations. What this tells me is that a customer would have to be quite loyal to CH to pick it over MM.
+
+### (d) Create a plot of the tree, and interpret the results
+
+```{r}
+plot(tree.train)
+text(tree.train, pretty=0)
+```
+
+### (e) Predict the response on the test data, and produce a confusion matrix comparing the test labels and the predicted test labels. What is the test error rate?
+
+```{r}
+tree.test = predict(tree.train, test,
+                    type = 'class')
+table(tree.test, test$Purchase)
+
+(140+92) / 270
+```
+
+The test error rate is $0.85925$. Pretty good!
+
+### (f) Apply the *cv.tree* function to the training set in order to determine the optimal tree size.
+
+```{r}
+set.seed(2)
+cv.OJ = cv.tree(tree.train, FUN = prune.misclass)
+names(cv.OJ)
+cv.OJ
+```
+
+We find that 9,6, and 4 all have very close deviation, but 9 has the smallest.
+
+### (g) Produce a plot with tree size on the x-axis and cross-validated classification error rate on the y-axis
+
+```{r}
+par(mfrow = c(1, 2))
+plot(cv.OJ$size, cv.OJ$dev, type='b')
+plot(cv.OJ$k, cv.OJ$dev, type='b')
+```
+
+### (h) Which size tree corresponds to the lowest cross-validated classification error rate?
+
+A tree size of 9 produces the lowest cross-validated classification error rate.
+
+### (i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with 5 terminal nodes.
+
+I already plotted the 9 node tree. So this doesn't prune anything. I'll try 4 even though 9 has a smaller error rate.
+
+```{r}
+prune.OJ = prune.misclass(tree.train, best=4)
+plot(prune.OJ)
+text(prune.OJ, pretty=0)
+```
+
+### (j) Compare the training error rates between the pruned and unpruned trees. Which is higher?
+
+```{r}
+summary(prune.OJ)
+```
+
+The unpruned tree has a smaller error rate of
+
+```         
+0.1762 = 141 / 800
+```
+
+Where our pruned tree has an error rate slightly larger at 0.18 = 144/800.
+
+### (k) Compare the test error rates between the pruned and unpruned trees. Which is higher?
+
+```{r}
+prune.test = predict(prune.OJ, test,
+                    type = 'class')
+table(prune.test, test$Purchase)
+
+
+```
+
+The nonpruned tree had a test error rate of:
+
+```         
+0.8592593
+```
+
+This pruned tree has a test error rate of
+
+```{r}
+(144 + 88) / (144+88+16+22)
+```
+
+Which is exactly the same as before.
+
+## 10. We now use boosting to predict *Salary* in the *Hitters* data set.
+
+### (a) Remove the observations for whom the salary information is unknown, and then log-transform the salaries
+
+```{r}
+library(tidyverse)
+Hitters = Hitters %>% filter(is.na(Salary) == FALSE) %>% 
+  mutate(Salary = log(Salary))
+```
+
+### (b) Create a training set of consisting of the first 200 observations, and a test set consisting of the remaining observations
+
+```{r}
+train_idx = sample(1:nrow(Hitters), 200)
+train = Hitters[train_idx, ]
+test = Hitters[-train_idx, ]
+```
+
+### (c) Perform boosting on the training set with 1000 trees for a range of values of the shrinkage parameter $\lambda$. Produce a plot with different shrinkage values on the x-axis and the corresponding training set MSE on the y-axis.
+
+```{r}
+library(gbm)
+library(ggplot2)
+
+set.seed(1)
+
+shrinkage_values = seq(0.01, 0.5, by = 0.05)
+results = data.frame(shrinkage = numeric(), MSE = numeric())
+
+for(lambda in shrinkage_values) {
+  boost.hitters = gbm(Salary~., data = train,
+                       distribution = 'gaussian', n.trees = 1000,
+                       shrinkage = lambda)
+
+
+  pred = predict(boost.hitters, n.trees = 1000)
+  mse = mean((pred - train$Salary)^2)
+  results = rbind(results, data.frame(shrinkage = lambda, MSE = mse))
+}
+ggplot(results, aes(x = shrinkage, y = MSE)) +
+  geom_line() +
+  labs(title = "Training MSE vs. Shrinkage",
+       x = "Shrinkage",
+       y = "Training MSE") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust=0.5))
+
+```
+
+### (d) Produce a plot with different shrinkage values on the x-axis and corresponding test set MSE on the y-axis
+
+```{r}
+set.seed(1)
+
+shrinkage_values = seq(0.01, 0.5, by = 0.05)
+results = data.frame(shrinkage = numeric(), test_MSE = numeric())
+
+for(lambda in shrinkage_values) {
+  boost.hitters = gbm(Salary~., data = train,
+                       distribution = 'gaussian', n.trees = 1000,
+                       shrinkage = lambda)
+
+
+  pred = predict(boost.hitters, newdata = test, n.trees = 1000)
+  test_mse = mean((pred - test$Salary)^2)
+  results = rbind(results, data.frame(shrinkage = lambda, test_MSE = test_mse))
+}
+
+ggplot(results, aes(x = shrinkage, y = test_MSE)) +
+  geom_line() +
+  labs(title = "Test MSE vs. Shrinkage",
+       x = "Shrinkage",
+       y = "Test MSE") +
+  theme_minimal() + 
+  theme(plot.title=element_text(hjust=0.5))
+
+```
+
+### (e) Compare the test MSE of boosting to the test MSE of that results from applying two of regression approaches seen in Chapters 3 and 6.
+
+Linear Regression
+
+```{r}
+lm.model = lm(Salary~., train)
+lm.preds = predict(lm.model, test)
+lm.test.err = mean((lm.preds - test$Salary)^2)
+lm.test.err
+```
+
+Lasso Regression
+
+```{r}
+library(glmnet)
+x.model.mat = model.matrix(Salary~., train)
+y.model.mat = model.matrix(Salary~., test)
+
+y = train$Salary
+
+lasso.model = glmnet(x.model.mat, y, alpha = 1)
+lasso.preds = predict(lasso.model, s = 0.01, y.model.mat)
+lasso.test.err = mean((lasso.preds - test$Salary)^2)
+
+lasso.test.err
+```
+
+The test MSE of the boosting is:
+
+```{r}
+min(results$test_MSE)
+```
+
+So we find that the boosting test MSE is **much** smaller than the other methods.
+
+### (f) Which variables appear to be the most important predictors in the boosting model?
+
+```{r}
+boosted.model = gbm(Salary~., data = train, 
+                              distribution = "gaussian", 
+                              n.trees = 1000, 
+                              shrinkage = 0.01)
+
+summary(boosted.model)
+```
+
+The most important variables seem to be CRuns, CAtBat, and Chits.
+
+### (g) Now apply bagging to the training set. What is the test MSE for this approach?
+
+```{r}
+bag.model = randomForest(Salary~., data = train, 
+                              distribution = "gaussian", 
+                              n.trees = 1000, 
+                              shrinkage = 0.01,
+                              mtry = 19,
+                              importance = TRUE)
+
+
+
+bag.preds = predict(bag.model, test)
+
+bag.test.err = mean((bag.preds - test$Salary)^2)
+
+bag.test.err
+```
+
+We get a test MSE of 0.2256. Better than the boosting method above by using this method which takes all predictors into account .
