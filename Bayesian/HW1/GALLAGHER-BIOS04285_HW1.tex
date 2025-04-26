@@ -1,0 +1,317 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={GALLAGHER-BIOS04285\_HW1},
+  pdfauthor={Ryan Gallagher},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{GALLAGHER-BIOS04285\_HW1}
+\author{Ryan Gallagher}
+\date{2023-01-29}
+
+\begin{document}
+\maketitle
+
+\textbf{NOTE TO PROF}:\\
+This data set only has the data for the Participants column, and only
+some the variables of interest. And at that, there is still
+inconsistency with the numbers I find and the ones reported. I think the
+simplest and most logical conclusion is that this isnt the FINAL dataset
+used for this study. With that being said, I've created some of the rows
+found in Table 1 in attempt to meet the expectations of this assignment.
+If it's any consolation too, the analysis isn't exceptionally different
+per the variable, since they're categorized to a range and then we just
+calculate frequency statistics. -Ryan\\
+-----------------------------------------------\\
+Import the data, set x to be the number of variables, and see the
+variables available.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat }\OtherTok{=} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"/Users/ryangallagher/Desktop/HW1Dataset.csv"}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{ls}\NormalTok{(dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "age"       "bcbs"      "death"     "erpr"      "grade"     "hospvol"  
+##  [7] "nci"       "node"      "size"      "stage2000" "surgvol"   "t13"      
+## [13] "t15"       "t9"        "time"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x}\OtherTok{=}\FunctionTok{nrow}\NormalTok{(dat)}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+\textbf{MAKING THE ``AGE GROUP, YEARS'' FIGURE FROM TABLE 1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{range}\OtherTok{=}\DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{x) \{}
+    
+    \ControlFlowTok{if}\NormalTok{ (dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{65} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{66} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{67} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{68} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{69}\NormalTok{)  \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{range[i]}\OtherTok{=}\StringTok{"65{-}69"}
+\NormalTok{        \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{70} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{71} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{72} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{73} \SpecialCharTok{|}\NormalTok{ dat[i,}\StringTok{"age"}\NormalTok{]}\SpecialCharTok{==}\DecValTok{74}\NormalTok{) \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{range[i]}\OtherTok{=}\StringTok{"70{-}74"}
+\NormalTok{        \}}
+    \ControlFlowTok{else}\NormalTok{ (dat}\SpecialCharTok{$}\NormalTok{range[i]}\OtherTok{=}\StringTok{"75{-}89"}\NormalTok{)}
+  
+\NormalTok{\}}
+\FunctionTok{table}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{range)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## 65-69 70-74 75-89 
+##   896   970  1217
+\end{verbatim}
+
+Above, This shows a different number than is reported in the report.
+Report has:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\StringTok{"65{-}69"}\OtherTok{=}\DecValTok{972}
+\StringTok{"70{-}74"}\OtherTok{=}\DecValTok{984}
+\StringTok{"75{-}89"}\OtherTok{=}\DecValTok{1127}
+\end{Highlighting}
+\end{Shaded}
+
+In an attempt to see if this data might just not be cleaned yet:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{x) \{}
+    \ControlFlowTok{if}\NormalTok{ (dat[i,}\StringTok{"age"}\NormalTok{] }\SpecialCharTok{\textgreater{}} \DecValTok{89}\NormalTok{) \{}
+       \FunctionTok{print}\NormalTok{(dat[i,}\StringTok{"age"}\NormalTok{])}
+\NormalTok{       \}}
+\NormalTok{    \}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 90
+## [1] 90
+## [1] 90
+\end{verbatim}
+
+Above yields 3 entries that are greater than 89, not enogh to explain
+the difference. Odd thing is -- they have the same total of
+observations, I'm not sure why there different Other than that I think
+this dataset is not the same as the one used in the final results of the
+paper\\
+\strut \\
+Here is the table as found in the academic paper:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{range }\OtherTok{=} \FunctionTok{table}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{range)}
+\NormalTok{range }\OtherTok{=} \FunctionTok{t}\NormalTok{(range)}
+
+\NormalTok{ages }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(range)}
+\NormalTok{keep }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Var2"}\NormalTok{, }\StringTok{"Freq"}\NormalTok{)}
+\NormalTok{ages }\OtherTok{=}\NormalTok{ ages[keep]}
+\NormalTok{y }\OtherTok{=} \FunctionTok{sum}\NormalTok{(ages}\SpecialCharTok{$}\NormalTok{Freq)}
+\NormalTok{ages}\SpecialCharTok{$}\NormalTok{percent }\OtherTok{=} \DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{ages[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\DecValTok{100}\SpecialCharTok{*}\FunctionTok{as.numeric}\NormalTok{(ages[i,}\StringTok{"Freq"}\NormalTok{])}\SpecialCharTok{/}\NormalTok{y\}}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{ages[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\FunctionTok{round}\NormalTok{(ages[i,}\StringTok{"percent"}\NormalTok{], }\AttributeTok{digits=}\DecValTok{1}\NormalTok{)\}}
+\FunctionTok{colnames}\NormalTok{(ages) }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Age group, years"}\NormalTok{, }\StringTok{"No."}\NormalTok{, }\StringTok{"\%"}\NormalTok{)}
+\NormalTok{ages}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Age group, years  No.    %
+## 1            65-69  896 29.1
+## 2            70-74  970 31.5
+## 3            75-89 1217 39.5
+\end{verbatim}
+
+\textbf{MAKING THE ``ANNUAL MEDICAL HOSPITAL VOLUME'' FIGURE FROM TABLE
+1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{hosp}\OtherTok{=}\DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{x) \{}
+    \ControlFlowTok{if}\NormalTok{ (dat[i,}\StringTok{"hospvol"}\NormalTok{]}\SpecialCharTok{\textless{}=}\DecValTok{11}\NormalTok{) \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{hosp[i] }\OtherTok{=} \StringTok{"0{-}11"}
+\NormalTok{        \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\DecValTok{12} \SpecialCharTok{\textless{}=}\NormalTok{ dat[i,}\StringTok{"hospvol"}\NormalTok{] }\SpecialCharTok{\&}\NormalTok{ dat[i,}\StringTok{"hospvol"}\NormalTok{] }\SpecialCharTok{\textless{}=} \DecValTok{23}\NormalTok{) \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{hosp[i] }\OtherTok{=} \StringTok{"12{-}23"}
+\NormalTok{        \}}
+    \ControlFlowTok{else}\NormalTok{ \{dat}\SpecialCharTok{$}\NormalTok{hosp[i]  }\OtherTok{=} \StringTok{"=\textgreater{}24"}\NormalTok{\}}
+\NormalTok{    \}}
+
+\NormalTok{hospTab }\OtherTok{=} \FunctionTok{table}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{hosp)}
+\NormalTok{hospTab }\OtherTok{=} \FunctionTok{t}\NormalTok{(hospTab)}
+
+\NormalTok{hospVol }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(hospTab)}
+\NormalTok{keep }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Var2"}\NormalTok{, }\StringTok{"Freq"}\NormalTok{)}
+\NormalTok{hospVol }\OtherTok{=}\NormalTok{ hospVol[keep]}
+\NormalTok{y }\OtherTok{=} \FunctionTok{sum}\NormalTok{(hospVol}\SpecialCharTok{$}\NormalTok{Freq)}
+\NormalTok{hospVol}\SpecialCharTok{$}\NormalTok{percent }\OtherTok{=} \DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{hospVol[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\DecValTok{100}\SpecialCharTok{*}\FunctionTok{as.numeric}\NormalTok{(hospVol[i,}\StringTok{"Freq"}\NormalTok{])}\SpecialCharTok{/}\NormalTok{y\}}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{hospVol[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\FunctionTok{round}\NormalTok{(hospVol[i,}\StringTok{"percent"}\NormalTok{], }\AttributeTok{digits=}\DecValTok{1}\NormalTok{)\}}
+\FunctionTok{colnames}\NormalTok{(hospVol) }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Annual Medicare Hospital Volume, no. of cases"}\NormalTok{, }\StringTok{"No."}\NormalTok{, }\StringTok{"\%"}\NormalTok{)}
+\NormalTok{hospVol}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Annual Medicare Hospital Volume, no. of cases  No.    %
+## 1                                          =>24 1540 50.0
+## 2                                          0-11  712 23.1
+## 3                                         12-23  831 27.0
+\end{verbatim}
+
+Once agian, there is a difference in my data as compared to the reported
+data in the study. With the inconsistency of the variables I have and
+the one in the report, I can't help But this I simply have the
+incomplete dataset.\\
+\textbf{MAKING THE ``ANNUAL MEDICAL SURGEON VOLUME'' FIGURE FROM TABLE
+1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat}\SpecialCharTok{$}\NormalTok{surg}\OtherTok{=}\DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{x) \{}
+    \ControlFlowTok{if}\NormalTok{ (dat[i,}\StringTok{"surgvol"}\NormalTok{]}\SpecialCharTok{\textless{}=}\DecValTok{5}\NormalTok{) \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{surg[i] }\OtherTok{=} \StringTok{"0{-}5"}
+\NormalTok{        \}}
+    \ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\DecValTok{6} \SpecialCharTok{\textless{}=}\NormalTok{ dat[i,}\StringTok{"surgvol"}\NormalTok{] }\SpecialCharTok{\&}\NormalTok{ dat[i,}\StringTok{"surgvol"}\NormalTok{] }\SpecialCharTok{\textless{}=} \DecValTok{11}\NormalTok{) \{}
+\NormalTok{        dat}\SpecialCharTok{$}\NormalTok{surg[i] }\OtherTok{=} \StringTok{"6{-}11"}
+\NormalTok{        \}}
+    \ControlFlowTok{else}\NormalTok{ \{dat}\SpecialCharTok{$}\NormalTok{surg[i]  }\OtherTok{=} \StringTok{"=\textgreater{}12"}\NormalTok{\}}
+\NormalTok{    \}}
+
+\NormalTok{surgTab }\OtherTok{=} \FunctionTok{table}\NormalTok{(dat}\SpecialCharTok{$}\NormalTok{surg)}
+\NormalTok{surgTab }\OtherTok{=} \FunctionTok{t}\NormalTok{(surgTab)}
+
+\NormalTok{surgVol }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(surgTab)}
+\NormalTok{keep }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Var2"}\NormalTok{, }\StringTok{"Freq"}\NormalTok{)}
+\NormalTok{surgVol }\OtherTok{=}\NormalTok{ surgVol[keep]}
+\NormalTok{y }\OtherTok{=} \FunctionTok{sum}\NormalTok{(surgVol}\SpecialCharTok{$}\NormalTok{Freq)}
+\NormalTok{surgVol}\SpecialCharTok{$}\NormalTok{percent }\OtherTok{=} \DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{surgVol[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\DecValTok{100}\SpecialCharTok{*}\FunctionTok{as.numeric}\NormalTok{(surgVol[i,}\StringTok{"Freq"}\NormalTok{])}\SpecialCharTok{/}\NormalTok{y\}}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) \{surgVol[i,}\StringTok{"percent"}\NormalTok{]}\OtherTok{=}\FunctionTok{round}\NormalTok{(surgVol[i,}\StringTok{"percent"}\NormalTok{], }\AttributeTok{digits=}\DecValTok{1}\NormalTok{)\}}
+\FunctionTok{colnames}\NormalTok{(surgVol) }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Annual Medicare Surgeon Volume, no. of cases"}\NormalTok{, }\StringTok{"No."}\NormalTok{, }\StringTok{"\%"}\NormalTok{)}
+\NormalTok{surgVol}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Annual Medicare Surgeon Volume, no. of cases  No.    %
+## 1                                         =>12 1281 41.6
+## 2                                          0-5  930 30.2
+## 3                                         6-11  872 28.3
+\end{verbatim}
+
+This one seems to be the closest to the report, but still not quite
+exactly. It looks like this has more inclusion, too.
+
+\end{document}
