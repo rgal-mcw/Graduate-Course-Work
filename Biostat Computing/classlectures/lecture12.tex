@@ -1,0 +1,217 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW: stratified random sampling and the NTDB}
+\begin{itemize}
+\item Write a SAS DATASTEP program to perform stratified random sampling:
+see the details in lecture 4, slide 7
+\item Hints: use the {\tt rand("unif")} function and the {\tt ordinal}
+function to create permutations
+\item A variable list can be used in many functions with the\\ 
+{\tt of} clause like \textcolor{red}{\tt of VAR1-VARn}\\
+for example, 
+{\tt ordinal(m, of VAR1-VARn)} instead of {\tt ordinal(m, VAR1, ..., VARn)}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Sorting data sets with {\tt proc sort}}
+\begin{itemize}
+\item A big part of learning the \textcolor{red}{\it SAS way} of doing things
+is working with sorted data sets 
+\item You can sort a data set in ascending order\\ 
+{\tt proc sort data=OLD out=NEW; by VAR1 ...\ VARn: run;}\\
+Or {\tt proc sort data=OLD; by VAR1 ...\ VARn: run;}\\
+\textcolor{blue}{if you have write access to {\tt OLD}}
+\item Or descending order: each corresponding {\tt VAR} needs the
+{\tt descending} modifier since ascending is the default\\ 
+{\tt proc sort data=OLD out=NEW; by descending VAR; run;}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{What is a unique key?}
+\begin{itemize}
+\item What is a unique key?
+\item Each NTDB patient is anonymized by the identifier {\tt inc\_key}:\\
+  \textcolor{blue}{is {\tt inc\_key} a unique key}, i.e., ONE record
+  for each distinct value?
+\item If so, then the {\tt /UNIQUE} option will succeed\\
+if NOT, it will generate an error
+\item Each hospital is represented by the anonymized identifier {\tt
+    traumactr}: \textcolor{red}{is {\tt traumactr} a unique key?}
+\end{itemize}
+\begin{verbatim}
+proc sort data=ntdb.elder 
+    out=traumactr(index=(inc_key/UNIQUE));
+    by traumactr inc_key;
+run;
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Creating a unique key with PROC SORT}
+\begin{itemize}
+\item There are several ways to create a unique key when one doesn't exist
+\item For example, there is the PROC SORT option {\tt NODUPKEY}
+\end{itemize}
+\begin{verbatim}
+proc sort NODUPKEY data=ntdb.elder out=nodupe;
+    by inc_key;
+run;
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP automatic variables\\ and automatic macro variables}
+\begin{itemize}
+\item {\it Automatic} variables 
+  are temporary and not stored in the {\tt NEW} data set:
+typically, they start and end with an underscore
+\item \textcolor{blue}{\tt \_N\_} is the number of the current observation\\
+{\tt \_N\_=1} for the first, etc.
+\item {\tt \_ERROR\_} is 1 if an error has occurred in the
+current observation and 0 otherwise
+\item {\tt set OLD end=LAST} produces the variable {\tt LAST} which is
+  1 for the last observation and 0 otherwise
+\item {\tt data NEW; set OLD end=LAST; if LAST; run;}
+\item Also, there are {\it PDV} lists: {\tt \_ALL\_}, 
+{\tt \_NUMERIC\_} and {\tt \_CHARACTER\_}
+\item Like an automatic variable, the keyword {\tt \_last\_} is the
+  last data set actually created\\
+\textcolor{red}{\tt data NEW2; set \_last\_; run;}
+\item The same as the {\tt syslast} automatic macro variable\\
+\textcolor{red}{\tt data NEW2; set \&syslast; run;}
+\item {\it Automatic} macro variables start with {\tt sys}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{By-group processing}
+\begin{itemize}
+\item In the DATASTEP, the \textcolor{red}{\tt by} statement is very useful
+  when the data set is sorted by one or more variables\\
+  {\tt data NEW; set OLD; by VAR1 ...\ VARn;}
+\item There are two {\it automatic} variables for each {\tt VAR}
+\item \textcolor{blue}{\tt FIRST.VAR} is 1 at the first of observation of a {\it by-group}\\
+  and 0 for all others
+\item \textcolor{blue}{\tt LAST.VAR} is 1 at the last of observation of a {\it by-group}\\
+  and 0 for all others
+\item If there is only one record in the {\it by-group},
+then {\tt FIRST.VAR=LAST.VAR=1}
+\item If there is more than one record per {\it by-group}, you can
+  create a unique key, if needed, with a subsetting IF: {\tt if
+    FIRST.VAR=1;}
+\item Or alternatively: {\tt if LAST.VAR=1;} 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Summaries of multiple observations}
+\begin{itemize}
+\item The {\tt retain} statement creates a variable 
+that RETAINs its value across DATASTEP observations\\
+unlike variables in a data set which acquire a new value
+from each observation due to automatic looping
+\item {\tt retain VAR1 VALUE1 ...\ VARn VALUEn;}\\
+the starting values are {\tt VAR1=VALUE1; ...; VARn=VALUEn;}\\
+\item for no starting value, place the variables at the end\\
+{\tt retain X1 VALUE1 ...\ Xn VALUEn Y1 ...\ Ym;}\\
+{\tt Y1 ...\ Ym} are missing
+\item For example, suppose that you want a total of the 
+variable {\tt Z}\\
+{\tt data NEW; set OLD end=LAST; retain TOT 0;\\ keep TOT; 
+\textcolor{red}{TOT+Z;} if LAST; run;}
+\item \textcolor{blue}{NTDB: let's calculate average annual
+case volume for each trauma center}
+\item see {\tt NTDB/sas/volume.sas}
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+

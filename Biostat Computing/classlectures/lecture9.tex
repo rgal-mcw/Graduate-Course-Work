@@ -1,0 +1,206 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R debugging tips: common pitfalls}
+\begin{itemize}
+\item \textcolor{red}{subsetting a matrix with a variable length index:\\
+    when resolving to one column (or row) returns a vector}\\
+  and your code is expecting a matrix to be returned\\
+  counter-measures: when returning a subset of columns (rows), encase
+  within {\tt cbind} ({\tt rbind}) which creates a matrix if needed
+\item \textcolor{blue}{unintentional backward {\tt for} loops}\\
+\begin{verbatim}
+L=length(cuts) ## a list
+xinfo=rbind(cuts[[1]]) ## creating a matrix
+## NEXT LINE IS WRONG
+## for(i in 2:L) xinfo=rbind(xinfo, cuts[[i]])
+## IF LENGTH IS ONE: THE ABOVE LOOP RUNS BACKWARDS
+## NEXT LINE IS RIGHT: DEFENSIVE PROGRAMMING
+if(L>1) for(i in 2:L) xinfo=rbind(xinfo, cuts[[i]])
+\end{verbatim}
+\item logical subset of a vector with 0/1 rather than {\tt FALSE/TRUE}\\
+  use {\tt which} religiously to avoid this {\it error-less} hard to find bug
+\item typos: {\tt ==} in comparisons vs.\ {\tt =} in assignments
+\item scalar {\tt \&\&/||} vs.\ vector {\tt \&/|} 
+({\tt all/any} might be of help)
+\item similarly, scalar {\tt min/max} vs.\ vector {\tt pmin/pmax}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Building and installing R packages: CRAN}
+\begin{itemize}
+\item The Comprehensive R Archive Network (CRAN) has\\
+ 16335 R add-on packages as of this writing\\
+there will be more by the time you read this
+\item On gouda, we have 14449 installed mainly from CRAN
+\item To install an R package from CRAN\\
+The two most reliable, and likely complete, nearby mirrors are 
+\url{http://lib.stat.cmu.edu/R/CRAN} at Carnegie-Mellon and
+\url{http://cran.wustl.edu} at Washington University in St.L.\\
+N.B. \textcolor{red}{http} NOT  \textcolor{blue}{https} 
+\end{itemize}
+{\tt $>$~options(repos=c(CRAN="http://lib.stat.cmu.edu/R/CRAN")) \\
+%$>$ install.packages("sem", dependencies=TRUE) \\
+$>$ install.packages("remotes", dependencies=TRUE) }\\
+To install all CRAN packages (takes hours: we run this over-night)\\
+{\tt $>$ install.packages(available.packages()[ , 1])}\\
+Some of them will fail for missing system dependencies like
+device drivers, required software, etc.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Building and installing R packages: Bioconductor}
+\begin{itemize}
+\item The Bioconductor Project produces R packages for bioinformatics: 
+\url{http://bioconductor.org}
+\item Bioconductor versions are tied to specific R versions\\
+{\tt $>$~tools:::.BioC\_version\_associated\_with\_R\_version()}\\
+returns {\tt '3.10'} with R 3.6.2
+\item  To install the package named {\tt limma} (and R or Bioconductor package dependencies, if any)\\
+{\tt $>$ source("http://bioconductor.org/biocLite.R")\\
+$>$ biocLite("limma")}
+\item 
+To install all Bioconductor packages (takes a while):\\
+{\tt $>$ biocLite(all\_group())}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Building and installing R packages: command line}
+\begin{itemize}
+\item You can build and install R packages from the command line
+\item This works with your own R packages or those of others
+\item If it is your own in the sub-directory {\tt PACKAGE},
+then build it:\\ {\tt $>$ R CMD build PACKAGE}
+\item For others, download the archive of source files\\ either a tar file 
+ending in {\tt .tar.gz} or {\tt .tgz}\\ or a ZIP file {\tt .zip}
+\item Unpack it: {\tt $>$ tar xzf TARFILE} or 
+{\tt $>$ unzip ZIPFILE} which should create the {\tt PACKAGE} sub-directory
+\item You don't have to change directories
+\item Build the package: {\tt $>$ R CMD build PACKAGE}
+\item Sometimes the vignettes crash the build or take a long time\\
+{\tt $>$ R CMD build --no-build-vignettes PACKAGE}
+\item So now you have created {\tt PACKAGE.VERSION.tar.gz}
+\item Install it: {\tt $>$ R CMD INSTALL PACKAGE.VERSION.tar.gz}
+\item And you can remove it later: {\tt $>$ R CMD REMOVE PACKAGE}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Building and installing R packages: {\tt remotes} package}
+\begin{itemize}
+\item You can build and install R packages from anywhere on the
+internet with the remotes package
+\item For example, former CRAN packages that have 
+been Archived: \url{https://cran.r-project.org/src/contrib/Archive}
+\item These can be installed with the {\tt install\_url} function
+\item Or R packages on \url{https://github.com}
+\item These can be installed with the {\tt install\_github} function
+\item However, R 3.6.2 or higher appears to be necessary
+\item And installing from the command line seems to be much faster
+\item Typically, there are also Orphaned packages, however, currently
+there are none (as of this writing)\\
+\url{https://cran.r-project.org/src/contrib/Orphaned}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW Hands-on: Building and installing R packages}
+\begin{itemize}
+% \item Let's install the {\tt DPpackage}
+% from\\ \url{https://cran.r-project.org/src/contrib/Archive/DPpackage}\\
+% with the {\tt install\_url} function
+\item Let's install the {\tt BART3} R package 
+from {\tt https://github.com/rsparapa/bnptools} 
+\item  with the {\tt install\_github} function
+\item and with the command line using {\tt git}
+\item create your own sub-directory: {\tt $>$ mkdir $~$/git; cd $~$/git}
+\end{itemize}
+{\tt $>$ git clone~https://github.com/rsparapa/bnptools.git}\\
+{\tt $>$ cd bnptools}
+
+\end{frame}
+
+\end{document}

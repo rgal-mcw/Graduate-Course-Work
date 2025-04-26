@@ -1,0 +1,329 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS at MCW and SAS Documentation}
+\begin{itemize}
+\item SAS is proprietary: NOT open source software
+\item You don't buy SAS, you rent it: annual subscription fee
+\item MCW has a site-wide license for SAS\\
+Biostatistics buys into the license for the Cheese cluster\\
+But SAS is not currently available on the RCC cluster\\
+Students can get SAS for Windows for free from the help desk\\
+\item The SAS online documentation
+\url{http://support.sas.com/documentation}
+\item SAS was slow to move online and early web pages were terrible
+\item But, they have made big improvements recently
+\item We are running SAS v9.4: the latest version\\
+however, 
+\textcolor{red}{the latest documentation is more difficult to traverse}
+\item So, I prefer the documentation for SAS v9.3 which 
+are now included in the header above
+\textcolor{blue}{\url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The SAS language}
+\begin{itemize}
+\item SAS is a fourth-generation language (4GL)\\
+4GL's are designed for special purposes
+\item SAS is designed for data science\\
+analysis, visualization, processing and management
+\item A strength is working with large data sets
+\item SAS will only use as much memory as you tell it to\\
+it is smart and efficient with {\it virtual} memory which
+is essentially hard-disk space (unlike R)
+\item SAS is case-insensitive and statements end in a semi-colon
+\item SAS is made up of multiple complementary products
+\item A mixture of the {\it DATASTEP} in Base SAS and\\
+{\it PROCEDURES} or {\it PROCS} from Base and \\
+other products like SAS/Stat
+\item The DATASTEP is vectorized\\
+in its own way that's different from R
+\item SAS' interactive capabilities are limited
+\item Therefore, SAS programs are typically run in batch
+in which case the SAS code is 
+\textcolor{red}{compiled and then executed: very fast}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{General SAS name rules}
+\begin{itemize}
+\item SAS names are used for data set names, variable names, format names, 
+informat names, etc.
+\item A SAS name can contain from one to 32 characters.
+\item The first character must be a letter or an underscore 
+\item Subsequent characters must be letters, numbers, or underscores
+\item Blank spaces cannot appear in SAS names.
+\item Exception: format and informat names cannot end in a number and
+are usually far shorter but the maximum is/are\\ 
+32 characters for numeric and
+31 characters for character
+\item Special Rules for Variable Names: case preservation\\
+\begin{quote}
+  SAS remembers the combination of uppercase
+  and lowercase letters that you use when you create the variable
+  name. Internally, the case of letters does not matter. "CAT," "cat",
+  and "Cat" all represent the same variable. But for presentation
+  purposes, SAS remembers the initial case of each letter and uses it
+  to represent the variable name when printing it.
+\end{quote}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS overview}
+\begin{itemize}
+\item Blocks of code executed together\\
+start with {\tt data} for a DATASTEP or {\tt proc} for a PROC\\
+end with a {\tt run;} statetment
+\item The types of SAS files related to a SAS program\\
+a program with file extension {\tt .sas} (like {\tt .R})\\
+the output {\tt .lst}  (like {\tt .Rout})\\ and the {\tt .log}
+(for debugging: no R equivalent)\\
+the output can be in PDF, HTML, MS RTF, etc.,
+but typically defaults to text for convenience 
+(as we do here)
+\item \textcolor{red}{BEWARE}: Don't forget the {\tt run;} statetment\\
+that will resulting in a confusing {\tt .log} file
+% \item Copy my initialization file\\
+% {\tt $>$ cp $~$rsparapa/autoexec.sas $~$}
+\item All numeric numbers are floating point: there is no
+truly integer type (except for the SAS Macro facility which 
+uses true integers and integer arithmetic)
+\item Character variables can be quite long nowadays,
+but by tradition most character variables are rarely longer than
+40 or 200 characters;
+and typically much shorter for a large data set
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS initialization and comments}
+\begin{itemize}
+\item The SAS initialization file is {\tt autoexec.sas}
+\item SAS looks first in the current directory and then in your
+home directory loading ONLY the first {\tt autoexec.sas} it finds
+\item Copy mine: {\tt $>$ cp $~$rsparapa/autoexec.sas $~$}
+\item SAS has single line comments: \textcolor{red}{RED is commented out}\\
+{\tt \textcolor{blue}{*} \textcolor{red}{THIS IS A COMMENT}\textcolor{blue}{;}}
+\item Similarly, there are SAS macro single line comments\\
+{\tt \textcolor{blue}{\%*} \textcolor{red}{THIS IS A COMMENT}\textcolor{blue}{;}}\\
+they do not appear in the {\tt .log} when a SAS macro is run\\
+as opposed to the standard single line comments which do
+\item SAS has block comments\\
+{\tt \textcolor{blue}{/*}\\ 
+\textcolor{red}{THIS IS A COMMENT\\
+FOR A BLOCK OF CODE}\\
+\textcolor{blue}{*/}}
+\item You can end a program at any line essentially commenting out
+the rest with an {\tt endsas;} statement
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Emacs/ESS and SAS function keys}
+\begin{itemize}
+\item ESS[SAS] provides fairly comprehensive syntax highlighting\\
+(I wrote it) But, it is not bullet-proof and it can be fooled\\
+New SAS features are added every year: difficult to keep up\\
+\item Definitions reminiscent of the Display Manager which is rarely used today,
+but very influential for its time in the 1980s/1990s
+\item Key and Approximate Display Manager Equivalent in CAPS
+\item \textcolor{red}{\tt TAB} moves margin to the next stop to the right
+\item \textcolor{red}{\tt C-TAB} moves margin to the previous stop to the left
+\item {\tt F1} help key, same as {\tt C-h}
+\item \textcolor{blue}{\tt F2} refresh the buffer with the file contents 
+\item \textcolor{red}{\tt F3} SUBMIT 
+\item \textcolor{red}{\tt F4} PROGRAM 
+\item \textcolor{red}{\tt F5} LOG 
+\item \textcolor{red}{\tt F6} OUTPUT 
+\item {\tt F7} text file, if any 
+\item \textcolor{blue}{\tt F8} go to the *shell* buffer 
+\item \textcolor{blue}{\tt F9} open a SAS data set near point for viewing 
+\item \textcolor{blue}{\tt F12} open a GSASFILE graphics file near point for viewing 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Importing A CSV file into a SAS library}
+\begin{itemize}
+\item SAS libraries are organized by directory
+\item For example, see {\tt /data/shared/04224/NTDB/sas}
+\item Notice that there is an {\tt autoexec.sas} file here\\
+that {\it includes} your ultimate version
+\item A good place to create a so-called LIBREF\\ 
+{\tt libname LIBREF "DIRECTORY";}
+\item Data sets are accessed by one-level or two-level names
+\item One-level names are temporary and deleted at job completion
+\item The keyword {\tt \_null\_} data set is not created at all
+\item Two-level names are permanently saved: {\tt LIBREF.NAME}
+\item see {\tt NTDB/sas/import.sas} and {\tt NTDB/sas/dsd.sas}
+\end{itemize}
+\begin{verbatim}
+proc import REPLACE datafile="../NTDB18.csv" 
+    out=ntdb.elder;
+    GUESSINGROWS=MAX;
+run;
+proc contents VARNUM;
+run;
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS and vectorization: automatic looping}
+\begin{itemize}
+\item See example {\tt /data/shared/04224/NTDB/sas/vector.sas}
+\item The DATASTEP automatically loops over the rows/records
+of a data set
+\item A convenient form of vectorization 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW 1: Importing data with the DATASTEP}
+\begin{itemize}
+\item Extra Packages for Enterprise Linux (EPEL)\\
+is a repository of free software packages: typically binary\\
+(already compiled if needed) for Red Hat flavored Linux distros
+\item You can see all of the packages installed on gouda by\\
+{\tt $>$ yum list installed $\backslash$* \#\# escape the wild card}\\
+I have captured this command in the file {\tt /data/shared/04224/gouda.txt} 
+\item Chapters 4 and 5 of SbS describe how to read input
+data from files in arbitrary formats
+\item read this data with SAS into 3 variables\\
+the first column is {\tt package}, the second is {\tt version}
+and the third is {\tt repo}
+\item how many of these packages come from the 
+{\tt repo} corresponding to EPEL defined by {\tt "@epel"}?
+\item Hint: use the {\tt firstobs} optional parameter
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW 2: Importing ECGs}
+\begin{itemize}
+\item \url{https://www.physionet.org/content/ptbdb/1.0.0}
+\item the PTB database of ECGs has been copied to {\tt /data/shared/04224/PTB}
+\item The database contain 549 conventional 12-lead resting ECGs 
+with the corresponding 3 Frank lead ECGs
+\item There are 217 patients: see {\tt CASES.txt}
+\item For example, 11 patients had left ventricular hypertrophy
+086, 201, 210, 216, 217, 218, 219,
+221, 222, 226 and 228
+\item And there 54 healthy controls: see {\tt CONTROLS.txt}
+\item Patient 086 data is in the directory {\tt patient086}
+\item The ECG data is in {\tt s0316lre.dat}
+\item The data header is {\tt s0316lre.hea}
+\item The first line says that there 15 leads (12+3)
+\item Sampled at 1000 Hz (1 per ms) for 115200 values per lead
+\item The next 15 lines are the leads
+\item The fifth number is the first value for that lead
+\item The sixth number is the sum of values for that lead
+\item However, the sixth number often doesn't seem to match
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW 2: Importing ECGs and signed integers}
+\begin{itemize}
+\item We can read in the data with an \textcolor{blue}{\tt informat}
+  like those described in Chapters 4 and 5\\
+see {\tt /data/shared/04224/patient086.sas}
+\item The reason that the sixth number and SAS' sum don't agree
+is due to the way that the arithmetic was calculated by PTB
+\item They used 16-bit signed integers with two's complement\\
+\item A type that SAS doesn't have: see the {\tt length} statement docs\\
+16-bit is old-fashioned: 32 or 64-bit are more common now
+\item Two's complement can \textcolor{blue}{ONLY} represent integers\\
+ from $-2^{\,b-1}$ to $2^{\,b-1}-1$ where $b$ is the number of bits
+\item And these values \textcolor{red}{wrap-around}\\ 
+$2^{\,b-1}-1+1$ is $-2^{\,b-1}$ and NOT $2^{\,b-1}$\\
+similarly, $-2^{\,b-1}-1$ is $2^{\,b-1}-1$ \\
+\item So, if you calculate the \textcolor{red}{wrap-around}
+sums accordingly, then does it match the sixth number?
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,496 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 1: NTDB annual hospital case volume}
+
+\begin{itemize}
+\item The number of patients seen by a given hospital is thought to be
+  prognostically beneficial for many types of treatment like cancer,
+  cardiovascular, trauma, etc.\\
+ i.e., the {\it practice makes perfect} theory
+\item The NTDB case reporting is required for those hospitals which
+  are designated trauma centers
+\item And their total case volume is fairly trivial to calculate
+\item However, the trauma designation is appearently an annual 
+designation and some hospitals go in and out of case reporting by
+year of hospital visit making
+their total volume a poor representation of their actual practice
+\item Therefore, average annual case volume is needed: calculate it
+\item Copy the data and my short program as a starting point
+\item {\tt $>$ cp /data/shared/04224/NTDB/NTDB18.csv $~$ }
+\item {\tt $>$ cp /data/shared/04224/NTDB/R/NTDB18.R $~$ }
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 2: NTDB \blue{cold}-decking missing imputation}
+
+\begin{itemize}
+\item For many a US Census, they were conducted on paper
+\item Often items were either mistakenly or intentionally left blank
+\item If the collected data is \textcolor{red}{(NOT)}
+  \textcolor{blue}{Missing Completely at Random}, you can
+  \textcolor{red}{(NOT)} drop missing records from statistical
+  analysis
+\item \red{Hot}-decking is the substitution of a \red{nearby} neighbor's
+  value to replace a missing value on the resident's form
+\item \blue{Cold}-decking is the substitution of \blue{any} neighbor's
+  value to replace a missing value on the resident's form
+\item For one or more missing covariates, record-level \blue{cold}-decking
+  imputation can be employed that
+  is biased towards the null, i.e., non-missing values from another
+  record are randomly selected regardless of the outcome
+\item This simple
+  missing data imputation method is sufficient for data sets with
+  relatively few missing values 
+\item Perform \blue{cold}-decking for the NTDB variables: {\tt white}, {\tt
+    black}, {\tt other}, {\tt hispanic}, {\tt male}, {\tt sbp},
+{\tt pulse} and {\tt rr} (respiratory rate) 
+\item Hints: use nested {\tt for/while} loops and 
+{\tt set.seed/sample.int} for random integers
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 2: NTDB \blue{cold}-decking missing imputation}
+
+\begin{itemize}
+\item More details
+\item Suppose that we have the following 5 variables:\\ 
+household income, owned home vs.\ renting,\\ 
+age of home, number of rooms and number of occupants
+\item It is reasonable to assume that these variables have a relationship
+between them
+\item Suppose record $i$ has the observed/missingness pattern\\
+{\tt \textcolor{blue}{A$_i$ B$_i$} NA NA NA}
+\item And we randomly draw record $j$ to replace its values\\
+{\tt C$_{j}$ D$_{j}$ NA \textcolor{red}{E$_{j}$ F$_{j}$}}
+\item Now, record $i$ looks like this\\
+{\tt \textcolor{blue}{A$_i$ B$_i$} NA \textcolor{red}{E$_{j}$ F$_{j}$}}
+\item So, we randomly draw again: record $k$\\
+{\tt G$_{k}$ NA H$_{k}$ I$_{k}$ NA}
+\item Now, record $i$ looks like this\\
+{\tt \textcolor{blue}{A$_i$ B$_i$} H$_{k}$ \textcolor{red}{E$_{j}$ F$_{j}$}}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 3 (mid-term): NTDB mortality data analysis}
+
+\begin{itemize}
+\item A proper statistical analysis of the NTDB is FAR beyond the
+  scope of this course
+\item However, it is a very convenient data set to practice a 
+few of the tools described in Sections 11 and 12
+\item We will perform an analysis for the outcome {\tt dead} based on 
+annual average volume, {\tt white}, {\tt
+    black}, {\tt other}, {\tt hispanic}, {\tt male} and {\tt sbp}
+\item N.B. the data is clustered by the hospital: {\tt traumactr}\\
+for such a large data set, typical clustering techniques are too
+consuming so we will include {\tt traumactr} as a variable above\\
+there are only 18 of them so this is a reasonable short-cut
+\item We will compute common statistics and make graphical figures
+\item For example, we will compute Receiver Operating Characteristic
+(ROC) curves
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 4: NTDB stratified random sampling}
+
+\begin{itemize}
+\item the {\tt gcstot} variable is the Glasgow Coma Scale (GCS)\\
+prognostically: 3 is the worst and 15 is the best
+\item as we will see, this is the most powerful predictor of
+mortality
+\item suppose that we want to divide the patient cohort into, 
+say M=5, random samples of roughly equal size
+\item imbalances in a strong predictor like GCS will make the
+random samples substantially differ in mortality relationships
+due to these unwanted imbalances alone 
+\item create a function to perform stratified random sampling (SRS)
+that accepts the data, {\it strata} and a setting for M
+\item SRS {\it stratifies}
+on one (or more) important variables called {strata} variable(s)
+\item \textcolor{blue}{sort} the data by the strata variable(s) and
+  then use \textcolor{red}{random permutations} of 1:M to divide
+the data into M samples
+\item \textcolor{blue}{unsort} the data and return it in the original 
+order, i.e., generally, you want to return data in the same order as
+that provided by the user
+\item Hint: use the {\tt order} function to sort/unsort
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R expressions: {\tt expr}}
+\begin{itemize}
+\item Expressions can end in a semi-colon or end-of-line
+\item Expressions can be spread over multiple lines IF each
+line ends in an operator like + so that the R interpreter
+knows that there is more to come
+%\item In the documentation, an R expression is {\tt expr}
+%\item This expression returns a value which can be assigned, passed to a function, etc.
+\item Each expression returns a value 
+\item You can group several expressions in curly brackets:\\ 
+{\tt \{ expr$_1$; \dots; expr$_m$ \}}\\
+where the return value comes from the last: {\tt expr$_m$ }
+%\item Often used in multi-threading
+\end{itemize}
+\begin{verbatim}
+library(parallel) ## an example of multi-threading
+library(tools)
+for(i in 1:mc.cores) mcparallel({psnice(value=19); expr})
+\end{verbatim}
+We will return to multi-threading later
+% Paraphrasing the {\tt psnice} documentation\\
+% Unix schedules processes to execute according to their priority.\\  Priority
+% is assigned values from 0 to 39 with 20 being the normal priority and
+% (counter-intuitively) larger numeric values denoting lower priority.
+% Adding to the complexity, there is a {\it nice} value:\\ the amount by
+% which the priority exceeds 20.  Processes with higher nice values will
+% receive less CPU time than those with normal priority.  Generally,
+% processes with nice value 19 are only run when the system would
+% otherwise be idle \textcolor{blue}{to enhance system interactivity}.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R expressions and logical conditions}
+
+\begin{itemize}
+\item A condition is an R expression that can be evaluated as\\ a TRUE or FALSE logical value either directly or indirectly
+\item A direct evaluation of a condition will yield TRUE or FALSE 
+\item For example, {\tt i \%in\% 2:3}
+\item An indirect evaluation occurs by type conversion or coercion
+\item A character value will yield an error
+\item A numeric or logical value of {\tt NA} will yield an error\\
+\textcolor{red}{often this will force you to use {\tt \&\&} or {\tt ||}
+instead of {\tt \&} or {\tt |}}\\
+\textcolor{blue}{such as in HW part 2}
+\item A numeric value of {\tt NaN} will yield an error
+\item A numeric value of zero is FALSE and all others are TRUE\\
+(except {\tt NA} and {\tt NaN})
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile] 
+\frametitle{R {\tt if} command syntax:  \textcolor{red}{RED} and
+\textcolor{blue}{BLUE} lines optional}
+
+{\tt if( cond$_1$ ) \{ expr$_1$ \}  \\
+\textcolor{red}{else if( cond$_2$ ) \{ expr$_2$ \}} \\
+$\vdots$ \\
+\textcolor{red}{else if( cond$_m$ ) \{ expr$_{m}$ \}} \\
+\textcolor{blue}{else \{ expr$_{m+1}$ \}} }
+
+\begin{verbatim}
+obj.list = mccollect() ## continuing multi-threading ex
+obj = obj.list[[1]]
+if(mc.cores==1 | class(obj)[1]!=type) {
+    return(obj)
+} else {
+    m = length(obj.list)
+    if(mc.cores!=m) 
+        warning(paste0("The number of items is only ", m))
+    ...
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R {\tt for} command syntax}
+%: \textcolor{red}{RED} and \textcolor{blue}{BLUE} clauses are optional}
+
+{\tt for( VARIABLE in \textcolor{blue}{ expr$_1$ }) expr$_2$}
+
+\begin{itemize}
+\item If the {\tt VARIABLE} is {\tt i}, typically, {\tt expr$_2$} will involve {\tt i}
+\item {\tt expr$_2$} can include \textcolor{red}{\tt break} 
+which ends the loop
+\item {\tt expr$_2$} can include \textcolor{blue}{\tt next} 
+which indexes {\tt i} and starts {\tt expr$_2$} over
+\item BEWARE: loops are rather slow for the R interpreter
+%\item What is a large loop is a moving target as computer technology progresses
+\item But hardware is constantly getting faster: its all relative
+\item 100,000,000 loops of this example takes 11s on my laptop 
+\end{itemize}
+\begin{verbatim}
+system.time({
+M = 12
+A = matrix(nrow=M, ncol=M)
+dimnames(A)[[1]]=paste0(1:M)
+dimnames(A)[[2]]=paste0(1:M)
+for(i in 1:M)
+    for(j in 1:M)
+        A[i, j] = i*j ## times tables
+if(M==12) print(A)
+})
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R {\tt while} command syntax}
+
+{\tt while(cond) expr}
+
+\begin{itemize}
+\item {\tt expr} can include the \textcolor{red}{\tt break} 
+command which ceases
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Writing your own R functions }
+
+{\tt NAME1 = function( name$_1$, \dots, name$_m$ ) expr } 
+\begin{itemize}
+\item the value of {\tt expr} is returned
+\item but you have more control than in a typical R expression\\
+you can return a value at any place within {\tt expr}
+via the {\tt return} function
+\item Call this function via {\tt NAME1 (expr$_1$, \dots, expr$_m$ )}
+\item Or: {\tt NAME1 (name$_m$=expr$_1$, \dots, name$_1$=expr$_m$ )}
+\item Some, or all, arguments can have default values so that you do not 
+have to supply every single argument
+\end{itemize}
+{\tt NAME2 = function( name$_1$=expr$_1$, \dots, name$_m$=expr$_{m}$ ) \dots } \\
+To call: {\tt NAME2 ( expr$_1$, \dots, expr$_m$ )  } \\
+Or: {\tt NAME2 ( )  } \\
+Or: {\tt NAME2 ( name$_n$=expr$_1$ )  } \\
+Also, you can abbreviate the {\tt name}s, but it can't be ambiguous
+\end{frame}
+
+\begin{frame}
+\frametitle{The {\tt ...} argument}
+
+\begin{itemize}
+\item Often from within your new function, {\tt NAME1}, you are
+  calling another function (or functions): for example, let's say {\tt
+    NAME2}
+\item But {\tt NAME2} might have a large number of arguments
+\item So it would be painful to include all of them in {\tt NAME1}
+\item The {\tt ...} argument is a catch-all for named arguments
+that are unknown to {\tt NAME1}
+\item {\tt dots = function(...) c(...)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Lexical scope and nested environments}
+
+\begin{itemize}
+\item S and S-Plus have {\it static} scope
+\item R has lexical scope
+\end{itemize}
+
+\begin{verbatim}
+cube = function(n) {
+  sq = function() n*n ## nested function definition
+  n*sq()
+}
+## first evaluation in S
+S> cube(2)
+Error in sq(): Object "n" not found
+S> n = 3
+S> cube(2)
+[1] 18
+## then the same function evaluated in R
+R> cube(2)
+[1] 8
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Lexical scope}
+
+\begin{itemize}
+\item There are three types of variables in a function\\
+named arguments, local variables and free variables
+\item A free variable becomes a local variable upon assignment
+\item Otherwise, a free variable is sought by recursively 
+widening the scope to the nested environments all the way
+to the global environment if necessary\\
+if not found,
+then an error is generated when the function runs\\
+it is not an error when the function is defined
+because the variable could be created at a later time
+\item EXCEPTION: a free variable (in its wider environment) can be altered from within a function
+  by the {\it super-assignment} operator {\tt
+    <<-} or via the {\tt assign} function\\
+in my experience, this is rarely necessary and probably should be avoided
+whenever possible
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Object-orientation}
+
+\begin{itemize}
+\item {\it Generic} functions can be specialized to have different actions
+for objects of different types
+\item They are named as {\tt NAME.CLASS} 
+where {\tt NAME} is the function name to be called, i.e., {\tt NAME(object)}
+\item And {\tt CLASS} is the object type as determined by the {\tt class}
+attribute, i.e., {\tt class(object)}
+\item Generic functions have a {\tt NAME.default} action that is
+  used when either there is no {\tt class} attribute for an object or
+  the specific {\tt NAME.CLASS} does not exist
+\item For {\it visible} functions (and some {\it invisible}), you can
+just type their name and see their definition
+\item For others, you need the {\tt getAnywhere} function
+\item See {\tt lecture4.R} and the generic {\tt print} function
+\item There is typically help for the default method\\
+ {\tt $>$ ?print.default}
+\item But others may, or may not, be documented
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 11: Statistical models in R}
+
+\begin{itemize}
+\item This reading is assigned due to the co-requisite
+requirement of this course, i.e., Statistical Models and Methods I
+\item However, in the interest of time, I'm not going to lecture on this 
+material since there are many other things that need to be discussed
+\item I will show some examples based on the NTDB, etc.
+\item And assign homework/exam problems based on it
+\item So, if you have any questions, please feel free to ask
+\item But a firm understanding of statistical concepts is not 
+an expected outcome of this course
+\item Rather, it is imperative that you learn effective R programming skills
+\item Learning R intimately will help you perform statistical
+  analyses and complete related statistical programming tasks, but we
+  will only discuss statistical practice in a cursory manner
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{American College of Surgeons National Trauma Data Bank (NTDB)}
+
+In the US Code of Federal Regulations (CFR), 45 CFR 46.101 (title 45,
+Public Welfare, section 46.101),
+%Per 45 Code of Federal Regulations (CFR) 46.101, 
+research using certain publicly available data sets does not involve
+``human subjects''. The data contained within these specific data sets
+are neither identifiable nor private and thus do not meet the federal
+definition of ``human subject'' as defined in 45 CFR 46.102.  These
+research projects do not need to be reviewed and approved by the
+Institutional Review Board, (IRB). MCW's Human Research Protection
+Program (HRPP) has a list of their recognized ``publicly available data sets''.\\
+% or ``restricted use data sets''.\\
+\url{https://www.mcw.edu/departments/human-research-protection-program/researchers/smartform-instructions/public-data-sets}
+\end{frame}
+
+\begin{frame}
+\frametitle{NTDB and data frames}
+
+\begin{itemize}
+\item the NTDB has all de-identified trauma admissions for those\\
+ aged 65 and older (restricted to 89 or less here)\\
+at all designated trauma center hospitals in the US\\
+about 1,000,000 admissions in the 2015 edition\\
+including the years 2007 to 2015
+\item the NTDB does NOT come as a CSV
+\item but I created a CSV for the first 18 trauma centers\\
+{\tt /data/shared/04224/NTDB/NTDB18.csv}\\
+about 50,000 admissions:
+there is an (incomplete) data dictionary in the same directory
+\item this is for educational purposes ONLY (HIPAA exception)
+\item the {\tt read.csv} function creates a {\tt data.frame}
+\item a {\tt data.frame} is the typical R data set object\\ 
+essentially a list of vectors of the same length
+\item like a matrix where the rows are lists\\
+and the columns are vectors of \textcolor{red}{potentially diverse types}
+\item the {\tt subset} function creates a subset {\tt data.frame} 
+\end{itemize}
+\end{frame}
+
+\end{document}

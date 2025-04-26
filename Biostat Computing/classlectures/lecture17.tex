@@ -1,0 +1,241 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{{\tt proc print} for producing output}
+\begin{itemize}
+\item {\tt proc print} is the go-to for many printing tasks
+\item The {\tt var} statement lists the variables to output
+\item The {\tt uniform} option makes each page's columns look like all
+  the others
+%\item Take advantage of SAS functionality such as {\tt where} clauses and {\tt FORMAT.}
+\item Subset the data for printing with a {\tt where} statment
+\item Specify SAS formats with a {\tt format} statement
+\item Specify labels for variable names with the 
+\textcolor{red}{\tt label} statement that is used in tandem with the
+  \textcolor{blue}{\tt label} option\\ don't forget to use both!\\
+{\tt proc print \textcolor{blue}{\tt label} data=NAME;
+var X;\\
+ \textcolor{red}{label} X="LABEL"; run;}
+\item A {\tt by} clause will force each {\tt by} group on their own pages\\
+can be fine-tuned with the {\tt pageby} statement
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{{\tt title} and {\tt footnote}}
+\begin{itemize}
+\item These two statements are similar
+\item They can appear anywhere before a {\tt run;} statement
+\item You can have up to 10 titles and 10 footnotes
+\item \textcolor{red}{\tt title "TITLE";} and 
+\textcolor{blue}{\tt footnote "FOOTNOTE";}\\
+produce the top title or footnote respectively
+\item \textcolor{red}{\tt titlen "TITLE";} and 
+\textcolor{blue}{\tt footnoten "FOOTNOTE";} where {\tt n} is a number
+from 1 to 10 to
+ produce the n$^{th}$ title or footnote %respectively
+\item \textcolor{red}{\tt title;} and 
+\textcolor{blue}{\tt footnote;} clear all titles or footnotes
+\item \textcolor{red}{\tt titlen;} and 
+\textcolor{blue}{\tt footnoten;} where {\tt n} is a number
+produce, clear the n$^{th}$ through 10$^{th}$ title or footnote respectively
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{{\tt proc plot} for producing plots}
+\begin{itemize}
+\item These are primitive TEXT plots
+\item For quick and dirty looks at the data
+\item Much easier to use than more advanced PROCs but
+extremely limited functionality
+\item {\tt proc plot data=NAME;\\ \qquad plot Y*X="CHARACTER"; run;}
+where {\tt CHARACTER} is the symbol to use:
+a symbol with a mark at its center is preferable
+like {\tt "+"} rather than {\tt "."}
+\item You can specify multiple plots\\
+{\tt proc plot data=NAME;\\ \qquad plot Y1*X1="C1" ...\ Yn*Xn="Cn"; run;}
+\item Similarly, plot them on the same page/axis\\
+{\tt proc plot data=NAME;\\ \qquad plot Y1*X="C1" ...\ Yn*X="Cn" / overlay; run;}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{{\tt proc chart} for producing bar charts}
+\begin{itemize}
+\item These are primitive TEXT charts
+\item For quick and dirty looks at the data
+\item Much easier to use than more advanced PROCs but
+extremely limited functionality
+\item {\tt proc chart data=NAME;\\ \qquad vbar X; run;} for vertical bars
+\item {\tt proc chart data=NAME;\\ \qquad hbar Y; run;} for horizontal bars
+\item You can specify multiple charts\\
+{\tt proc chart data=NAME;\\ \qquad vbar X; hbar Y; ...; run;} 
+\item Use the {\tt discrete} option for categorical variables
+\item {\tt proc chart data=NAME;\\ \qquad vbar X / discrete; run;} for vertical bars
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{SAS/Graph, graphics stream files
+and {\tt $~$/autoexec.sas}}
+\begin{itemize}
+\item Using the SAS/Graph product to produce graphics stream files
+\item This is a still relevant legacy system of \textcolor{red}{G}PROCs
+  which\\ predates modern ODS and SAS Statistical Graphics
+  \textcolor{blue}{SG}PROCs
+\item Typically, \textcolor{red}{G}PROCs are named {\tt proc
+    \textcolor{red}{G}NAME} and\\ Statistical Graphics
+  \textcolor{blue}{SG}PROCs are named {\tt proc \textcolor{blue}{SG}NAME}
+\item We have this setting in our {\tt $~$/autoexec.sas} file
+\item {\tt goptions device=pslcmyk gsfmode=replace gsfname=gsasfile
+    colors=(black red blue green cyan magenta yellow);}
+\item This specifies Adobe PostScript color graphics stream files
+with Cyan/Magenta/Yellow/blacK (CMYK) color standard
+\item And this setting as well\\
+ {\tt filename gsasfile "\&fnroot..ps";}\\
+so, if your SAS program is named {\tt NAME.sas} then the 
+macro variable {\tt fnroot} resolves to {\tt NAME}\\
+{\tt fnroot} is a global macro variable created by the {\tt \_fn}
+macro
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{SAS/Graph, graphics stream files
+and {\tt $~$/autoexec.sas}}
+\begin{itemize}
+\item So, the smart defaults in {\tt $~$/autoexec.sas}
+result in a GPROC replacing the file {\tt \&fnroot..ps}\\
+(or creating it if it does not exist)
+\item Notice that there are two does in {\tt \&fnroot..ps}\\
+{\tt \&fnroot.ps} would resolve to {\tt NAMEps}\\
+one dot is macro variable concatenation, so the second dot is necessary
+to produce {\tt NAME.ps} instead
+\item If you press {\tt F12}, Emacs/ESS will open a viewer of
+the file\\ (by reading your {\tt .log} to find the stream file you created)
+\item Since the GPROC is replacing the file by default, if you want to
+  produce more than one you need to specify \textcolor{blue}{append}
+  rather than
+  \textcolor{red}{replace} between the first graph creation and the second\\
+  {\tt goptions gsfmode=\textcolor{blue}{append};}\\
+For the rest of the SAS program, \textcolor{blue}{append} will 
+be in effect which is likely what you want
+\item Of course, you can over-ride these settings at any time
+as necessary, but smart defaults will save a lot of your time 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{{\tt proc univariate}'s {\tt histogram} statement}
+\begin{itemize}
+\item {\tt proc univariate} uses the GPROC facility with its 
+{\tt histogram} statement for a continuous variable
+\item {\tt proc univariate noprint data=NAME; histogram X; run;}
+\item You can only produce one histogram from a \\
+{\tt proc univariate noprint data=NAME; ...\ run;} block
+\item In between the first and the second, you need to 
+switch to \textcolor{blue}{append}, then you can append as many 
+histrograms as needed
+\end{itemize}
+\begin{verbatim}
+proc univariate noprint data=NAME; 
+histogram X;
+run;
+goptions gsfmode=append;
+proc univariate noprint data=NAME; 
+histogram Y;
+run;
+proc univariate noprint data=NAME; 
+histogram Z;
+run;
+\end{verbatim}
+\end{frame}
+
+\end{document}

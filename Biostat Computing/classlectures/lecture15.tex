@@ -1,0 +1,635 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{shortvrb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Concatenating data sets}
+\begin{itemize}
+\item Concatenating data sets: creates a single data set from a series
+  of data sets \textcolor{red}{in the order which they appear}\\
+{\it stacking} them one on top of another, etc.
+\item {\tt data NEW; set \textcolor{red}{OLD1 ...\ OLDn}; run;}\\
+in a diagram, {\tt NEW} looks like this:
+\begin{tabular}{c}
+{\tt OLD1} \\ 
+$\vdots$ \\
+{\tt OLDn} \\
+\end{tabular}
+\item For large data sets, use {\tt proc append}
+\item see {\tt NTDB/sas/traumactr.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Interleaving data sets}
+\begin{itemize}
+\item Interleaving data sets: similar to concatenation\\
+  but their observations appear \textcolor{blue}{in the order of the {\tt by}
+    clause}\\
+the order the data sets appear does NOT matter\\
+ (except for ties of the {\tt by} clause variables)
+\item {\tt data NEW; set OLD1 ...\ OLDn; 
+\textcolor{blue}{by VAR1 ...\ VARm;} run;}
+\item see {\tt NTDB/sas/traumactr.sas}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Merging data sets}
+\begin{itemize}
+\item Merging two or more data sets requires some more consideration
+than concatenation/interleaving
+\item {\tt data NEW; \textcolor{blue}{merge} OLD1 ...\ OLDn;\\ 
+{by VAR1 ...\ \textcolor{red}{VARm};} run;}
+\item Each of the data sets {\tt OLD1 ...\ OLDn} must be sorted
+according to the {\tt by} clause
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Merging data sets}
+\begin{itemize}
+\item Generally, each of the data sets EXCEPT ONE should have\\
+  \textcolor{red}{unique keys} according to the {\tt by} clause
+\item You can tell if a key is unique by the last variable in
+the clause\\
+  the automatic variables {\tt
+    first.\textcolor{red}{VARm}=last.\textcolor{red}{VARm}=1} %(but one)
+\item One data set (typically the last for program readability)\\
+does not have to be unique\\
+there may be multiple observations for each key
+\item The data set option {\tt in} can be useful since NOT every
+data set will necessarily contribute observations\\
+\item {\tt {merge} OLD1(in=NAME1) ...\ OLDn(in=NAMEn);}\\
+these automatic variables are 1 for contributed variables to 
+a particular observation and 0 otherwise
+\item see {\tt PTB/merge.sas}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Summarizing data sets: START HERE}
+\begin{itemize}
+\item To calculate summaries, these are the
+PROCs commonly used\\
+{\tt proc freq}, {\tt proc means} and {\tt proc univariate}
+\item They all accept \textcolor{red}{\tt by} and 
+\textcolor{blue}{\tt where} statements
+\item {\tt proc freq} for categorical variables
+\item Common {\tt OPTION1}: \textcolor{red}{\tt order=freq} by
+  descending frequency
+\item Common {\tt OPTION2}: \textcolor{blue}{\tt list} for multi-way
+tables and\\ \textcolor{red}{\tt missing} to create a missing category
+\end{itemize}
+\begin{verbatim}
+proc freq OPTION1 data=NAME; *for display in .lst;
+tables Z Y*X / OPTION2;
+run;
+proc freq NOPRINT OPTION1 data=NAME; *not in .lst;
+tables Y*X / OPTION2 out=NEW1; *saved to a data set;
+run;
+proc freq noprint OPTION1 data=NAME;
+tables Z / OPTION2 out=NEW2;
+run;
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Summarizing data sets with {\tt proc means}}
+\begin{itemize}
+\item Some overlap of {\tt means} and {\tt univariate}
+for continuous summaries
+\item {\tt means} mainly for simple statistics\\
+\textcolor{red}{{\tt minid/maxid}} captures information about min/max
+\item {\tt univariate} mainly for more complex summaries
+like quantiles, hypothesis tests and \textcolor{blue}{\tt histrogram}s
+which we will see later 
+\end{itemize}
+\begin{verbatim}
+proc means data=NAME; *for display in .lst;
+var x y z;
+run;
+
+proc means noprint data=NAME; *summaries in a new data set;
+var VAR1 ... VARn;
+output out=NEW STAT=NAME1 ... NAMEn
+       minid(VARi(XVAR1 ... XVARk))=XVAL1 ... XVALk
+       maxid(VARj(YVAR1 ... YVARm))=YVAL1 ... YVALm;
+run;
+\end{verbatim}
+       %minid(VARi(XID1 ... XIDk))=X1 ... Xk
+       %maxid(VARj(YID1 ... YIDm))=Y1 ... Ym;
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Summarizing data sets with {\tt proc means}\\
+and {\tt proc univariate}}
+\begin{verbatim}
+proc means OPTIONS data=NAME;
+where ...; * subsetting data set;
+by ...;    * for summaries of each by-group;
+class ...; * by-like summaries for unsorted data sets;
+var VAR1 ... VARn;
+output out=NEW STAT1=X1 ... Xn ... STATm=Y1 ... Yn;
+run;
+
+proc univariate OPTIONS data=NAME;
+where ...; * subsetting data set;
+by ...;    * for summaries of each by-group;
+class ...; * by-like summaries for unsorted data sets;
+var VAR1 ... VARn;
+output out=NEW STAT1=X1 ... Xn ... STATm=Y1 ... Yn;
+run;
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Summarizing data sets with {\tt proc corr}}
+\begin{itemize}
+\item Correlation is a very important summary for pairs of variables
+\item {\tt proc corr} computes correlation for all possible pairs
+\item {\tt proc corr PEARSON} is the default assuming Normality\\
+{\tt proc corr PEARSON outp=NEW} to output them to a data set
+\item {\tt proc corr SPEARMAN} for nonparametric correlations of the ranks
+rather than the values themselves\\
+{\tt proc corr SPEARMAN outs=NEW} to output them
+\end{itemize}
+\begin{verbatim}
+proc corr OPTIONS data=NAME;
+var VAR1 ... VARn;
+run;
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example: Electronic health records (EHR)\\
+\textcolor{blue}{Context: Diabetes and recurrent hospital admissions}}
+
+\begin{itemize}
+\item We have IRB approval to study a cohort of newly diagnosed diabetes patients from a single health care system
+\vspace*{0.1in}
+\item We have the electronic health records (EHR) for these patients
+  from 2007-2012: prior records may, or may not, be available
+\vspace*{0.1in}
+\item EHR are an omnibus of digital health care information
+ \vspace*{0.1in}
+ \item We focus on 82 covariates: patient demographics, health insurance,
+ health care charges, diagnoses, procedures, anti-diabetic therapy,
+ laboratory values and vital signs
+\vspace*{0.1in}
+\item By its nature, EHR data is fundamentally time-varying %that are inherently  time-dependent
+\vspace*{0.1in}
+ \item EHR covariates are occasionally missing even when carrying the last value forward
+ \vspace*{0.1in}
+ \item Imputed 15 continuous variables with Sequential BART\\ % (8 lab values and\\ 7 vital signs)
+(Xu, Daniels \& Winterstein 2016 {\it Biostatistics})
+ \vspace*{0.1in}
+ \end{itemize}
+ \end{frame}
+
+\begin{frame}\frametitle{Electronic health records (EHR)\\
+\textcolor{blue}{Diabetes and recurrent
+      hospital admissions}}
+
+\begin{itemize}
+\item \textcolor{red}{488 patients followed 5 years from 2008-2012\\
+the survival rate was high 0.939 (noninformative censoring)\\
+yet experienced a high rate of hospital admissions: 525 total} %: 63\%, 0; 37\%, 1+}
+%but there were 525 hospital admissions} %: 63\%, 0; 37\%, 1+}
+\vspace*{0.1in}
+\item For diabetes, which covariates increase the risk of admission?
+What about the number of previous admissions or an acutely recent admission?
+\vspace*{0.1in}
+\item \textcolor{black}{What are the functional forms of the covariates
+i.e.\ linear, quadratic, logarithm, etc.?}  Are the covariate effects
+additive or multiplicative?
+\vspace*{0.1in}
+\item \textcolor{blue}{Are there interactions?}
+ \textcolor{red}{Are these effects constant with respect to time, i.e., proportionality assumption?}
+\item We want to avoid precarious restrictive assumptions
+hence we chose to use Bayesian Additive Regression Trees (BART)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}\frametitle{Electronic health records (EHR)\\
+\textcolor{blue}{Diabetes and recurrent hospital admissions}}
+\begin{center}
+\begin{tabular}{lrcrc}\hline
+%&\multicolumn{2}{c}{At the End of}&\multicolumn{2}{c}{At Hospital}\\
+%&\multicolumn{2}{c}{By End of}&\multicolumn{2}{l}{ }\\
+&\multicolumn{2}{c}{Patients}&\multicolumn{2}{l}{Admissions}\\ \hline
+%&\multicolumn{2}{c}{By End of Follow-up}&\multicolumn{2}{l}{Total}\\ \hline
+Number of Admissions          &488&       & 525&\\
+  0                 &308& (63.0)&   0& \\
+  1                 & 79& (16.2)&  79& (15.0)\\
+  2-3               & 50& (10.3)& 115& (21.9)\\
+  % 4-6               & 37& ( 7.6)\\
+  % 7-16              & 14& ( 2.9) \\ \hline
+\textcolor{red}{4-16}              & 51& \textcolor{blue}{(10.5)}& 331& \textcolor{red}{(63.1)} \\ \hline
+% &\multicolumn{2}{c}{By End of} \\
+% &\multicolumn{2}{c}{Follow-up}  \\ \hline
+% Deceased            &488&      \\
+%   Yes               & 30&(  6.1)\\
+%   No                &458&( 93.9)\\ \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{comment}
+\begin{frame}\frametitle{EHR\\
+\textcolor{blue}{Diabetes and recurrent hospital admissions}}
+
+\begin{itemize}
+\item We focus on 82 covariates: patient demographics, health insurance,
+health care charges, diagnoses, procedures, anti-diabetic therapy,
+laboratory values and vital signs
+\vspace*{0.1in}
+
+\item These covariates are inherently time-dependent and occasionally missing
+even when carrying the last value forward
+\vspace*{0.1in}
+\item Imputed 15 continuous variables with Sequential BART\\
+8 lab values and 7 vital signs\\
+Xu, Daniels \& Winterstein 2016 {\it Biostatistics}
+\vspace*{0.1in}
+\item Variable selection: Decoupling Shrinkage and Selection (DSS) \\
+Hahn \& Carvalho 2015 {\it JASA}; McCulloch et al. 2015 JSM
+\vspace*{0.1in}
+\item Divided the cohort at random into training and validation sets
+\vspace*{0.1in}
+\item Risk agonists:  \textcolor{blue}{insulin treatment}, \textcolor{red}{peripheral vascular disease (PVD)}
+ and the number of previous admissions, $N_i(t-)$
+\end{itemize}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}\frametitle{EHR:
+\textcolor{blue}{Diabetes and recurrent hospital admissions}}
+\begin{center}
+\begin{tabular}{lrcrc}\hline
+%&\multicolumn{2}{c}{At the End of}&\multicolumn{2}{c}{At Hospital}\\
+%&\multicolumn{2}{c}{By End of Follow-up}&\multicolumn{2}{c}{By Admission}\\ \hline
+&\multicolumn{2}{c}{Patients}&\multicolumn{2}{c}{Admissions}\\ \hline
+Gender              &488&                       &525\\
+  M                 &216& (44.3)                &228& (43.4)\\
+  F                 &272& (55.7)                &297& (56.6)\\ \hline
+Race                &488&                       &525\\
+  Black             &174& (35.7)                &265& (50.5)\\
+  White             &314& (64.3)                &260& (49.5)\\ \hline
+Age                 &488&                       &525\\
+  Mean, SD         & 60.9&15.0                & 60.3&15.7\\ \hline
+% Median, IQR      & 60.5&20.0                & 60.0&24.0\\
+% Q1, Q3            & 51.0& 71.0                & 49.0& 73.0\\
+% Min, Max          & 26.0& 94.0                & 24.0& 92.0\\
+% 21-44             & 66& (13.5)                & 87& (16.6)\\
+% 45-54             & 94& (19.3)                & 99& (18.9)\\
+% 55-64             &137& (28.1)                &115& (21.9)\\
+% 65-74             & 92& (18.9)                &100& (19.0)\\
+% 75+               & 99& (20.3)                &124& (23.6)\\ \hline
+ZIP3 area           &488&                       &525\\
+  532/urban         &378& (77.5)                &454& (86.5)\\
+  530/suburb        &110& (22.5)                & 71& (13.5)\\ \hline
+Insurance and Age          &488&                       &525\\
+  Government 65+    &191& (39.1)                &224& (42.7)\\
+  Government $<$65  &138& (28.3)                &208& (39.6)\\
+  Commercial $<$65  &143& (29.3)                & 71& (13.5)\\
+  Other $<$65       & 16& ( 3.3)                & 22& ( 4.2)\\ \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{EHR: \textcolor{blue}{Diabetes and recurrent hospital admissions}}
+\begin{center}
+\begin{tabular}{lrcrccc}\hline
+&                           & & &                              & &95\% \\
+&\multicolumn{2}{c}{ }& &                              &Relative&Credible  \\
+%&\multicolumn{2}{c}{By End of}& &                              &Relative&Credible  \\
+%&\multicolumn{2}{c}{Follow-up}&\multicolumn{2}{c}{By Admission}&Intensity&Interval\\ \hline
+&\multicolumn{2}{c}{Patients}&\multicolumn{2}{c}{Admissions}&Intensity&Interval\\ \hline
+% A$_{1c}$(\%)         &416&                       &488\\
+%   Mean, SD         &  7.1&\multicolumn{1}{c}{1.6}                 &  6.9&\multicolumn{1}{c}{1.7}\\
+%    Missing           & 72&                       & 37\\ \hline
+% % Median, IQR      &  6.6&1.8                 &  6.4&1.3\\
+% % Q1, Q3            &  6.0& 7.8                 &  5.9& 7.3\\
+%   Min, Max          &  4.5& 15.6                &  4.1& 16.4\\
+%    $<$ 9            &366& (88.0)                &437  & (89.5)\\
+%  $\ge$ 9            & 50& (12.0)                & 51  & (10.5)\\
+%   Missing           & 72&                       & 37\\ \hline
+\textcolor{blue}{Insulin}             &488&                       &525&            &\textcolor{blue}{2.39} & 1.56, 3.25\\
+  Yes               &206& (42.2)                &391& (74.5)\\
+  No                &282& (57.8)                &134& (25.5)\\ \hline
+\textcolor{red}{PVD}                 &488&                       &525&            &\textcolor{red}{2.90} &2.00, 3.89\\
+  Yes               &272& (55.7)                &488& (93.0)\\
+  No                &216& (44.3)                & 37& ( 7.0)\\ \hline
+&                           & & &                              &\multicolumn{2}{c}{partial dependence function} \\
+%&                           & & &                              &\multicolumn{2}{c}{of BART relative intensities}\\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{EHR: \textcolor{blue}{Hospital admission risk profiles}}
+\begin{center}
+\begin{tabular}{l|cc|cccccc} \hline
+& & & \multicolumn{6}{|l}{$N_i(t)$ with time in months} \\
+Risk & Insulin & PVD & 0 &12 &24 &36 &48 & \multicolumn{1}{l}{60} \\ \hline
+Low     & 0 & 0  & 0 & 0 & 0 & 0 & 0 & 0  \\
+\textcolor{blue}{Medium}  & 1 & 0  & 0 & 0 & 1 & 1 & 1 & 1  \\
+\textcolor{red}{High}    & 1 & 1  & 0 & 1 & 2 & 3 & 4 & 4  \\ \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{EHR: \textcolor{blue}{Risk profiles: Cumulative Intensity\\partial dependence function}}
+\begin{center}
+\includegraphics[scale=0.45]{../EHR/count-pred-I-color.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{\textcolor{blue}{Risk profiles: Relative Intensity and 95\% Credible Intervals\\partial dependence function}}
+\begin{center}
+\includegraphics[scale=0.45]{../EHR/count-pred-RI-color.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{\textcolor{blue}{Risk profiles: Relative Intensity \& 95\% Prediction Intervals\\partial dependence function}}
+\begin{center}
+\includegraphics[scale=0.45]{../EHR/count-pred-PI-color.pdf}
+\end{center}
+\end{frame}
+
+\MakeShortVerb{\!}
+\begin{frame}\frametitle{EHR: \textcolor{blue}{Diabetes and hospital
+      admission risk }}
+
+\begin{itemize}
+\item Some diabetes patients are at high risk for hospital admission
+\begin{itemize}
+\item \textcolor{red}{diagnosed with PVD}
+\item \textcolor{red}{prescribed insulin therapy}
+\item \textcolor{red}{with a recent hospital admission}
+\item \textcolor{red}{and/or several previous hospital admissions}
+\end{itemize}
+\item \textcolor{blue}{Health policy implications: Diabetic patients' health
+care post-discharge should be carefully orchestrated to ensure the delivery of quality
+clinical care which maximizes healthy outcomes while
+    preventing adverse events and costly unnecessary hospital admissions}
+\item {\bf BART} package contains a roughly 20\% random sample\\
+50 patients from training: !ydm20.train! \& !xdm20.train!\\
+50 patients from validation: !xdm20.test!
+\item See example: !system.file('demo/dm.recur.bart.R', package='BART')!
+\item complete data set at
+\url{http://www.mcw.edu/FileLibrary/Groups/Biostatistics/TechReports/TechReports5175/tr064.tar}
+\item !tr064.tar! copied to !/data/shared/04224/EHR!
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}\frametitle{Cumulative intensity
+and recurrent events}
+
+\begin{itemize}
+\item In this example, we are ignoring the impact of 
+covariates\\ we are interested in the experience
+of diabetes patients in aggregate rather than individually
+\item With the discrete time approach, divide the time line
+into a grid based on when events were observed\\
+$0=t_{(0)}<t_{(1)} < \dots < t_{(K)}<\infty$ where
+$t_{(j)}$ are the distinct event times observed
+\item Suppose we count the number of events in each interval\\
+$\textcolor{blue}{k_j}$ is the number of events found in the interval
+$(t_{(j-1)}, t_{(j)}]$
+\item The {\it intensity} of an event falling in the interval
+  $(t_{(j-1)}, t_{(j)}]$ is the probability
+$p_j=\textcolor{blue}{k_j}/N$ where $N$ is the number of patients\\
+(so few patients died in this study that we can 
+simply ignore them: in other cases you may not be able to)
+\item And the cumulative intensity by time $t_{(j)}$
+is just the sum of these probabilities%: $C_j = \sum_{k=1}^j p_j$
+\end{itemize}
+\begin{align*}
+C_j &= \sum_{h=1}^j p_h = \textcolor{red}{m_j}/N 
+\where \textcolor{red}{m_j}=\sum_{h=1}^j \textcolor{blue}{k_h}
+& \mbox{\textcolor{red}{number of cumulative events}}
+\end{align*}
+\end{frame}
+ 
+\begin{frame}\frametitle{HW EHR part 1: Cumulative intensity
+and recurrent events}
+
+\begin{itemize}
+\item N.B. don't confuse the cumulative intensity with
+a cumulative distribution function (CDF) or a cumulative incidence
+function\\ e.g., cumulative intensity is not restricted to 
+the interval $(0, 1)$ like the others, i.e., its not a probability
+\item Calculate the cumulative intensity function based on\\ the
+20\% sample: see {\tt EHR/sas/dm20.sas}
+\end{itemize}
+\begin{tabular}{l|l} \hline
+Variable & Description \\ \hline
+{\tt id} & Unique patient identifier: $i=1, \dots, N=100$\\ 
+& \textcolor{red}{(not a unique key)}\\
+{\tt t}  & The {\it study day} at the end of the interval: 
+$j=1, \dots, K=798$\\
+         & \textcolor{blue}{{\tt id} and {\tt t} taken together are the unique key}\\
+{\tt y}  & Was an event observed within this interval? 0 or 1\\
+{\tt n}  & the number of {\it previous} events that have been observed\\
+         & prior to this interval
+\end{tabular}
+For each patient, $m_{ij}=y_{ij}+n_{ij}$ cumulative events by time $t_{(j)}$\\
+Similarly, for the whole sample, $m_{+j}=\sum_{i=1}^N m_{ij}$\\
+$C_j = N^{-1} m_{+j} =N^{-1} \sum_{i=1}^N m_{ij}$
+% $C_j = \sum_{k=1}^j p_j = N^{-1}\sum_{k=1}^j m_{+j}
+% =N^{-1}\sum_{k=1}^j \sum_{i=1}^N m_{ij}$
+\end{frame}
+\end{document}
+
+\begin{frame}\frametitle{Cumulative intensity and jack-knifing}
+
+\begin{itemize}
+\item Now, we have an estimate of our cumulative intensity curve\\
+\item However, what is the uncertainty of the estimate for ${C}_j$?
+\item After thinking hard about this, I don't know
+% \item Asymptotic theory ($N \rightarrow \infty$) suggests 
+% that $\V{C_j}=\frac{p_j(1-p_j)}{N}$, but how big does $N$ have to be?
+\item A computational trick: use jack-knifing to calculate its SD\\
+a simple way to make the calculation without theory
+\item \textcolor{red}{But, this is only workable for data sets that are
+    relatively small}
+% \item \textcolor{blue}{And typically, the estimator is a mean as we
+%     have here: $C_j = N^{-1}m_{+j} = N^{-1} \sum_{i=1}^N m_{ij}$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cumulative intensity and jack-knifing}
+
+\begin{itemize}
+\item Notationally, $C_j$ is our estimate using all of the patients
+$C_j = N^{-1} m_{+j} =N^{-1} \sum_{i=1}^N m_{ij}$
+\item If we leave patient {\tt id=$i$}'s data out when
+we calculate the cumulative incidence, then we have $C_{-ij}$
+\item The so-called {\it pseudo-values} are as follows: $i=1, \dots, N$
+%$\tilde{C}_{ij} = N C_j- (N-1) C_{-ij},\ i=1, \dots, N$
+%\item For the cumulative intensity, the mean of the pseudo-values is
+\end{itemize}
+\begin{align*}
+\tilde{C}_{ij}& = N C_j- (N-1) C_{-ij}\\
+C_{-ij} & = (N-1)^{-1} (m_{+j}-m_{ij})\\
+\textcolor{red}{\tilde{C}_{ij}}& = m_{+j} - (m_{+j}-m_{ij})\\
+&\textcolor{red}{=m_{ij}}\\
+\textcolor{blue}{N^{-1}\sum_{i=1}^N \tilde{C}_{ij}}&
+%= N^{-1}\sum_{i=1}^N (m_{+j}-(m_{+j}-m_{ij}))\\
+=N^{-1}\sum_{i=1}^N m_{ij} =N^{-1} m_{+j}\\
+&\textcolor{blue}{=C_j}
+\end{align*}
+\end{frame}
+
+\begin{frame}\frametitle{Cumulative intensity and jack-knifing}
+
+\begin{itemize}
+% \item \textcolor{red}{$N^{-1}\sum_{i=1}^N \tilde{C}_{ij}=C_j$} 
+% \textcolor{blue}{so jack-knifing is appropriate}
+\item We compute the sample variance %of $C_j$ is
+%approximately the standard deviation 
+of these $\tilde{C}_{ij}$\\
+$ \sd^2_j = (N-1)^{-1}\sum_{i=1}^N (\tilde{C}_{ij}-{C}_{j})^2$
+\item According to the jack-knifing method\\
+the SD of $C_j$ is approximately equal to\\
+the SD of $N^{-1}\sum_{i=1}^N \tilde{C}_{ij}$\\ which is
+  the SD of the mean of $N$ values\\ 
+(rather than the SD of a single value)\\
+ $SD_j = \sd_j/\sqrt{N}$\\
+%which is often called the Standard Error
+\item The 95\% confidence interval is\\
+$(C_j-1.96 SD_j, C_j+1.96 SD_j)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{HW EHR part 2: Cumulative intensity
+and jack-knifing}
+
+\begin{itemize}
+\item Jack-knifing was discovered by Quenouille (1949, 1956) and popularized
+  by Tukey (1958) who gave it this name
+\item Like a jack-knife, it is useful in many scenarios
+\item Use jack-knifing to calculate the standard deviation
+of the cumulative incidence $C_j$
+\item Perform this exercise in two ways
+\begin{enumerate}
+\item Taking advantage of the nice cancellation in the
+pseudo-values for cumulative intensity
+\item And, generically, i.e., we can't always assume such nice 
+cancellation
+\end{enumerate}
+\item Then compare these results with {\tt proc plot}
+for the estimate and confidence intervals
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{HW EHR part 2: Cumulative intensity
+and jack-knifing}
+
+\begin{itemize}
+\item Hints: use a PROC whenever you can like {\tt proc means}\\
+the {\tt output} statement along with the {\tt noprint} option 
+are extremely useful for summary calculations
+\item mixture of PROC and DATASTEP code will typically be the fastest
+  solution both in programming and in execution time
+\item Take advantage of a {\tt by} clause when a data set is sorted\\
+if not, then you can either sort the data set, create an index
+or, use a {\tt class} statement with {\tt proc means} (with {\tt \_freq\_})\\
+roughly in that order of usefulness
+\item Use \textcolor{blue}{\tt merge} 
+\item Use {\tt set ...\ point}: if you do, then don't forget the 
+\textcolor{red}{\tt stop;} 
+\end{itemize}
+\end{frame}
+
+\end{document}

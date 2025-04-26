@@ -1,0 +1,1281 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames]{beamer}
+\setbeameroption{show notes}
+%\usepackage[round]{natbib}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+%\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+%\usepackage{cancel}
+%\usepackage{tikz}
+%\usepackage[english]{babel}
+\usepackage{statex2}
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{courier}
+\usepackage{listings}
+\usepackage{fancyvrb}
+%\usepackage{pgf} %portable graphics format
+%\usepackage[autobold]{statex2}
+%\usepackage{enumitem}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+% \newcommand*{\BART}{\mathrm{BART}\ }
+% \newcommand*{\Wei}[2]{\mathrm{Wei}\wrap[()]{#1, #2}}
+% \newcommand*{\HBART}{\mathrm{HBART}\ }
+% \newcommand*{\corr}{\mathrm{corr}}
+% \newcommand*{\abs}{\mathrm{abs}}
+% \newcommand*{\DP}[2]{\mb{\mathrm{DP}}\wrap[()]{\mb{#1,\ #2}}}
+%\newcommand*{\EV}[2]{\mb{\mathrm{ExtremeValue}}\wrap[()]{\mb{#1,\ #2}}}
+%\newcommand*{\Wei}[2]{\mathrm{Wei}\wrap[()]{#1, #2}}
+
+\lstset{basicstyle=\small\ttfamily}
+%\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+\lstdefinestyle{customR}{
+  % belowcaptionskip=1\baselineskip,
+  % breaklines=true,
+  frame=LT,
+  % xleftmargin=\parindent,
+  language=R,
+showstringspaces=false,
+morekeywords={addmargins,dbConnect,dbGetQuery,Postgres,str},
+%emphstyle=\color{RedViolet},
+  % showstringspaces=false,
+  % basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\color{VioletRed},
+  commentstyle=\color{BrickRed},
+  identifierstyle=\color{black},
+  stringstyle=\color{ForestGreen},
+}
+\lstdefinestyle{customSAS}{
+  frame=LT,
+  language=SAS,
+showstringspaces=false,
+morekeywords={proc,data,datafile,out,run},
+  keywordstyle=\color{VioletRed},
+  commentstyle=\color{BrickRed},
+  identifierstyle=\color{black},
+  stringstyle=\color{ForestGreen},
+}
+
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput}%
+{% fontsize=\footnotesize,
+ % %
+ % frame=lines,  % top and bottom rule only
+ % framesep=2em, % separation between frame and text
+ % rulecolor=\color{Gray},
+ % %
+ % label=\fbox{\color{Black}data.txt},
+ % labelposition=topline,
+ % %
+ % commandchars=\|\(\), % escape character and argument delimiters for
+ %                      % commands within the verbatim
+ % commentchar=*        % comment character
+}
+
+\title{An introduction to big data mining of electronic health records with
+Jupyterhub, R, SQL and SAS}
+\author{Kristen Osinski, Rodney Sparapani and Bradley Taylor}
+\date{M1060: July 21, 2022}
+\begin{document}
+\bibliographystyle{plainnat}
+
+\titlepage
+\boldmath
+% 0. Intro
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Abstract}}
+  Since the \emph{American Recovery and Reinvestment Act} mandated
+  meaningful usage of Electronic Health Records (EHR) data systems in
+  2009, there has been a paradigm shift in clinical/translational
+  research towards studying EHR administrative databanks.  The
+  Clinical and Translational Science Institute (CTSI) of Southeast
+  Wisconsin has been at the forefront of this emerging trend.  CTSI
+  Biomedical Informatics has painstakingly created the Clinical
+  Research Data Warehouse (CRDW) with its Honest Broker tables.  The
+  CRDW provides access to the EPIC EHR and other ancillary digital
+  databanks. However, searching and manipulating the CRDW was
+  challenging even for those familiar with it.  Recently, in 2020, a
+  Jupyterhub server was created so that users could explore the CRDW
+  directly with relative ease via programming languages in common use
+  among biostatisticians, bioinformaticians and data scientists: SQL,
+  R and SAS.  This workshop will provide you with a hands-on
+  introduction to the CRDW via Jupyterhub.  CITI training and MCWCORP
+  username/password authentication is recommended.  Room capacity
+  limit: 90.
+\end{frame}
+ 
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Learning
+      Objectives}}
+\begin{itemize}
+\item Definitions/jargon for Electronic Health Records (EHR)
+\item A series of online resources are developed for EHR
+\item The CTSI Clinical Research Data Warehouse (CRDW)
+\item An overview of the CRDW Jupyterhub environment 
+\item Brief history of SQL, R and SAS
+\item Hands-on experience with Jupyterhub by thoughtful examples
+\item Short introduction of RASMACRO 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Schedule}}
+
+\begin{tabular}{rl}
+8:00 & Speaker/attendee introductions \\
+8:15 & Bradley Taylor, Chief Research Informatics Officer \\
+8:30 & Kristen Osinski, Business Analyst IV, CTSI \\
+9:15 & Overview: slides 0:20  \\
+10:00& Snack break: getting to know each other \\
+10:30& Hands-on with Jupyterhub: slides 21:32  \\
+12:00& Lunch provided \\
+12:30& Hands-on with Jupyterhub: slides 33:43  \\
+2:00 & Biological break \\
+2:15 & Hands-on with Jupyterhub: slides 44:55 \\
+3:45 & Q and A \\
+4:15 & Closing ceremonies
+\end{tabular}
+
+\end{frame}
+
+\begin{comment}
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Outline}}
+
+\begin{itemize}
+\item Overview
+\item Background
+\item Timeline
+\end{itemize}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Overview}}
+
+\begin{itemize}
+\item Clinical and Translational Science Institute\\
+of Southeast Wisconsin (CTSI)
+\item CTSI Clinical Research Data Warehouse (CRDW)
+%\item We restrict our attention on the following matters
+\item CRDW contains adult electronic health records (EHR)\\
+at Froedtert and MCW: mainly EPIC EHR\\
+but including billing claims and ancillary databanks
+%including the EPIC EHR, billing and other sources of data
+\item Jupyterhub access to the CRDW for adults
+\item Collaborative Institutional Training Initiative (CITI) required
+\item SQL, R and SAS: popular and mature programming languages
+\item SQL and R come free with Jupyterhub
+\item SAS can be purchased through the MCW IS Ticket system\\
+ for Linux server and Windows clients, it's either free or cheap
+%\$60 for Linux on the RCC cluster and for Windows installs  
+\item \textcolor{PineGreen}{[\href{https://mcwcherwellapp.mcwcorp.net/CherwellPortal}{https://mcwcherwellapp.mcwcorp.net/CherwellPortal}]}
+\item In this presentation, links are colored MCW green \textcolor{PineGreen}{[green]}
+and surrounded by square brackets for color equity
+
+% \item On the TIOBE Index of programming language popularity (circa 04/22)
+% \item Structured Query Language (SQL) is number 9 \\ first appeared in 1974
+% \item R is number 11 \\
+% derivative of S which first appeared in 1976
+% \item SAS is number 21 \\
+% first appeared in 1972
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{CRDW Data Horizon
+and Important Eras}}
+
+\begin{itemize}
+\item 1989: North American Association of Central Cancer Registries
+  (NAACCR) for Froedtert %Memorial Lutheran Hospital % and Community Memorial
+\item 1999 to 2018, November: GE/IDX billing
+%\item 2001: NAACCR for St.\ Joseph's West Bend
+%\item 2003: Philips IntelliSpace Cardiovascular/Xcelera for echos
+\item 2004: EPIC EHR debuts at Froedtert
+\item 2005: GE/MUSE for EKGs
+\item 2005 to 2007: National Provider Identifiers (NPI) transition
+\item 2009: American Recovery and Reinvestment Act mandates {\it meaningful use} of EHR (i.e., not just for billing purposes)
+%\item 2011: Affordable Care Act mandates {\it meaningful use} of EHR
+\item 2012, May: EPIC EHR Community Memorial Menominee Falls
+\item \textcolor{red}{2013, July: EPIC EHR for Community Physicians Clinics} 
+\item 2013, September: EPIC EHR St.\ Joseph's West Bend
+\item 2015: Elekta/MOSAIQ radiotherapy dosage
+\item \textcolor{blue}{2015, October: ICD-10 era begins}
+\item 2020, March: COVID-19 pandemic declared
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Resources}}
+
+\begin{itemize}
+\item This presentation, programs, etc.\ are available online\\
+\textcolor{PineGreen}{[\href{https://github.com/rsparapa/CTSI/tree/main/Summer22}{at my \texttt{github.com} repository}]}
+\item \textcolor{PineGreen}{[\href{https://ctsi.mcw.edu/about/history/support/berd}
+{Biostatistics, Epidemiology and Research Design (BERD)}]}
+\item \textcolor{PineGreen}{[\href{https://ctsi.mcw.edu/investigator/services/ctsi-mini-grants/biostatistical-consultation}
+{BERD Mini-grants}]}
+\item \textcolor{PineGreen}{[\href{https://www.mcw.edu/departments/biostatistics/biostatistics-consulting-service}{Biostatistics Consulting Service (BCS)}]}
+\item \textcolor{PineGreen}{[\href{https://www.i2b2.org}
+{i2b2: informatics for integrating biology and the bedside}]}
+\item \textcolor{PineGreen}{[\href{https://ctri.mcw.edu/resources/bmi-links}
+%{Clinical and Translational Science Institute\\ 
+%of Southeast Wisconsin (CTSI)\\ 
+{CTSI Biomedical Informatics links}]}
+\item \textcolor{PineGreen}{[\href{https://ctri.mcw.edu/wp-content/uploads/CTSI-Honest-Broker-Data-Dictionary.pdf}{CTSI Honest Broker Data Dictionary}]}
+\item \textcolor{PineGreen}{[\href{https://en.wikipedia.org/wiki/Project_Jupyter}{Project Jupyter}]}
+\item CRDW Jupyterhub \textcolor{PineGreen}{[\href{https://jupyter.ctsi.mcw.edu}{https://jupyter.ctsi.mcw.edu}]}
+\item \textcolor{PineGreen}{[\href{https://www.cdc.gov/nchs/icd/icd9cm.htm}
+{ICD-9 manuals available for download}]}
+\item \textcolor{PineGreen}{[\href{https://icd10cmtool.cdc.gov}
+{US Centers for Disease Control \& Prevention (CDC)\\ 
+ICD-10-CM Browser}]}
+\item \textcolor{PineGreen}{[\href{https://www.nber.org/research/data/icd-9-cm-and-icd-10-cm-and-icd-10-pcs-crosswalk-or-general-equivalence-mappings}
+{US Centers for Medicare \& Medicaid Services (CMS) \\
+(with the CDC) ICD-9 to, and from, ICD-10 crosswalk \\
+of General Equivalence Mappings (GEM)}]}
+\item \textcolor{PineGreen}{[\href{https://www.neighborhoodatlas.medicine.wisc.edu}{Area Deprivation Index (ADI)}]}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{What is an Electronic Health Record?}}
+
+\begin{itemize}
+\item Electronic Medical Record (EMR) and\\ 
+Electronic Health Record (EHR)\\
+are often used interchangeably
+\item However, there is a subtle distinction
+\item Technically, the EMR is merely a digital version (whether of
+  digital provenance or scanned images) of what used to be a paper
+  {\it medical record} (which is a misnomer, i.e., NOT limited to
+  merely medicine as the name seemingly implies)
+\item Typically, the EMR is a collection of health-related data
+\item Inpatient and outpatient doctor/nursing/etc.\ treatment notes
+\item Imaging, laboratory results, vital signs, etc. 
+\item Whereas the EHR is an information management system like EPIC
+  providing convenient access to the EMR along with other ancillary
+  digital capabilities such as \textcolor{red}{billing}/scheduling,
+  prescription pharmaceutical orders and modern data sources 
+including X-ray/CAT/MRI scans,  chemo-/radio-therapy dosage,
+  electrocardiograms, echocardiograms, etc.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{What is an Honest Broker?}}
+
+\begin{itemize}
+\item
+``A neutral intermediary ... between the individual whose ... data are being studied, and the researcher. The honest broker collects and collates pertinent information ... replaces identifiers with a code, and releases only coded information to the researcher.''
+ \textcolor{PineGreen}{[\href{https://www.hhs.gov/ohrp/sachrp-committee/recommendations/2011-october-13-letter-attachment-d/index.html}{US
+     Health and Human Services FAQ}]}
+\item CTSI Biomedical Informatics is the Honest Broker!
+\item The term originated in diplomacy meaning an entity
+accepted as impartial by all sides in a negotiation
+\item German Chancellor Otto von Bismarck was the first to use the
+  term, by applying it to himself, as an intermediary in negotiations
+  between Russia and the Ottoman Empire (Auray-Blais and Patenaude,
+  BMC Medical Ethics 2006)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Honest Broker De-identification}}
+
+\begin{itemize}
+\item Jupyterhub data is brought ``up-to-date'' on Wednesday nights
+\item HIPAA de-identification provided by the Honest Broker
+\item For example, patient names, etc.\ are removed
+\item The Medical Record Number (MRN),
+  \textcolor{red}{\texttt{patient\_mrn}},\\ is replaced by 
+  \textcolor{red}{\texttt{patient\_hash}} which is an encrypted
+  key
+\item \textcolor{red}{\texttt{patient\_hash}} is unchanging so that
+the MRNs could be retrieved if you have IRB approval for identified
+data
+\item All dates for each patient are de-identified by a\\
+\textcolor{blue}{single} random integer from -10 to 10 (with zero excluded)
+\item This allows any two date differentials to be calculated
+exactly such as the age of a diagnosis with respect to birth date
+\item Geographically, we have only state of residence and\\
+ZIP code shortened to the first 3 digits 
+\item Yet, addresses were geocoded to Census Block Groups (CBG)\\ 
+and the corresponding Area Deprivation Index is provided\\
+(the CBG is not of course)
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief introduction to SQL}}
+
+\begin{itemize}
+\item Structured Query Language (SQL) 
+\item The syntax/semantics for interacting with\\
+relational database management systems
+\item Originally developed by IBM: now an industry standard
+\item \textcolor{PineGreen}{[\href{https://www.iso.org/standard/63555.html}
+{SQL:2016 AKA ISO/IEC 9075:2016}]}
+\item \textcolor{PineGreen}{[\href{https://www.tiobe.com/tiobe-index}
+{The TIOBE Index of programming language popularity}]}\\ (circa 04/22)
+\item SQL is ranked 9
+\item First appeared in 1974
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief introduction to R}}
+
+\begin{itemize}
+\item The R language is an open-source, free software GNU project\\
+ purpose-built for data science that is {\it object-oriented}
+\item \textcolor{PineGreen}{[\href{https://R-project.org}{https://R-project.org}]}
+\item \textcolor{PineGreen}{[\href{https://CRAN.R-project.org/manuals.html}{https://CRAN.R-project.org/manuals.html}]}
+\item Naturally vectorized language with convenient objects such as vectors,
+matrices, lists (objects containers) and 
+\textcolor{red}{\texttt{date.frame}}'s
+\item On the TIOBE Index of programming language popularity (circa 04/22)
+\item R is ranked 11 
+\item A derivative of S which first appeared in 1976
+\item Many free add-on packages
+\item 18991 available on the Comprehensive R Archive Network (CRAN) (circa 04/22) \textcolor{PineGreen}{[\href{https://CRAN.R-project.org}{https://CRAN.R-project.org}]}
+\item N.B. Jupyterhub can be used with either R or Python 3\\ 
+(Python is ranked 1 on the TIOBE Index circa 04/22)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Accessing the database with R}}
+
+\begin{itemize}
+\item Via \textcolor{red}{\texttt{DBI}} package and the 
+\textcolor{red}{\texttt{RPostgres}} backend from CRAN 
+\item Use your MCWCORP credentials to log in online at 
+\textcolor{PineGreen}{[\href{https://jupyter.ctsi.mcw.edu}{https://jupyter.ctsi.mcw.edu}]}
+\item BUT YOU HAVE A SEPARATE \textcolor{blue}{\texttt{JHUSERNAME/JHPASSWORD}}
+\end{itemize}
+\lstinputlisting[style=customR]{snippet1.R}
+%\VerbatimInput{snippet1.R}
+% \begin{verbatim}
+% user="JHUSERNAME" 
+% password="JHPASSWORD"
+% library(DBI)
+% library(RPostgres)
+% db=dbConnect(
+%     Postgres(), 
+%     dbname  ="fh_jupyter_hub_hbdb",
+%     user    =user,
+%     password=password,
+%     host    ="localhost", 
+%     port    =5432, 
+%     bigint  ="integer"
+% )
+% \end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief introduction to SAS}}
+
+\begin{itemize}
+\item The SAS language is a proprietary for-fee fourth-generation\\ domain-specific environment for data science
+\item \textcolor{PineGreen}{[\href{https://SAS.com}{https://SAS.com}]}
+\item \textcolor{PineGreen}{[\href{https://support.sas.com/en/documentation.html}{https://support.sas.com/en/documentation.html}]}
+\item Convenient naturally vectorized \texttt{DATASTEP} language 
+\item You don't buy SAS, you rent it annually
+\item The MCW site license goes from June to May
+\item It is free for students and members of Biostatistics/CAPS
+\item For others its cheap, use the IS ticket system to order\\
+\textcolor{PineGreen}{[\href{https://mcwcherwellapp.mcwcorp.net/CherwellPortal}{https://mcwcherwellapp.mcwcorp.net/CherwellPortal}]} \\
+\$60 for SAS on the RCC cluster and for Windows installs  
+\item On the TIOBE Index of programming language popularity (circa 04/22)
+\item SAS is ranked 21 
+\item First appeared in 1972
+\item The RASMACRO collection of my GPL SAS macros 
+\textcolor{PineGreen}{[\href{https://github.com/rsparapa/rasmacro}{https://github.com/rsparapa/rasmacro}]}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief
+introduction to SAS}}
+
+\begin{itemize}
+\item Why not just use R instead of SAS?
+\item R's strengths are not within data processing
+\item For example, R does not have warnings about non-unique keys
+whereas SAS does (always check your \texttt{.log} !)
+\item This begs the question: ``What is a unique key?''
+\item Suppose your SSN is unique, does that make it a unique key?
+\item NO! %, not necessarily
+\item Consider a table consisting of annual earnings\\ 
+where each row/record is a year for a given SSN?
+\item What is the unique key on this table?
+\item It is SSN AND year: NOT SSN alone!
+\item The R function \texttt{byvalue} adds SAS-like
+FIRST./LAST. automatic variables but it is not the same as the real
+thing with ERRORS/WARNINGS (SAS provides them, R is silent)
+\item For virtually all tables in the CRDW, the unique key
+is not obvious and often surprising: SAS is much better suited to this
+\item You have been forewarned
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief
+introduction to Comma Separated Values}}
+
+\begin{itemize}
+\item A data exchange format that goes back to the early 1970's
+\item Popularized by spreadsheets in the 80's and 90's
+\item What we have today was solidifed by about 2005 
+\item Standards include RFCs 4180 and 7111 among others
+\item See \textcolor{PineGreen}{[\href{https://en.wikipedia.org/wiki/Comma-separated_values}
+{``Comma-separated values'' on Wikipedia}]}
+\item Typically, a three-letter file type of ``csv'',
+e.g., ``Book1.csv''
+\item A text file where each field is separated by commas
+\item A missing value is nothing: two consecutive commas
+\item Fields with commas are encased in double-quotes
+\item Double-quotes are escaped by doubling them (like SAS does)
+\item Double-quotes around numbers (or anything) is read as text 
+\item Although, a standard there are edge cases that can't be
+  {\it automatically} read by common software such as R and/or SAS
+\item Furthermore, spreadsheets are very lax: columns can be a mixture of numbers and text that will create havoc when read
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief
+introduction to Comma Separated Values}}
+
+\begin{itemize}
+\item If CSV files have so many challenges, then why bother?
+\item No other data exchange formats have caught on
+\item Alternatives like {\it recfiles} are not nearly as popular
+\item With respect to CSV, SAS fills an important niche
+\item SAS makes the exchange of CSV files with dates, times
+and date-times effectively trivial
+\item This is a very important concern since the EHR is rife
+with chronological info: so much so that you don't even want to
+consider making their transfer manual in any shape or form
+\item And we have decades of experience with CSVs
+\item Largely automated functions roughly in order of usefulness
+\item SAS: \texttt{PROC IMPORT}/\texttt{PROC EXPORT}
+\item R functions: \texttt{read.csv()}/\texttt{write.csv()}
+\item RASMACRO: \texttt{\_cimport}/\texttt{\_cexport}\\
+plus \texttt{\_crepair}, \texttt{\_constant}
+and \texttt{\_verify} for handy features
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{CSV processing with R}}
+\begin{itemize}
+\item You can download your CSV files as we will see later
+\item Either with your web browser or with Secure Copy: \texttt{scp}
+\item \texttt{scp} is a standard command on Windows, macOS and Linux
+\item However, \textcolor{red}{due to IRB restrictions, 
+you may not download data
+for more than 9999 PATIENTS} in one project
+\item This is the honor system since there is no mechanism
+to prevent malfeasance %(but their could be ``real soon now'')
+\item And you can process them with R
+\item R will convert character to numeric values where possible
+\item Except that it handles dates as character by default!
+\item There is no automatic detection: that is a manual process
+\end{itemize}
+\begin{verbatim}
+CMD% scp USER@jupyter.ctsi.mcw.edu:naaccr.csv DIR
+R> naaccr = read.csv("DIR/naaccr.csv")
+R> str(naaccr)
+R> ?str
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief
+introduction to RASMACRO}}
+\begin{itemize}
+\item SAS has a powerful macro language
+\item RASMACRO is GPL library at 
+\textcolor{PineGreen}{[\href{https://github.com/rsparapa/rasmacro}{https://github.com/rsparapa/rasmacro}]}
+\item It is available on the Biostatistics Linux Cluster
+and the Research Computing Center cluster
+\item But anyone can install it
+\item Very useful to working with CRDW data 
+\item \texttt{\_verify} to automatically convert {\it character} fields to numeric if possible,
+i.e., some fields are unnecessarily encoded as text
+\item \texttt{\_constant} automatically drops variables that are constant including missing
+\item \texttt{\_crepair} for CSVs with very long variable strings\\
+R will create an esoteric CSV file\\
+that needs re-formatting so SAS can read it automatically
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{A brief
+introduction to RASMACRO}}
+\begin{itemize}
+\item Installing RASMACRO is fairly trivial on Windows and Linux
+\item Get it from github in a directory called \texttt{rasmacro}
+\end{itemize}
+\texttt{git clone https://github.com/rsparapa/rasmacro.git} \\
+To get updates: \texttt{cd rasmacro; git pull} \\
+Add these lines to your \texttt{sasv9\_local.cfg} \\
+where \texttt{RASMACRO} is the path to your directory 
+\begin{verbatim}
+/* ' these are single quotes */
+-sasautos ('!SASROOT/sasautos' 'RASMACRO') 
+-set SASAUTOS ('!SASROOT/sasautos' 'RASMACRO')
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{CSV processing with SAS}}
+\begin{itemize}
+\item SAS does NOT automatically convert character to numeric
+\item However, the RASMACRO \texttt{\_verify} can handle that
+\item SAS does automatically detect dates, times and datetimes!
+\item The RASMACRO \texttt{\_constant} automatically detects
+variables that are constant (including missing) and
+removes them
+\item In this case, the following were superfluous and removed
+\item \texttt{mult\_tum\_rpt\_as\_one\_prim, multiplicity\_counter, 
+cs\_tumor\_size, cs\_lymph\_nodes, cs\_mets\_at\_dx, cs\_mets\_at\_dx\_bone, 
+cs\_mets\_at\_dx\_brain, cs\_mets\_at\_dx\_liver, cs\_mets\_at\_dx\_lung, 
+sequence\_number\_hospital}
+\end{itemize}
+\lstinputlisting[style=customSAS]{snippet1.sas}
+% \begin{verbatim}
+% proc import datafile="DIR/naaccr.csv" out=naaccr;
+% guessingrows=max;
+% run;
+% %_verify(data=naaccr, out=naaccr);
+% %_constant(data=naaccr, out=naaccr);
+% \end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item With your web browser, login
+  \textcolor{PineGreen}{[\href{https://jupyter.ctsi.mcw.edu}{https://jupyter.ctsi.mcw.edu}]} \\
+using MCWCORP credentials, i.e., same as Outlook/etc.
+\item And use your Jupyterhub-only \texttt{JHUSERNAME/JHPASSWORD}
+\item Pressing Shift+Enter on your keyboard submits the code
+\end{itemize}
+\lstinputlisting[style=customR]{snippet2.R}
+% \begin{verbatim}
+% library(DBI)
+% library(RPostgres)
+% user="JHUSERNAME" 
+% password="JHPASSWORD"
+% ## db object to facilitate database two-way communication
+% db=dbConnect(
+%     Postgres(),           ## connect to PostgreSQL
+%     dbname  ="fh_jupyter_hub_hbdb",
+%     user    =user,
+%     password=password,
+%     host    ="localhost", ## loopback web connection 
+%     port    =5432, 
+%     bigint  ="integer"    ## see dbConnect documentation
+% )
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item Which version of PostgreSQL are we running?
+\item At the time of this writing, I see version \textbf{\textcolor{red}{11}}.15
+\item The documentation can be found at
+\textcolor{PineGreen}{[\href{https://www.postgresql.org/docs/11}
+{https://www.postgresql.org/docs/\textbf{\textcolor{red}{11}}}]}
+\item N.B. \textbf{\textcolor{red}{11}} stands for the major version number, e.g.,
+if the software is upgraded to a newer version, then update accordingly
+\end{itemize}
+\begin{lstlisting}[style=customR]
+print(dbGetQuery(db, "select version()"))
+\end{lstlisting}
+\texttt{PostgreSQL} $\textcolor{red}{\bm{11}}$\texttt{.15 ...}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item For those on Biostatistics Cluster servers gouda or colby\\
+you can access Jupyterhub over the LAN
+\item Many advantages using the 
+tools that you use on a daily basis 
+\item Here, I'm using emacs
+\end{itemize}
+\lstinputlisting[style=customR]{snippet3.R}
+% \begin{verbatim}
+% library(DBI)
+% library(RPostgres)
+% user="JHUSERNAME" 
+% password="JHPASSWORD"
+% ## db object to facilitate database two-way communication
+% db=dbConnect(
+%     Postgres(),           
+%     dbname  ="fh_jupyter_hub_hbdb",
+%     user    =user,
+%     password=password,
+%     host    ="garth.ctsi.mcw.edu", ## LAN connection 
+%     port    =5432, 
+%     bigint  ="integer"    
+% )
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item Let's see the public database tables
+\end{itemize}
+\lstinputlisting[style=customR]{snippet4.R}
+% \begin{verbatim}
+% ## ' these are single quotes 
+% tables=dbGetQuery(db, 
+%              "select * 
+%               from information_schema.tables
+%               where table_schema = 'public'")
+% print(tables$table_name)
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item Let's see the public database table columns
+\end{itemize}
+\lstinputlisting[style=customR]{snippet5.R}
+% \begin{verbatim}
+% ## ' these are single quotes 
+% columns=dbGetQuery(db, 
+%              "select * 
+%               from information_schema.columns
+%               where table_schema = 'public'")
+% str(columns)
+% table(columns$table_name)
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item We have created the \texttt{columns} \texttt{data.frame}
+\item We used the \texttt{str} function to see its {\it structure}: \texttt{str(columns)}
+\item The first four variables look like so
+\end{itemize}
+\begin{verbatim}
+'data.frame':	671 obs. of  44 variables:
+$ table_catalog : chr "fh_jupyter_hub_hbdb" ...
+$ table_schema  : chr "public" "public" "public" ...
+$ table_name    : chr "fh_hb_diagnosis_jupyter" ...
+$ column_name   : chr "patient_hash" "encounter_hash" ...
+...
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item We can quickly summarize the tables in the database
+\item \texttt{table(columns\$table\_name)}
+\item For a selection, counts correspond to the number of columns as we have seen from the structure of the \texttt{data.frame}
+%\item Here's an edited version focusing on the most important tables
+\end{itemize}
+\begin{verbatim}
+      fh_hb_demographics_jupyter          
+                              31
+         fh_hb_diagnosis_jupyter 
+                              15 
+fh_hb_diagnostic_results_jupyter
+                              27
+         fh_hb_mar_table_jupyter
+                              37
+  fh_hb_med_orders_table_jupyter 
+                              32 
+             fh_hb_procs_jupyter
+                              18 
+            fh_hb_vitals_jupyter 
+                              11 
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+%\begin{center}
+\begin{tabular}{lll}
+Table Name \texttt{fh\_hb\_NAME\_jupyter} & 
+\textcolor{PineGreen}{[\href{https://ctri.mcw.edu/wp-content/uploads/CTSI-Honest-Broker-Data-Dictionary.pdf}{Title in Documentation}]} \\ \hline
+\texttt{demographics}       & ``Patient Demographics'' \\ 
+\multicolumn{3}{l}{One record per patient: birth date, gender, 
+race/ethnicity, death, etc.} \\ \hline 
+\texttt{diagnosis}          & ``Diagnosis (Dx)'' \\
+\multicolumn{3}{l}{Combo of EPIC/billing with ICD-9/ICD-10 
+diagnosis codes} \\  \hline  
+\texttt{diagnostic\_results}& ``Diagnostic Results'' \\
+\multicolumn{3}{l}{Combo of mainly EPIC with MOSAIQ (for radiotherapy dosage)} \\  \hline  
+\texttt{mar\_table}         & ``Medications Administered''\\
+\multicolumn{3}{l}{EPIC \textcolor{red}{in-patient} records with Medi-Span pharm class/sub-class} \\   \hline 
+\texttt{med\_orders\_table} & ``Medication Orders'' \\
+\multicolumn{3}{l}{EPIC prescription orders (not fills!) along with Medi-Span} \\  \hline  
+\texttt{procs}              & ``Procedures (Px)'' \\
+\multicolumn{3}{l}{Combo of EPIC/billing with 
+\textcolor{red}{ICD-9/ICD-10} 
+and \textcolor{blue}{HCPCS/CPT codes}} \\  \hline  
+\texttt{vitals}             & ``Vitals'' \\
+\multicolumn{3}{l}{EPIC vital signs such as height/weight, blood pressure,
+temp, etc. } \\   \hline 
+\end{tabular}
+%\end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+%\begin{center}
+\begin{tabular}{lll}
+\multicolumn{2}{c}{Froedtert Only} \\
+Table Name \texttt{fh\_hb\_NAME\_jupyter} & 
+\textcolor{PineGreen}{[\href{https://ctri.mcw.edu/wp-content/uploads/CTSI-Honest-Broker-Data-Dictionary.pdf}{Title in Documentation}]} \\ \hline
+\texttt{naaccr}       & ``NAACCR Data'' \\ 
+\multicolumn{3}{l}{North American Association of Central Cancer Registries} \\ \hline 
+\texttt{surgical\_case}       & ``Surgical Case'' \\ 
+\multicolumn{3}{l}{Including anesthesia, \texttt{asa\_rating\_c}, surgical service, etc.} \\ \hline
+\multicolumn{2}{l}{\texttt{ekg\_patient\_tracings}, \texttt{ekg\_order},} \\
+\multicolumn{2}{l}{\texttt{ekg\_test\_demographics}, \texttt{ekg\_resting\_ecg\_meas},} \\
+\multicolumn{2}{l}{\texttt{ekg\_qrs\_times\_types}, \texttt{ekg\_waveform},} \\
+\multicolumn{2}{l}{\texttt{ekg\_lead\_data}, \texttt{ekg\_pharma\_data},} \\
+\multicolumn{2}{l}{\texttt{ekg\_meas\_matrix} \& \texttt{ekg\_meas\_matrix\_leads}} \\
+           %     %ekg_lead_data                  %ekg_meas_matrix 
+           %                    18                               16 
+           % %ekg_meas_matrix_leads                        %ekg_order 
+           %                    56                               13 
+           %  %ekg_patient_tracings                  %ekg_pharma_data 
+           %                     5                                6 
+           %   %ekg_qrs_times_types             %ekg_resting_ecg_meas 
+           %                     7                               22 
+           % %ekg_test_demographics                     %ekg_waveform 
+           %                    14                               11 
+\multicolumn{3}{l}{GE Healthcare's MUSE for electrocardiograms: see Appendix A} \\ \hline
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\textcolor{PineGreen}{[\href{https://www.ncbi.nlm.nih.gov/books/NBK441940}
+  {American Society of Anesthesiologists (ASA)\\ 
+physical status classification}]}
+\begin{tabular}{r|l}\frametitle{\bf\textcolor{blue}{
+American Society of Anesthesiologists (ASA) rating: \texttt{asa\_rating\_c}}}
+Value & Definition \\ \hline
+1 & healthy \\
+2 & mild systemic disease \\
+3 & severe systemic disease that is not life-threatening \\
+4 & severe systemic disease that is a {\bf constant threat to life} \\
+5 & moribund patient not expected to survive without surgery \\
+6 & brain-dead patient who is an organ donor 
+\end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item When does the NAACCR data start?
+\item Above, I said 1989: how did I get that?
+\item N.B. Do not confuse the SQL \texttt{date\_part} function with 
+the SAS \texttt{datepart} function: they are similar, yet quite different
+\end{itemize}
+\lstinputlisting[style=customR]{snippet6.R}
+% \begin{verbatim}
+% naaccr=dbGetQuery(db, 
+%           "select
+%            date_part('year', date_of_diagnosis_shifted)
+%            as dxyear from fh_hb_naaccr_jupyter")
+% t(table(naaccr$dxyear))
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item When does the EKG data start?
+\item Covered in the Appendix A of the 
+\item \textcolor{PineGreen}{[\href{https://ctri.mcw.edu/wp-content/uploads/CTSI-Honest-Broker-Data-Dictionary.pdf}{CTSI Honest Broker Data Dictionary}]}
+\end{itemize}
+\lstinputlisting[style=customR]{snippet7.R}
+% \begin{verbatim}
+% ## ' these are single quotes
+% muse=dbGetQuery(db, 
+%           "select
+%            date_part('year',acquisition_date_shifted)
+%            as ekgyear from ekg_test_demographics")
+% t(table(muse$ekgyear))
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item The state of Wisconsin (like regions of the US/Canada) 
+has/have a cancer registry that health care systems must
+submit their incidence data to by statuary requirements
+\item \textcolor{PineGreen}{[\href{https://www.naaccr.org/data-standards-data-dictionary}
+{NAACCR data dictionaries}]}
+\item 
+\textcolor{PineGreen}{[\href{http://datadictionary.naaccr.org/default.aspx?c=10&Version=22}
+{Latest version 22}]}
+\item NAACCR item 523: ICD-O-3 behavior codes \texttt{behavior\_code\_icd\_o\_3}
+\item ``valid codes are 0-3'' is what NAACCR specifies in their docs\\ 
+which leaves a lot to be desired
+\item So use the Surveillance, Epidemiology
+and End Results (SEER) program docs too 
+\item NCI SEER is a subset of NAACCR
+regions in the US (including WI) with more carefully curated data\\
+and much better documentation too!
+\item \textcolor{PineGreen}{[\href{https://seer.cancer.gov/manuals/2022/SPCSM_2022_MainDoc.pdf}
+{SEER Program Coding and Staging Manual}]}
+\item 0: benign, 1: uncertain, 2: in situ, 3: malignant
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item NAACCR item 400: Primary Site \texttt{site\_primary}
+\item ICD-O-3 topography code, e.g., breast cancer C50
+\item NAACCR item 560: \texttt{sequence\_number\_hospital}
+\item Indicates the sequence of all malignant and nonmalignant
+neoplasms over the lifetime of the patient
+\item How many patients had their first breast cancer between
+2016 and 2017?
+\item The PostgreSQL manual seems to be very terse
+\item But SAS has a nice description in their manual: \\
+\textcolor{PineGreen}{[\href{https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/sqlproc/titlepage.htm}{SAS 9.4 SQL Procedure User’s Guide, Fourth Edition}]}
+\item See the \texttt{BETWEEN} and \texttt{LIKE} operators
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\lstinputlisting[style=customR]{snippet8.R}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item But, how many of these are malignant?
+\item Notice that except for the dates/times,
+everything is character
+\item In both R and SAS, character is more painful than numeric
+values (SAS imports dates from CSV files as numeric)
+\item We can export the data as a CSV with R's \texttt{write.csv}
+\item The option \texttt{quote=FALSE} means don't use quotes
+\item However, if some fields have embedded commas, then you
+can't turn this option on: and we don't know if there are any
+\item The \texttt{na} option determines how \texttt{NA} is handled
+\item In this case, we set it to the CSV standard: \texttt{na=""}
+for nothing 
+\end{itemize}
+\lstinputlisting[style=customR]{snippet9.R}
+% \begin{verbatim}
+% addmargins(table(naaccr$site_primary, 
+%            naaccr$behavior_code_icd_o_3))
+% write.csv(naaccr, "naaccr.csv", row.names=FALSE, na="") 
+% str(naaccr)
+% ?str
+% \end{verbatim}
+\end{frame}
+
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Honest Broker Residential
+Address Geocoding}}
+\begin{itemize}
+\item Geocoding is the process of taking the address of a location and
+  returning geographic coordinates\\
+ such as a latitude/longitude pair or a US Census Tract
+\item  
+\textcolor{PineGreen}{[\href{https://degauss.org}{DeGAUSS:
+    Decentralized Geomarker Assessment for Multi-Site Studies}]}
+\item ``Patient Demographics'' \texttt{geocode\_result}
+\item Self-explanatory codes that are not accurately geocoded:\\ 
+\texttt{po\_box} and \texttt{non\_address\_text} 
+\item \texttt{cincy\_inst\_foster\_addr}: the address was not geocoded \\ 
+a known institutional address, not a residential address
+\item \texttt{imprecise\_geocode}: the address was geocoded, but results were suppressed because due to the lack of precision
+\item \texttt{geocoded}: the address was geocoded with precision
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Introduction to
+the Area Deprivation Index (ADI)}}
+\begin{itemize}
+\item \textcolor{PineGreen}{[\href{https://www.neighborhoodatlas.medicine.wisc.edu}{ADI documentation}]}
+\item ``Patient Demographics'' \texttt{adi\_narank}
+\item A Census Block Group (CBG) with an ADI ranking of 1 indicates the lowest level of disadvantage within the nation, i.e., least deprived 1st percentile
+\item A CBG with an ADI ranking of 100 indicates the highest level of disadvantage, i.e., most deprived 100th percentile
+\item So the range is integers 1 to 100
+\item Some CBG are missing ADI rankings with the following codes
+\item \texttt{NA} the R missing value code which is undocumented
+\item \texttt{'PH'} for suppression due to low population and/or housing 
+\item \texttt{'GQ'} for suppression due to a high group quarters population
+\item \texttt{'PH-GQ'}  (or \texttt{'GQ-PH'}?) 
+for suppression due to both types
+\item \texttt{'KVM'} (or \texttt{'QDI'}?) 
+designates block groups without an ADI value due to 
+  missing data within the data's source\\
+the American Community Survey Five Year Estimates
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\lstinputlisting[style=customR]{snippet10.R}
+% \begin{verbatim}
+% a=dbGetQuery(db, "select geocode_result 
+%                   from fh_hb_demographics_jupyter")
+% table(a$geocode_result, useNA='ifany')
+% b=dbGetQuery(db, "select adi_narank 
+%                   from fh_hb_demographics_jupyter
+%                   where geocode_result='geocoded'")
+% table(b$adi_narank, useNA='ifany')
+% unk = (is.na(b$adi_narank) | 
+%        b$adi_narank %in% c('GQ', 'PH', 'GQ-PH', 'QDI'))
+% table(unk)
+% b$adi=0
+% b$adi[unk]=NA
+% b$adi[!unk]=as.integer(b$adi_narank[!unk])
+% summary(b$adi)
+% plot(density(b$adi, from=1, to=100, na.rm=TRUE), 
+%      xlab='ADI', ylab='Distribution', 
+%      main='', sub='1:least, 100:most')
+% abline(h=0.01, col=8)
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Death and Cause
+      of Death}}
+
+\begin{itemize}
+\item Death is available; however, it may not be trustworthy
+\item It is common to see EHR data far beyond the death date
+\item Also, Cause of Death is not available
+\item It can be acquired from the state of Wisconsin or\\
+the US Centers for Disase Control and Prevention (CDC) \\ 
+National Death Index (NDI)
+\item NDI is death only; NDI Plus includes cause % and costs more
+\item Of course, this costs money and cause costs more
+\item Typically, NDI/NDI Plus is one to two years behind
+\item Complete data for 2020 was released in 01/2022
+\item Early release for 2021 in 01/2022 was about 98\% complete 
+\item And the caveats about cause of death are substantial
+\item \textcolor{PineGreen}{[\href{https://www.cdc.gov/nchs/ndi/index.htm}
+{US CDC NDI}]}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Anomylous Death Dates}}
+\begin{itemize}
+\item There appears to be an issue with the status of death\\
+and/or the death dates in the ``Patient Demographics'' table
+\item It is all relative, but the size of the ``Vitals'' table is much smaller
+than other tables such as ``Encounters''
+\item Presumably, there would not be vital signs recorded on a date after someone has died
+\item So, we can create a relatively undemanding check of death dates
+by comparisons with their vital signs 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\lstinputlisting[style=customR]{snippet11.R}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+Let's compare the last date of vital signs with death date
+\lstinputlisting[style=customR]{snippet12.R}
+% \begin{verbatim}
+% ## ' these are single quotes 
+% in.clause=paste0("('", paste(zombies$patient_hash, 
+%                  collapse="','"), "')")
+% zdates=dbGetQuery(db, 
+%           paste("select patient_hash, measure_date_shifted 
+%                  from fh_hb_vitals_jupyter  
+%                  where patient_hash in ", in.clause, 
+%                 "order by patient_hash, 
+%                  measure_date_shifted"))           
+% max.zdates=c(tapply(zdates$measure_date_shifted, 
+%                     zdates$patient_hash, max))
+% class(max.zdates)='POSIXct'
+% print(cbind(format(zombies$death_date_shifted), 
+%             format(max.zdates)))
+% \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Medi-Span, GPI and RxNorm
+Medical Nomenclature}}
+\begin{itemize}
+\item \textcolor{PineGreen}{[\href{https://www.wolterskluwer.com/en/solutions/medi-span/about/gpi}
+{Medi-Span Generic Product Identifier (GPI)}]}
+\item The Wolters Kluwer Medi-Span brand database, called the Medispan
+  Electronic Drug File, links the GPI code to other prescription drug
+  classification codes
+\item \textcolor{PineGreen}{[\href{https://www.nlm.nih.gov/research/umls/rxnorm/index.html}{RxNorm}]} is part of Unified Medical Language System (UMLS)
+  terminology maintained by the US National Library
+  of Medicine (NLM)
+\item GPI and RxNorm codes are available on two CRDW tables
+\item ``Medication Orders'' for medicinal prescriptions (not fills!): \texttt{fh\_hb\_med\_orders\_table\_jupyter}
+\item ``Medications Administered'' for medicine given: \texttt{fh\_hb\_mar\_table\_jupyter} 
+\item Example variables of interest
+\item \texttt{pharm\_class}: pharmacologic class
+\item \texttt{pharm\_subclass}: pharmacologic subclass
+\item \texttt{ingredient\_rxcui\_name}: RxNorm Concept Unique Identifier (CUI) name
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+How to make your own lookup table of drug nomenclature\\ 
+N.B. RESOURCE INTENSIVE: JUST DON'T DO IT TODAY
+\lstinputlisting[style=customR]{snippet13.R}
+% \begin{verbatim}
+% medispan=dbGetQuery(db, 
+%              "select distinct pharm_class, pharm_subclass, 
+%               substring(gpi from 1 for 2) as gpi_group,
+%               substring(gpi from 3 for 2) as gpi_class,
+%               substring(gpi from 5 for 2) as gpi_subclass,
+%               ingredient_rxcui_name
+%               from fh_hb_mar_table_jupyter 
+%               order by pharm_class, pharm_subclass,
+%               ingredient_rxcui_name")
+% write.csv(medispan, "medispan.csv", row.names=FALSE, na="")
+% \end{verbatim}
+\end{frame}
+
+\begin{comment}
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{itemize}
+\item We have already mentioned NCI SEER
+\item Another resource is NCI's
+\textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare}
+{SEER-Medicare Linked Database}]}
+\item For example, \textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare/aboutdata/hcpcs.html}{a resource for identifying HCPCS/CPT codes}]}
+%\item Such as \textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare/aboutdata/ndc_frequency.html}{oral chemotherapy drug names}]}
+\item
+
+\item Here, automated processing would be very challenging with R
+\item This is a job for ... RASMACRO!
+\item See the file \texttt{oral\_meds.sas}
+\end{itemize}
+\end{frame}
+\end{comment}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+What types of procedure codes do we have? \\ 
+N.B. RESOURCE INTENSIVE: JUST DON'T DO IT TODAY
+\lstinputlisting[style=customR]{snippet14.R}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item What types of procedure codes do we have in the EHR? \\ 
+\item The Centers for Medicare and Medicaid Services (CMS)
+was an early entrant into the electronic billing space
+\item The Healthcare Common Procedural Coding System (HCPCS)
+was created by CMS for billing purposes
+\item HCPCS Level I codes are the \textcolor{PineGreen}{[\href{https://www.ama-assn.org/amaone/cpt-current-procedural-terminology}{American
+Medical Association's Common Procedural Terminology
+fourth edition (CPT-4)}]} that typically have 5 digits
+(or occasionally 4 digits followed by a letter: see \texttt{snippet15.R}) 
+\item \textcolor{PineGreen}{[\href{https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets/Alpha-Numeric-HCPCS}{HCPCS Level II}]} codes start with a letter 
+typically followed by 4 digits (see \texttt{snippet15.R})
+\end{itemize}
+
+\begin{tabular}{llr}
+\texttt{px\_type} & Coding system & Percentage \\
+\texttt{09} & ICD-9  & 0.1\% \\
+\texttt{10} & ICD-10 & 0.3\% \\
+\texttt{CH} & HCPCS/CPT & \textcolor{red}{88.0\%} \\
+\texttt{OT} & Custom & 11.0\% \\
+\texttt{NA} & Not available & 0.7\%
+\end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{itemize}
+\item We have already mentioned NCI SEER
+\item Another resource is NCI's
+\textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare}
+{SEER-Medicare Linked Database}]}
+\item For example, \textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare/aboutdata/hcpcs.html}{a resource for identifying CPT/HCPCS codes}]}
+%\item \textcolor{PineGreen}{[\href{https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets/Alpha-Numeric-HCPCS}{List of HCPCS codes with descriptions}]}
+%\item Such as \textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare/aboutdata/ndc_frequency.html}{oral chemotherapy drug names}]}
+\item   \textcolor{PineGreen}{[\href{https://healthcaredelivery.cancer.gov/seermedicare/aboutdata/breast.all.hcpcs.table.txt}{See
+      this badly formatted list of breast cancer patient codes}]}
+\item Here, automated processing would be very challenging with R
+\item This is a job for ... RASMACRO!
+\item See the file \texttt{breastcodes.sas}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{itemize}
+\item For example, we have an EHR study of breast cancer survivors
+%\item Which \textcolor{PineGreen}{[\href{https://www.ama-assn.org/amaone/cpt-current-procedural-terminology}{AMA Common Procedural Terminology (CPT) codes}]}
+\item Which codes are for breast cancer treatment and which standard care?
+\item We need non-breast cancer men and women to compare with
+\item Let's contrast HCPCS codes with colorectal cancer patients
+\item What is left over are very likely breast cancer treatment
+\item Let's examine the codes billed to Medicare part A/B in 2016
+% \item We can look these up in the AMA CPT books
+% that are available in the MCW library
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{center}
+\begin{tabular}{rr|l}
+CPT & Bills & Description \\ \hline
+19380 & 1690 & revision of reconstructed \textcolor{red}{breast} \\
+19357 & 1448 & \textcolor{red}{breast} reconstruction \\
+19340 & 1281 & immediate insertion of \textcolor{red}{breast} prosthesis \\
+11970 & 1062 & replacement of tissue expander with prosthesis \\
+19371 & 1031 & periprosthetic caspulectomy of \textcolor{red}{breast} \\
+19342 & 1006 & delayed insertion of \textcolor{red}{breast} prosthesis \\
+19316 & 788 & mastopexy \\
+19283 & 717 & placement of \textcolor{red}{breast} localization device \\
+19328 & 660 & removal of intact mammary implant \\
+19350 & 638 & nipple/areola reconstruction \\
+19370 & 599 & open periprosthetic caspulectomy of \textcolor{red}{breast} \\
+93702 & 599 & bioimpedance spectroscopy analysis for lymphedema \\
+19499 & 520 & unlisted \textcolor{red}{breast} procedure \\
+77058 & 507 & magnetic resonance imaging of the \textcolor{red}{breast} \\
+19286 & 424 & placement of \textcolor{red}{breast} localization device \\
+81212 & 419 & procedure for 185delAG, 5385insC, 6174delT variants 
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{center}
+\begin{tabular}{rr|l}
+CPT & Bills & Description \\ \hline
+19296 & 388 & placement of radiotherapy catheter into the \textcolor{red}{breast} \\
+11921 & 369 & tattooing; 6.1 to 20 sq cm \\
+38740 & 325 & axillary lymphedectomy; superficial \\
+19297 & 316 & radiotherapy catether placement with partial masectomy \\
+38790 & 295 & lymphangiography injection \\
+19086 & 279 & \textcolor{red}{breast} biopsy of additional lesion \\
+77469 & 273 & intraoperative radiation treatment management \\
+19126 & 252 & excision of \textcolor{red}{breast} lesion identified by 
+radiological marker \\
+77424 & 252 & intraoperative radiation delivery, single x-ray treatment \\
+19361 & 239 & \textcolor{red}{breast} reconstruction with latissimus dorsi flap \\
+11971 & 223 & removal of tissue expanders without prosthesis insertion \\
+19330 & 223 & removal of mammary implant material \\
+19364 & 213 & \textcolor{red}{breast} reconstruction with free flap \\
+19325 & 179 & mammaplasty augmentation with prosthetic implant \\
+64462 & 174 & paravertebral block injection including imaging guidance \\
+11922 & 163 & tattooing; each additional 20 sq cm
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Cancer Research with RASMACRO}}
+
+\begin{center}
+\begin{tabular}{lr|l}
+HCPCS & Bills & Description \\ \hline
+L8000 &      816  &     Mastectomy bra                  \\
+J9179 &      705  &     Eribulin mesylate injection     \\
+J9354 &      693  &    Inj, ado-trastuzumab emt 1mg    \\
+Q4116 &      427  &    Alloderm                        \\
+L8600 &      335  &    Implant \textcolor{red}{breast} silicone/eq      \\
+L8030 &      330  &    \textcolor{red}{Breast} prosthes w/o adhesive    \\
+C1728 &      247  &    Cath, brachytx seed adm         \\
+C8906 &      245  &    Mri w/cont, \textcolor{red}{breast},  bi         \\
+C8905 &      239  &    Mri w/o fol w/cont, \textcolor{red}{breast}, un    \\
+C8907 &      171  &    Mri w/o cont, \textcolor{red}{breast}, bi        \\
+G8875 &      171  &    \textcolor{red}{Breast} cancer dx min invsive    \\
+J9207 &      134  &    Ixabepilone injection           \\
+C9726 &      116  &    Rxt \textcolor{red}{breast} appl place/remov     \\
+C9728 &      103  &    Place device/marker, non pro    \\
+J1950 &       88  &    Leuprolide acetate /3.75 mg     \\
+G8872 &       85  &    Intraop image confirm excise    \\
+C2639 &       72  &    Brachytx, non-stranded,i-125    
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+
+\begin{itemize}
+\item Froedtert is a Level 1 trauma center so it has a trauma registry
+\item However, you need IRB approval to utilize the trauma registry
+\item But you can get some of the data from \texttt{surgical\_case}
+\item How many surgical trauma \textcolor{red}{patients} are there per year?
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\item Here's the number of trauma surgeries performed in 2018
+\end{itemize}
+\lstinputlisting[style=customR]{snippet16.R}
+\end{frame}
+
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item But we want the number of trauma \textcolor{red}{patients} undergoing surgery in 2018
+\item We can use the \texttt{byvalue} function to identify the first
+patient record by date
+\item You have to upload the \texttt{byvalue.R} file to Jupyterhub
+\item How many surgical trauma \textcolor{red}{patients} are there per year?
+\end{itemize}
+\lstinputlisting[style=customR]{snippet17.R}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{\bf\textcolor{blue}{Hands-on with Jupyterhub}}
+\begin{itemize}
+\item What about their trauma diagnoses?
+\item We can use the \texttt{inclause} function to create an \texttt{IN}
+clause to merge with the \texttt{diagnosis} table
+\item You have to upload the \texttt{inclause.R} file to Jupyterhub
+\item How many surgical trauma \textcolor{red}{patients} 
+first encounters linked to the \texttt{diagnosis} table?
+\end{itemize}
+\lstinputlisting[style=customR]{snippet18.R}
+\end{frame}
+
+\end{document}
+

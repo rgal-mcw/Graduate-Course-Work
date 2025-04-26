@@ -1,0 +1,203 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R and GCC upgrade}
+
+\begin{itemize}
+\item
+\url{https://wiki.biostat.mcw.edu/Running_R_on_Clusters}
+\end{itemize}
+\begin{verbatim}
+#!/bin/bash
+## ~/emacs-26.3 shell script 
+(module load gcc/9.2 emacs/26.3 R/3.6.2; emacs "$@")
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Advanced SAS Macros}
+\begin{itemize}
+\item We are going to look at some exemplars from the RASmacro
+library for inspiration
+\item It is located locally at {\tt /usr/local/sasmacro}
+\item And it is on github (but it needs to be updated)
+\item These macros will give us ideas for how to use
+SAS macros, how to write them and what further can be
+done with them
+\item In particular, {\it hardening} of macros to
+quotes, embedded ampersands, etc.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Advanced SAS Macros: Building Blocks}
+\begin{center}
+\begin{tabular}{ll}
+Name               & Description \\ \hline
+{\tt \_abend.sas}  & Abend the SAS program \\
+{\tt \_count.sas}  & Number of items in a list \\
+{\tt \_dsexist.sas}& Does a data set exist? \\
+{\tt \_exist.sas}  & Does a file exist? \\
+{\tt \_fn.sas}     & Create footnotes with the SAS program name \\
+{\tt \_level.sas}  & Create a macro value from a data set var.\\
+{\tt \_list.sas}   & Create a list: more general than a var. list \\
+{\tt \_nobs.sas}   & Number of obs. in a data set \\
+{\tt \_pdfjam.sas} & Combine ODS graphic files \\
+{\tt \_require.sas}& Is a required argument present? \\
+{\tt \_retain.sas} & RETAIN with BY-group processing\\
+{\tt \_sort.sas}   & Sort a data set if necessary \\
+{\tt \_substr.sas} & Smart sub-string function \\
+{\tt \_unwind.sas} & OS-specific statements: UNIX/Linux vs. Windows \\
+{\tt \_vorder.sas} & Order the var. in a data set\\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Advanced SAS Macros: Higher-level}
+\begin{center}
+\begin{tabular}{ll}
+Name               & Description \\ \hline
+{\tt \_dropobs.sas}& Drop obs. of missing variables\\
+{\tt \_dropvar.sas}& Drop var. that's always missing/constant\\
+{\tt \_summary.sas}& Flexible tables with the statistics\\
+& that you want: correctness vs.\ prettiness \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 1: SAS macro for hot-decking and the NTDB}
+\begin{itemize}
+\item Write a SAS macro to perform hot-decking\\
+ for the NTDB example: see the details in lecture 4, slide 4
+%\item Hints: use arrays and \textcolor{blue}{\tt set ...\ point}\\
+\item Hints: for random number generation from the Uniform
+  distribution, use the {\tt rand("unif")} and {\tt call
+    streaminit(SEED);} to set the seed.  This seed is 
+an argument to the macro, {\tt seed=REQUIRED}.
+\item Other arguments are an input data set, {\tt data=REQUIRED},
+and an output data set, {\tt out=REQUIRED}.
+\item Previous hints from the HW in lecture 13 still apply.
+ \item Use arrays with the {\tt array} statement
+ \item Use the {\tt set} statement with the {\tt point} option to
+   iterate through the data set BEWARE: with {\tt point}, don't forget
+   the {\tt \textcolor{red}{stop;} run;} at the end of the DATASTEP
+\item With many functions you can use an {\tt of} clause with a variable
+list, e.g., \textcolor{blue}{\tt nmiss(of VAR1-VARn)}\\
+instead of \textcolor{red}{\tt nmiss(VAR1, ..., VARn)}
+\item Or with the STARTS-WITH colon operator
+ \textcolor{blue}{\tt nmiss(of VAR:)}
+% \item Use a macro variable for the list of variables to
+% hot-deck like {\tt \%let var=white black other hispanic male sbp pulse rr;}
+% \item To count the number of items in a macro variable, 
+% use the {\tt \%\_count()} macro like {\tt \%let k=\%\_count(\&var);}
+\item Use the {\tt \%\_nobs()} macro to determine how many
+observations are in a data set like {\tt \%\_nobs(data=ntdb.elder)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 2: stratified random sampling macro for the NTDB
+data set}
+\begin{itemize}
+\item Write a SAS macro to perform stratified random sampling:
+see the details in lecture 4, slide 7
+\item Hints: use the {\tt call
+    \_permute} subroutine to create permutations. Use {\tt call
+    streaminit(SEED);} to set the seed.  This seed is an argument to
+  the macro, {\tt seed=REQUIRED}.
+\item Other arguments are an input data set, {\tt data=REQUIRED},
+an output data set, {\tt out=REQUIRED}, and a variable
+list to be kept, {\tt var=REQUIRED}.
+\item Previous hints from the HW in lecture 13 still apply.
+\item A variable list can be used in many functions with the\\ 
+{\tt of} clause like \textcolor{red}{\tt of VAR1-VARn}\\
+% for example, 
+% {\tt ordinal(m, of VAR1-VARn)} instead of {\tt ordinal(m, VAR1, ..., VARn)}
+\end{itemize}
+\end{frame}
+
+\end{document}

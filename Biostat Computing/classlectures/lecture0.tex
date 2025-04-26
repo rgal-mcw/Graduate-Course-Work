@@ -1,0 +1,721 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline for today}
+
+\begin{itemize}
+\item Introductions
+\item Syllabus 
+\item Documentation 
+\item Computing on the Cheese Cluster
+\item Welcome to Emacs
+% \begin{itemize}
+% \item MCWCorp authentication, WiFi and the Solstice client
+% \item Secure Shell and Secure Copy 
+% \item Data shares, LAN and WiFi test
+% \item Linux commands
+% \item x2go checkup (TODO from home: Internet and VPN test)
+% \item emacs and ESS
+% \item R and SAS
+% \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Introductions and syllabus}
+
+\begin{itemize}
+\item Introduce yourself
+\begin{itemize}
+\item Pronounce your name
+\item Where are you from?
+\item What graduate program are you in?
+\item What schools did you go to and your major?
+\item What are your other interests?
+\end{itemize}
+\item Do you have a laptop?  If so, what OS?  Bring it along
+\item Programming experience with R, SAS and Linux\\ %, C++, Emacs and LaTeX
+(the biostatistical ``stack'' and basis for this course)
+\item For example, here's my background
+\item A statistician AND a programmer: you have to be both
+\item I consider myself a data scientist, NOT a computer scientist
+\item From 1991,  heavy use of SAS
+\item From 1991,  heavy use of UNIX/Linux/Unix-like
+%\item From 1998,  heavy use of Emacs
+\item From 2009,  heavy use of R
+%\item From 2009,  heavy use of C++
+%\item From 2009,  heavy use of LaTeX (most of course materials)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+%\item Syllabus
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer’s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} \textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Wikipedia: a moment in my history}
+
+\begin{itemize}
+\item for computer science and technology, it is an excellent free
+  choice when others are unavailable
+\item most articles have citations for those who need to dig further
+\item it is very helpful as an introduction to a new topic
+\item but doesn't have much to offer for those learning R and SAS
+\item the follow-on to Nupedia which I was a part of in 2000
+\item Nupedia founded by Jimmy Wales %with an estimated net worth
+%  today of \$1M (via google search) \\
+who later founded Wikipedia in January 2001 which arose from it
+% \item I worked with Larry Sanger Editor-in-chief of Nupedia\\
+%  (later Editor-in-chief of Wikipedia) with an estimated net worth of
+%   \$650K (a google search did not reveal my net worth!)
+\item Nupedia was a dramatic failure and a footnote in history
+\item But it spawned Wikipedia a major unintended success
+\item wiki is simple hence its popularity: ironically I far prefer LaTeX
+\item \url{https://en.wikipedia.org/wiki/Wiki}
+%\item \url{https://wiki.biostat.mcw.edu}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{RTFM: Read the F****ing Manual}
+
+``If all else fails read the instructions.''
+ Donald Knuth, a renowned computer scientist and 
+the inventor of TeX (precursor to LaTeX) and many 
+other achievements, might (or might not) have said this
+
+\begin{itemize}
+\item Unix means UNIX, Linux, macOS or similar Unix-like operating systems
+\item To identify Unix-like: {\tt .Platform\$OS.type=="unix"}
+\item A counter-example: it does NOT mean Microsoft Windows
+\item To identify MS Windows: {\tt .Platform\$OS.type=="windows"}
+\item  \red{on gouda} {\tt \$ man} Unix-command like {\tt \$ man man}
+\item  \red{on gouda} {\tt \$ info} Unix-command like {\tt \$ info info}
+\item Emacs has the capability to render both types as we'll see
+\item {\tt M-x man}
+\item {\tt M-x info}
+\item N.B.\ the Helvetica sans serif proportional font used for text
+  whereas a fixed-width {\tt teletype/typewriter} font with
+  serifs is used for commands and URLs, etc., i.e., what you type
+\end{itemize}
+
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+\frametitle{Recurring themes}
+
+\begin{itemize}
+\item Linux/UNIX/Unix-like support multi-threading/processing
+\item Windows is unable to ``fork'': R multi-threading is crippled
+\item Spreadsheets are not type safe: {\tt wikipedia Type\_safety}
+\item SAS excels at sorting and merging data especially with unique
+  keys providing user-friendly errors/warnings/notes
+\item R can sort/merge but is often silent about mis-specification
+\item R has a rich interactive environment and SAS does NOT
+\item R and C++ are object-oriented and Rcpp glues them together
+\item Emacs is a programmer's editor and we are programmers
+\item Emacs supports many languages like C/C++ and LaTeX
+\item ESS (Emacs Speaks Statistics) supports R and SAS
+\item RStudio is a waste of time
+\item x2go ``accelerates'' X11 traffic over the Internet 
+\item Reproducible errors vs.\ sporadic errors
+\end{itemize}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}
+\frametitle{Typical biostatistical computing stack}
+(TIOBE Index of the Top 100 Programming Languages:\\ 
+August 2022)
+\url{https://www.tiobe.com/tiobe-index}
+
+\begin{itemize}
+\item GNU/Linux kernel
+\item GNU Compiler Collection (GCC): C(2)/C++(4)/Fortran(19)
+\item GNU tools: bash(43), core utilities
+\item GNU Emacs: programmer' editor \\
+mostly written in Emacs Lisp(30) and the rest in C
+\item GNU R(16): its free and is supported by other free software\\
+Comprehensive R Archive Network (CRAN): 18558 packages\\
+descendent of S and S-Plus
+\item SAS(24) is not free, but MCW has a site-wide license\\
+(that I negotiated)
+\item X Window System and GNOME2/MATE
+\item Structured Query Language: SQL(9) for relational databases
+\item TeX Live bundle of TeX/LaTeX 
+\item Python(1)/Java(3)/Perl(20) NOT used much in biostatistics\\
+so they will not be discussed further in this course\\
+\red{N.B. Python is interactive (slow) so we naturally use R instead}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}\frametitle{Data Advantages of R and/or SAS vs.\ everything else}
+\begin{itemize}
+\item \textcolor{blue}{programming languages for data processing and analysis} 
+\item convenient environments that are naturally \textcolor{red}{vectorized}
+\item many years of refinement: SAS (1966) and S/R (1976)
+\item wide availability on many platforms
+\item particularly well-adapted to Linux/UNIX (and macOS for R)\\
+neither SAS nor R adapt well to Windows as we'll see
+\item reasonably priced: R is free and SAS is paid for by employers
+\item at MCW, SAS is free for students and cheap/free for others
+\item large user community of statisticians and related professions
+\item interfaces for data input and data management systems
+\item many functions of interest such as probability distributions
+\item facilitate the creation of graphical visualizations 
+\item provide access to advanced statistical analysis routines:
+NOT the focus of this course so listed last, but immensely important
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Advantages of the Client-Server Model: \textcolor{blue}{the Server}}
+Modern GNU/Linux Server Technology Layers
+\begin{itemize}
+%\item Standards: %Single UNIX Specification (SUS) and 
+%	   Portable Operating System Interface (POSIX)
+\item Linux kernel:  always in memory facilitating hardware/software
+	  % UNIX flavors: Bell Labs, Berkeley Software Distribution (BSD) 
+	  % and CMU Mach
+	  % GNU Linux flavors: Red Hat/CentOS and Debian
+\item Software tools:
+%	  UNIX flavors: Bell Labs and BSD 
+    	  GNU Project
+\item Dynamic shared libraries and package managers:
+\item %Networking: 
+	  Transmission Control Protocol/Internet Protocol (TCP/IP)\\
+Secure Sockets Layer/Transport Level Security (SSL/TLS) %and Secure Shell (SSH)
+%	  Virtual Private Network (VPN)
+\item Programming language: 
+%	  ISO/IEC C/C++ programming language
+	  GNU Compiler Collection (GCC)%: C/C++/Fortran
+\item Graphical User Interface:
+	  X.org X Window System\\ X version 11 (X11) protocol
+%	  Tcl/Tk Tool Command Language (Tcl) and Toolkit (Tk)
+%	  NX technology
+	  and GNOME2/MATE
+\item Text: 
+%     	  7-bit 
+American Standard Code for Information Interchange (ASCII)
+%     	  8/16/32-bit ISO/IEC 10646 
+and Unicode Transformation Format (UTF)
+%\item Font technology:
+          % Adobe Type 1
+	  % Apple TrueType
+          % fontconfig
+%\item Printing: Adobe PostScript (PS) and Portable Document Format (PDF)
+\item File system:
+     Redundant Array of Independent Disks (RAID), 
+     Journaling,
+     %Silicon Graphics/Red Hat 
+Extents File System (XFS) and \textcolor{red}{tape backup}
+\item Central Processing Unit (CPU):
+%     Instruction Set: 
+AMD64/x86-64
+     Multi-threading: servers typically have 2 or 4 CPUs and each has multiple cores capable of 1 or 2 threads %(most laptops too)
+\item General Purpose Computing on Graphics Processing Units (GPGPU):
+     As a consequence, incapable of audio/video 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Advantages of the Client-Server Model: \textcolor{blue}{the Client}}
+Many layers are similar: just listing important differences
+\begin{itemize}
+\item Use your PC/Mac as the client rather than 
+                comparable server hardware/software which does not
+		work as well for a variety of reasons: not up-to-date,
+                lacking hardware/drivers, %Microsoft Office support, 
+		etc.
+\item Client software: email software with calendaring/filtering/etc., 
+modern web browsers and Microsoft Office support
+\item Graphics Processing Units (GPU):
+          Capable of processing audio/video
+\item File system: \textcolor{red}{NO TAPE BACKUP} \\ 
+\textcolor{blue}{Store everything that you want
+to keep on the server}
+\item Virtual Private Network (VPN): with VPN software
+the client can reach the server from ANYWHERE via the Internet
+(ANYWHERE except MCW because the VPN hardware is on the
+Internet side of our local connection so we can't get to it,
+but we don't need to when we are on campus)
+\end{itemize}
+
+\end{frame}
+
+\begin{comment}
+\begin{frame}
+\frametitle{Distant third phenomenon}
+
+Slight preference for first over second and a wide distance to third
+Example 1, hierarchy of biomedical evidence
+\begin{enumerate}
+\item[1] randomized clinical trials
+\item[2] meta-analyses and reviews
+\item[3] observational studies
+\end{enumerate}
+
+Example 2a, preference for article/dissertation citations
+\begin{enumerate}
+\item[1] journal articles 
+\item[2] books in print
+\item[3] technical reports, manuals, URLs, etc.
+\end{enumerate}
+
+Example 2b, reference material for computer science and technology
+\begin{enumerate}
+\item[1] books in print and online manuals/compendiums
+\item[2] journal articles including prestigious proceedings
+\item[3] Wikipedia
+\end{enumerate}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}
+\frametitle{A Brief History of UNIX (R)}
+\begin{itemize}
+\item[1969:] AT\&T Bell Labs starts work on UNIX
+\item[1970:] open source UNIX provided for small fee: Bell flavored UNIX
+\item[1972-3:] Bell Labs develops C, re-writes UNIX in C 
+\item[1973-8:] DARPA invents TCP/IP network protocol 
+\item[1978:] University of California releases Berkeley Software Distribution 
+BSD flavored UNIX 
+\item[1981-3:] ARPANET goes TCP/IP creating the Internet
+\item[1987:] MIT/DEC release the X Window System\\
+X protocol version 11 AKA X11
+\item[1988-94:] Apple lawsuit vs.\ Microsoft and HP over\\
+ GUI \textcolor{blue}{``Look and Feel''} copyright/patent infringement
+\item[1990:] AT\&T and BSD are merged into UNIX SVR4 
+\item[1992-4:] \textcolor{red}{UNIX Wars:} Free BSD release blocked by AT\&T lawsuit
+%\item[1992:] SUN releases Solaris (SVR4) with X11 
+\item[1993:] CDE is released: standard UNIX GUI 
+\item[2000:] TLS (1999) and SSH (2000) are released for Internet security 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{A Brief History of GNU Linux}
+
+\begin{itemize}
+\item[1984:] Richard Stallman creates GNU (GNU is Not Unix) as\\ 
+``a complete UNIX-compatible software system'' \\
+along with the GNU General Public License (GPL) 
+\item[1991:] Linux kernel by Linus Torvalds mimics UNIX 
+\item[1992:] Linux kernel GPLed and paired with GNU tools 
+\item[1992-4:] \textcolor{red}{UNIX Wars:} Free BSD release blocked by AT\&T lawsuit gifts Linux mindshare with Debian and Red Hat releases 
+\item[1997-8:] KDE/GNOME GUIs head start\\ (GNOME for Solaris not until 2000)
+\item[1999:] Intelligent package installers \\ GNU Compiler Collection (GCC): C/C++/FORTRAN 
+\item[2002:] Red Hat Enterprise Linux (RHEL): Red Hat flavored Linux
+\item[2003:] Fedora Project including Fedora Linux for lap-/desk-top PCs and
+ Extra Packages for Enterprise Linux (EPEL)
+\item[2004:] Lap-/desk-top friendly Ubuntu Linux: Debian flavored \\ 
+Linux shipped on 20-50\% of new servers 
+\item[2006:] the free RHEL clone CentOS is announced
+\item[2014-20:] CentOS: an ``official'' clone of Red Hat
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{A Brief History of GNU R}
+
+\begin{itemize}
+\item[1976:] John Chambers creates S at Bell labs for UNIX: free software
+\item[1988:] S-Plus released for DOS: a commercial successor to S
+\item[1995-8:] S-Plus released for Windows (1995), UNIX (1996) and\\
+ Linux (1998)
+\item[1997:] Ross Ihaka and Robert Gentleman release GNU R as a free
+successor to S that is integrated with MacOS and Windows\\
+with the R Development Core Team (including Chambers)
+\item[1999:] Comprehensive R Archive Network (CRAN) debuts
+\item[2001:] R supports Mac OS X (macOS) and enters the Unix-like era
+\item[2019:] R v3.6 released
+\item[2020:] R v4.0 released
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{A Brief History of SAS}
+
+\begin{itemize}
+\item[1966-8:] Anthony Barr and Jim Goodnight begin development at\\
+ North Carolina State University on IBM mainframe computers
+\item[1972:] First release of SAS, but they lose their NIH funding 
+\item[1973:] John Sall joins the project
+\item[1976:] SAS Institute is incorporated in Cary, NC
+\item[1985:] SAS re-written in C for OS portability: modern SAS era begins
+\item[1990:] SAS v6 released with added support for UNIX and Windows
+\item[1999:] SAS v8 released with added support for Linux
+\item[2013:] SAS v9.4 Analytical Products 12.3 released
+\item[2018:] SAS v9.4 Analytical Products 15.1 released
+\item[2020:] SAS v9.4 Analytical Products 15.2 released
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{MCWCorp authentication and Solstice}
+
+\begin{itemize}
+\item start here on day 2
+\item one username/password to rule them all?
+\item cross-platform MCWCORP ActiveDirectory authentication
+\item WiFi, email, Office365, D2L, \textcolor{blue}{VPN} and 
+\textcolor{red}{the Cheese Cluster}
+\item download and install the Solstice client\\
+\url{https://www.mersive.com/download}
+\item hands-on: taking over the projector\\
+Caveat: M1 Macs don't work well in my experience 
+%\item SHARES AVAILABLE OVER WIFI FOR MCWCORP ONLY
+%\url{https://wiki.biostat.mcw.edu/Shares}
+%\item this course: {\tt /data/shared/04224} or the {\tt 04224} share
+%\item login to gouda and go to the next slide
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{\textcolor{red}{The Cheese Cluster}}% and x2go clients}
+
+\begin{itemize}
+\item login to gouda %and go to the next slide
+\item Your WiFi gateway
+\item To run demanding code start on an interactive shell on colby
+\item The Cheese Cluster uses the Terascale Open-source Resource and QUEue Manager (TORQUE)
+\item For single threading\\ 
+{\tt qsub -I -X}\\
+{\tt qsub -I -X -l nodes=1} 
+\item For multi-threading with {\tt P} threads\\
+{\tt qsub -I -X -l nodes=1:ppn=P} 
+\item See the wiki for more info on TORQUE
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Secure shell, ssh, and Secure copy, scp}
+
+\begin{itemize}
+\item The commands {\tt ssh} and {\tt scp} are included in Linux and macOS
+\item For Windows, see the wiki
+\end{itemize}
+\url{https://wiki.biostat.mcw.edu/Secure_shell_and_secure_copy}\\
+\url{https://wiki.biostat.mcw.edu/Secure_copy}
+\end{frame}
+\begin{comment}
+\item x2go provides these commands for Windows from PuTTY\\
+as {\tt plink} and {\tt pscp} respectively
+\item But you need to have them in your {\tt PATH}
+\item Create/edit {\tt AUTOEXEC.BAT} with the following lines
+%and run it by typing ``autoexec'' on the command line %: {\tt $>$ autoexec}
+\end{itemize}
+{\tt :: this is a comment for the file AUTOEXEC.BAT }\\
+{\tt set path=\%path\%C:$\diagdown$Program~Files~(x86)$\diagdown$x2goclient;}
+How to run a batch file at startup of Windows 8 and 10?
+\begin{enumerate}
+\item Create a shortcut to the batch file.
+\item Once the shortcut is created, right-click the shortcut file and select Cut.
+\item Press Start, type ``run'', and press Enter.
+\item In the Run window, type ``shell:startup'' to open the Startup folder.
+\item Once the Startup folder is opened, click the Home tab at the top of the folder. Then, select Paste to paste the shortcut file into the Startup folder.
+\end{enumerate}
+\end{comment}
+
+\begin{frame}
+\frametitle{Secure shell, ssh, and Secure copy, scp}
+
+\begin{itemize}
+\item First, we need to create keys: a public key
+and a private key
+\item Let's look at the manual for {\tt ssh-keygen}
+\item check the directory on client and/or server: {\tt \$ ls -la .ssh}
+\item for example, on Linux or macOS, we would do as follows
+\item create it if not there: {\tt \$ mkdir .ssh}
+\item and protect it! {\tt \$ chmod 700 .ssh}
+\item check it again: {\tt \$ ls -la .ssh}
+\item generate your keys on the server and copy them to your client
+\item {\tt \$ ssh-keygen -t rsa}
+\item {\tt \$ cp .ssh/id\_rsa.pub .ssh/authorized\_keys}
+\end{itemize}
+{\tt scp USER@gouda.biostat.mcw.edu:.ssh/id\_rsa.pub .ssh}\\
+{\tt scp USER@gouda.biostat.mcw.edu:.ssh/id\_rsa .ssh}\\
+login to gouda with {\tt ssh} or x2go with your key (no password)
+%\item login to gouda: {\tt \$ ssh -X USER@gouda.biostat.mcw.edu}
+%{\tt \$ scp .ssh/id\_rsa.pub USER@gouda.biostat.mcw.edu:.ssh}
+\end{frame}
+
+\begin{frame}
+\frametitle{x2go clients}
+
+\begin{itemize}
+\item download and install x2go client
+\item \url{https://wiki.x2go.org/doku.php/doc:installation:x2goclient}
+\item For Windows, this is the best version according to Chris
+\url{https://code.x2go.org/releases/binary-win32/x2goclient/releases/4.1.2.0-2018.06.22}
+\item let's go over the x2go settings and test
+\end{itemize}
+\end{frame}
+
+\begin{comment}
+\begin{verbatim}
+mkdir ~/.ssh
+ssh-keygen -t rsa
+chmod 700 ~/.ssh
+cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys ~/.ssh/id_rsa
+\end{verbatim}
+\end{frame}
+\end{comment}
+
+\begin{frame}
+\frametitle{A Brief History of Emacs and ESS}
+\begin{itemize}
+\item[1975:] Emacs created by Richard Stallman (AKA RMS) at MIT 
+\item[1984:] RMS re-writes GNU Emacs (GPL) in C \\ 
+\textcolor{red}{Apple Macintosh Human Interface Guidelines (HIG)} 
+\item[1986:] emacs FORTRAN-mode: intelligent editing for FORTRAN 
+\item[1987:] IBM Common User Access (CUA) failed altnerative to HIG
+\item[1988-94:] Apple lawsuit vs. Microsoft and HP over\\
+ GUI \textcolor{blue}{``Look and Feel''} copyright/patent infringement 
+\item[1990:] John Sall adds some SAS support to GNU Emacs 
+\item[1991:] Multi-lingual XEmacs (GPL) for X11 released 
+\item[1994:] GNU Emacs (GPL) for X11 released \\ 
+Tom Cook releases SAS-mode (GPL) 
+\item[1994-7:] Anthony Rossini creates ESS (GPL) containing\\
+the Emacs modes ESS[SAS], ESS[R] and ESS[Stata] 
+\item[1999+:] Rich Heiberger and I improve ESS[SAS] for batch processing 
+\item[2000+:] ESS and Emacs evolve together for more user-friendliness
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Welcome to Emacs}
+\url{https://wiki.biostat.mcw.edu/Emacs}
+\begin{itemize}
+\item Modifier Keys: Emacs documentation looks like this
+\item {\tt C-KEY} means hold down the Control key while pressing {\tt KEY}
+\item For example, {\tt C-x} means hold down Control while pressing {\tt x}
+\item {\tt M-KEY} means hold down the Meta key while pressing {\tt KEY}
+\item On PC, the Meta key is usually the Alt key 
+\item On Mac, the Meta key should be the Option key: see last slide
+% {\tt $\sim$/.emacs}
+% \begin{verbatim}
+% (setq mac-command-modifier 'alt)
+% (setq mac-option-modifier 'meta)
+% \end{verbatim}
+\item Or, you can press {\tt Esc}, release,
+  and then press {\tt KEY}
+\item Execute an emacs command: {\tt M-x COMMAND} which is followed by
+  pressing {\tt Enter}
+\item For example, {\tt M-x man} to bring up a man page\\
+ or {\tt M-x info} the directory of info pages
+\item {\tt S-KEY} means hold down the Shift key while pressing {\tt KEY}
+% \item Some examples. M-x list-packages M-x list-fontsets C-u M-x
+%   list-fontsets ({\tt C-u} is called prefix argument which alters the
+%   next command).
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Hands-on running Emacs}
+\begin{itemize}
+\item To run more recent versions of GCC and the GNU Debugger\\ 
+(these are needed to compile R packages)
+\item {\tt \$ module load gcc/9.2 gdb/9.2}
+%\item {\tt \$ module load emacs/26.3 R/3.6.2 \&\& emacs "\$@"}
+\item Let's create a bash shell script to avoid typing that again
+\item Open the file to edit: {\tt C-x C-f emacs-26.3}
+\item {\tt \#!/bin/bash} \\ 
+{\tt (module load gcc/9.2 gdb/9.2; emacs "\$@")}\\
+Encasing commands in parentheses is a \textcolor{red}{subshell}
+%{\tt module load emacs/26.3 R/3.6.2 \&\& emacs "\$@"}
+%\item Or copy it: {\tt C-x C-f /data/shared/04224/emacs-26.3}
+%\item By saving it: {\tt C-x C-w $~$/emacs-26.3}
+\item Try to quit emacs: {\tt C-x C-c}
+\item Interrupt command: {\tt C-g}
+\item Save the file: {\tt C-x C-s}
+\item Really quit emacs: {\tt C-x C-c}
+\item Or just copy it:\\ {\tt \$ cp /data/shared/04224/emacs/emacs-26.3 $~$}
+\item Check the files permissions: {\tt \$ ls -l emacs-26.3}
+\item Add the execute permission: {\tt \$ chmod +x  emacs-26.3}
+\item Check the files permissions: {\tt \$ ls -l emacs-26.3}
+\item Run the script in the background: {\tt \$ emacs-26.3 \& }
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Common Emacs Shortcuts}
+
+\begin{itemize}
+\item {\tt C-h} is the help key and {\tt F1} is its alias
+\item But you have to get your laptop to generate an {\tt F1}
+\item For example, {\tt C-h k} describes the next key pressed
+\item Try {\tt C-h k F1 k}
+\item {\tt M-F1} opens a new frame (MCW)
+\item {\tt C-F10} make the font smaller (MCW)
+\item {\tt C-F11} make the font bigger (MCW)
+\item {\tt C-x C-f} is open a file or a directory
+\item {\tt F2} is refresh (ESS)
+\item {\tt F8} is go to {\tt *shell*} buffer (ESS)
+\item {\tt M-F8} is go to {\tt *shell*} buffer in the current directory (MCW)
+\item {\tt M-w} is \textcolor{red}{copy}
+\item {\tt C-y} is \textcolor{blue}{paste}
+\item {\tt C-w} and {\tt Delete} are cut 
+\item {\tt C-delete} or {\tt S-delete} is cut (MCW)
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Common Emacs Shortcuts}
+
+\begin{itemize}
+\item {\tt C-c} comments a region (an area of text selected)
+\item {\tt C-u} is the prefix command so 
+{\tt C-u C-c} uncomments a region
+\item {\tt M-up} go to the beginning of the file (MCW)
+\item {\tt M-down} go to the end of the file (MCW)
+%\item {\tt M-F1} creates a new emacs frame (MCW)
+\item {\tt C-x 2} splits the buffer top over bottom
+\item {\tt C-x 1} unsplits the buffer
+\item {\tt C-x 3} splits the buffer left and right
+\item {\tt C-s} starts a forward search
+\item Repeating {\tt C-s} searches for the same string again
+\item {\tt C-r} starts a reverse search
+\item {\tt C-u C-s} starts a forward regular expression search
+\item See Search:Regexps entry of emacs manual : {\tt M-x info}
+\item {\tt M-x man re\_format} man page on regular expressions
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{R and Emacs/ESS for your client}
+
+\begin{itemize}
+\item \textcolor{blue}{\url{https://cran.r-project.org/bin}}
+\item Vincent Goulet has developed installable binaries
+for Windows and macOS
+\item For Windows: \url{https://vigou3.gitlab.io/emacs-modified-windows}
+%\item For macOS: \url{https://vigou3.gitlab.io/emacs-modified-macos}
+\item Check ESS is working with {\tt M-x ess-version}
+\item But, for macOS, Vincent's binaries cause
+frequent crashes 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs/ESS on macOS}
+
+\begin{itemize}
+\item So I created my own binary based on {\tt homebrew} from
+\url{https://github.com/railwaycat/homebrew-emacsmacport/releases}
+%\item (these might work on earlier versions of macOS: haven't tried)
+\item Copy this file (newer versions of emacs also have issues): 
+{\tt /data/shared/04224/emacs/emacs-26.3.tar.gz}
+\item And extract: {\tt \$ tar xzf emacs-26.3.tar.gz -C /}
+%\item Copy this file: {\tt /data/shared/04224/emacs/emacs.tar.gz}
+%\item And extract: {\tt \$ tar xzf emacs.tar.gz -C /}
+\item \textcolor{red}{Mac Command key settings for {\tt $~$/.emacs}\\ 
+{\tt /data/shared/04224/emacs/emacs-macOS.el}}
+\item You also have to install XQuartz\\
+\url{https://www.xquartz.org}
+\item And set its Preferences accordingly on the Input tab:\\
+check ``Option keys send Alt\_L and Alt\_R''
+\item Also, in the Keyboard System Preferences
+\item On the Keyboard tab\\
+check ``Use F1, F2, etc., keys as standard function keys''
+\item On the Shortcuts tab you will see \textasciicircum UpArrow
+and \textasciicircum DownArrow\\
+uncheck {\tt C-up} and {\tt C-down} 
+\item Check ESS is working with {\tt M-x ess-version}
+\end{itemize}
+\end{frame}
+
+\end{document}

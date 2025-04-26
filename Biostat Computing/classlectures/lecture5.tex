@@ -1,0 +1,470 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\item {\tt lattice}: \url{http://lmdvr.r-forge.r-project.org/figures/figures.html}
+\end{itemize}
+
+\end{frame}
+
+\begin{comment}
+\begin{frame}[fragile]
+\frametitle{HW part 1 (mid-term): NTDB time series with {\tt xyplot}}
+
+\begin{itemize}
+\item Create several models for {\tt dead$~$gcstot+age}
+\item For {\it nonparametric} flexible fits, estimate a series
+of models based on data frame subsets
+\item Each of these separate models for levels of the following
+variables: {\tt male}, {\tt tbi\_icd9} and {\tt year}, i.e., 
+32 models total
+\item Plot time series for the probability of death by {\tt year}
+\item The $x$-axis is {\tt year}
+\item The $y$-axis is the probability of death
+\item With 4 lines, for the 4 settings of {\tt male} and {\tt tbi\_icd9} 
+\item With multiple panels for the following settings\\
+ 5 rows for {\tt gcstot} values of {\tt (3, 6, 9, 12, 15)} and\\
+ 3 columns for age {\tt 65, 75, 85}
+\item Or a more visually appealing layout of your choice
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 2 (mid-term): NTDB 3D plots}
+
+\begin{itemize}
+\item Based on the same models as above
+\item Plot 3D contours with {\tt contourplot}
+\item Plot 3D heat maps with {\tt levelplot}
+\item Plot 3D surfaces with {\tt wireframe}
+\item The $x$-axis is {\tt gcstot}
+\item The $y$-axis is {\tt age}
+\item The $z$-axis is the probability of death
+\item For the 4 settings of {\tt male} and {\tt tbi\_icd9} on each page,\\
+create 8 pages for the years %2008, 2011 and 2014
+\item Or a more visually appealing layout of your choice
+\end{itemize}
+
+\end{frame}
+\end{comment}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: two-headed monster}
+
+\begin{itemize}
+\item There are two graphics packages for R that have 
+a similar syntax which makes learning both of them convenient
+\item \textcolor{red}{The {\tt graphics} package for routine daily usage}
+is one of the {\it base} packages as described in Section 12
+\item Easy to use, it can create high-quality
+graphical figures, but there are limits to their customizability
+\item You can see the documentation with {\tt library(help=graphics)}
+\item Depends on the {\tt grDevices} package which has support for
+devices, colors, fonts, etc.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: two-headed monster}
+
+\begin{itemize}
+\item The {\tt lattice} package which is one of the {\it recommended}
+packages can create more appealing customizable graphical figures of
+publication and grant proposal quality
+\item It builds upon {\tt grDevices} and {\tt graphics}
+\item With some added capabilities in {\tt latticeExtra}
+\item You can see the documentation with {\tt library(help=lattice)}
+\item But, \textcolor{blue}{the {\tt lattice} package documentation is 
+voluminous} and it can take quite a while to read and understand
+\item Yet, the examples are very helpful; there are extra examples
+online that will dispell some of the mystery  
+\url{http://lmdvr.r-forge.r-project.org/figures/figures.html}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: two-headed monster}
+\begin{itemize}
+\item DO NOT USE {\tt ggplot2}!  
+\item It is unacceptable for the following reasons
+\item The graphs are terrible: a gray background by default?
+\item {\tt ggplot2} package doesn't come with R
+\item Its syntax doesn't resemble {\tt graphics/lattice}
+\item It has no 3D capabilities
+%\item  {\tt latticeExtra} 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: two-headed monster}
+\begin{itemize}
+\item Common types of plots and their high-level functions
+\end{itemize}
+\begin{tabular}{l|lll}
+Type of plot    & Dimensions & {\tt graphics} & {\tt lattice} \\ \hline
+%Bar chart       & {\tt } & {\tt barchart}
+Box and whisker & 1 & {\tt boxplot}  & {\tt bwplot} \\
+%Dot chart       & {\tt dotchart} & {\tt dotplot} \\
+Histogram       & 1 & {\tt hist}     & {\tt histogram} \\
+Density         & 1 & {\tt plot.density} & {\tt densityplot} \\
+Quantile-quantile & 1 & {\tt qqnorm}   & {\tt qqmath} \\
+QQ              & 2 & {\tt qqplot}   & {\tt qq} \\
+Scatter         & 2 & {\tt plot} & {\tt xyplot} \\
+Contour         & 3 & {\tt contour}  & {\tt contourplot} \\
+Heat map        & 3 & {\tt image}    & {\tt levelplot} \\
+Surface         & 3 & {\tt persp}    & {\tt wireframe} \\
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt graphics} package}
+
+\begin{itemize}
+\item Let's explore the high-level {\tt plot} function 
+\item Many objects types have their own generic functions\\ {\tt $>$
+    plot(object)} will call the function {\tt plot.CLASS} where the
+  {\tt object} is of type {\tt CLASS} like {\tt plot.density}
+\item But, we are more concerned with the default: {\tt plot.default}
+\item Here the arguments of primary interest
+that are shared/comparable between {\tt graphics} and {\tt lattice}
+% \item \textcolor{red}{\tt col} is the color to be used for the plot
+%   points/lines/etc.
+% \item It can be a known color string: see {\tt colors}
+% \item Or it can be an integer marker number
+% \item This is controlled by the color palette: see {\tt $>$ ?palette}
+\end{itemize}
+\begin{verbatim}
+plot(x, y = NULL, col = 1, 
+     type = "p", cex = 1, pch = 1, lty = 1, lwd = 1,
+     xlim = NULL, ylim = NULL,
+     xlab = NULL, ylab = NULL)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt graphics} package}
+\begin{verbatim}
+plot(x, y = NULL, col = 1, 
+     type = "p", cex = 1, pch = 1, lty = 1, lwd = 1,
+     xlim = NULL, ylim = NULL,
+     xlab = NULL, ylab = NULL)
+\end{verbatim}
+\begin{itemize}
+\item {\tt x} is a vector for the $x$-axis
+\item {\tt y} same thing for the $y$-axis\\
+if {\tt y} is not specified, then {\tt x} is plotted as a time series
+\item common {\tt type} settings: {\tt "p"} for points, {\tt "l"} for lines,\\ 
+{\tt "b"} for both points and lines, {\tt "h"} for vertical lines,\\
+{\tt "s"} for stair steps/survival functions and\\ 
+{\tt "n"} does not produce anything
+\item {\tt cex} for the size of points and {\tt pch} for the kind
+\item specify the line type by {\tt lty}
+and the line width by {\tt lwd}
+%\item {\tt col} specifies a color from the current palette: see {\tt $>$ ?palette}
+\item {\tt xlim} is a length 2 vector for the limits of the $x$-axis
+%\item {\tt ylim} same thing for the $y$-axis
+\item {\tt xlab} is the label for the $x$-axis: 
+either a character string\\ or an {\tt expression}
+see {\tt $>$ ?plotmath}
+\item {\tt ylim/ylab} same thing for the $y$-axis
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt graphics} package}
+\begin{verbatim}
+plot(x, y = NULL, col = 1, 
+     type = "p", cex = 1, pch = 1, lty = 1, lwd = 1,
+     xlim = NULL, ylim = NULL,
+     xlab = NULL, ylab = NULL)
+\end{verbatim}
+\begin{itemize}
+\item \textcolor{red}{\tt col} is the color to be used for the plot
+  points/lines/etc.
+\item A color's name by character string: see {\tt
+    colors} for a list
+\item Or it can be an integer {\it marker} number
+\item This is based on the current color palette which
+can be customized by the {\tt palette} function: default markers
+\item \blue{Choosing good colors can be tricky: stick to the powers of 2}
+\begin{tabular}{ll|ll|ll}
+{\it 0}$\,=2^{-\infty}$ & {\it white} &
+{\it 1}$\,=2^0$ & {\it black} &
+\textcolor{red}{\it 2$\,=2^1$} & \textcolor{red}{\it red} \\
+3 & green & 
+\textcolor{blue}{\it 4$\,=2^2$} & \textcolor{blue}{\it blue} &
+5 & cyan \\
+6 & magenta & 7 & yellow &
+\textcolor{gray}{\it 8$\,=2^3$} & \textcolor{gray}{\it gray} \\
+\end{tabular}
+\begin{comment}
+\begin{tabular}{ll|ll|ll|ll}
+{\it 1}$\,=2^0$ & {\it black} &
+\textcolor{red}{\it 2$\,=2^1$} & \textcolor{red}{\it red} \\
+3 & green &
+\textcolor{blue}{\it 4$\,=2^2$} & \textcolor{blue}{\it blue} &
+5 & cyan & 6 & magenta \\
+7 & yellow &
+\textcolor{gray}{\it 8$\,=2^3$} & \textcolor{gray}{\it gray} \\
+\end{tabular}
+\end{comment}
+\item If you need more, then see {\tt bass/colors.R}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt graphics} package}
+\begin{itemize}
+\item Interactively, {\tt plot} will create a graphics window with a panel
+\item Or multiple {\tt plot} calls yielding multiple 
+panels via {\tt par(mfcol=c(rows, cols))} or\\
+ {\tt par(mfrow=c(rows, cols))}\\
+%panels via {\tt par(mfcol=c(m, n))} or {\tt par(mfrow=c(m, n))}\\
+but often with very poor quality: see {\tt lecture5.R}
+\item Low-level functions that overlay graphics on this panel follow
+\item Those that are self-explanatory and
+\textcolor{blue}{similar} to {\tt lattice}
+\item {\tt lines(x, y=NULL, col=1, lty=1, lwd=1)} 
+\item {\tt points(x, y=NULL, col=1, pch=1, cex=1)} 
+\item {\tt text(x, y=NULL, labels, col=1, cex=1, pos=NULL)} \\
+\begin{tabular}{rcc}
+\multicolumn{1}{l}{pos} & 3 &  \\
+2   & (x, y) & 4 \\
+    & 1 \\
+\end{tabular} positions go clock-wise starting at 6 o'clock
+\item {\tt legend} is \textcolor{red}{NOT similar} to {\tt lattice} 
+%adj = c(0.5, 0.5), pos = NULL, offset = 0.5
+\item {\tt legend(x, y=NULL, col=1, legend, lty=1, lwd=1,\\ 
+\quad pch=1, cex=1, horiz=FALSE)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt graphics} package}
+\begin{itemize}
+\item This is the same for the {\tt lattice} package
+\item {\tt $>$ ?Devices} lists the graphical file formats supported
+\item We are going to restrict our attention to\\
+ Adobe Portable Document Format (PDF)
+\item In an interactive R session, you can capture what is in
+the graphics window at any time by (in batch, this is an error)\\
+{\tt $>$ dev.copy2pdf(file="FILENAME.pdf")}
+\item In an interactive or batch R session, you can create 
+a graphics file without a graphics window
+\item
+\begin{verbatim}
+pdf(file="FILENAME.pdf")
+PLOTTING STATEMENTS
+dev.off()
+\end{verbatim}
+\item The latter can create graphics files with multiple pages\\
+  each {\tt plot} creates a page (except for multiple panels where
+  each of these is a page)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt lattice} package}
+\begin{verbatim}
+xyplot(formula, data, groups = NULL, col = 1,
+     type = "p", cex = 1, pch = 1, lty = 1, lwd = 1,
+     xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, 
+     strip = strip.custom(strip.names = FALSE),
+     layout = c(cols, rows), as.table = FALSE)
+\end{verbatim}
+\begin{itemize}
+\item \textcolor{blue}{\tt formula} of the form {\tt y$~$x} for a single panel \\
+  or {\tt y$~$x|g1*g2*...} for panels of plots conditioned on the
+  variables {\tt g1*g2*...} which are typically
+  factors\\
+  if not factors, then specify {\tt factor(g1)*factor(g2)*...}
+%  bug or feature? sometimes {\tt y$~$x|g1} will not be appealing,\\ but
+%  {\tt y$~$x|g1*g2} is more attractive even if {\tt g2} is a constant
+\item {\tt data} is a data frame with {\tt x} and {\tt y}, etc.
+\item \textcolor{red}{\tt groups=z} overlays data within the same panel
+based on different values of the variable {\tt z}
+\item {\tt layout} controls how multiple panels are configured, if any
+\item {\tt as.table} controls the order multiple plans are drawn\\
+{\tt as.table = TRUE} seems more logical than the default
+\item {\tt strip} controls how the panels are labeled \\
+{\tt strip.names = TRUE} seems more logical than the default
+%\item other arguments are the same as the {\tt graphics} package
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt lattice} package}
+\begin{itemize}
+\item Interactively, {\tt xyplot} will create a graphics window 
+\item Low-level functions can overlay graphics on this panel
+\item Those that are \textcolor{blue}{similar} to {\tt graphics} follow\\
+typically, just prefix an {\tt l} on their names for lattice
+\item {\tt llines(x, y=NULL, col=1, lty=1, lwd=1)} adds lines
+\item {\tt lpoints(x, y=NULL, col=1, pch=1, cex=1)} adds points
+\item {\tt ltext(x, y=NULL, col=1, labels, cex=1,\\ 
+\quad %adj=c(0.5, 0.5), 
+pos=NULL, offset=0.5)} adds text
+\item And there is an additional one like {\tt plot} itself \\
+  {\tt lplot.xy(list(x=x, y=y), col=1, type="p",\\
+    \quad cex=1, pch=1, lty=1,
+    lwd=1)} %with coordinates {\tt xy\$x} and {\tt xy\$y}
+%\item \textcolor{red}{But, you need to call these from 
+%a {\tt panel} function}\\
+%see {\tt lecture5.R} FIXME
+\end{itemize}
+\begin{verbatim}
+xyplot(formula, data, ## the easy way
+panel=function(...){ panel.abline(h=0);panel.xyplot(...)})  
+xyplot(formula, data) ## or the hard way
+update(trellis.last.object(),
+       panel=function(...) {
+           i=panel.number() ## call panel.FUNCTIONS and
+           lFUNCTIONS })
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt lattice} package}
+\begin{itemize}
+\item As we saw, there are three 3D functions in {\tt graphics}:\\
+{\tt contour}, {\tt image} and {\tt persp}
+\item Each of these functions has an interface like 
+{\tt NAME(x, y, Z)} where {\tt x} and {\tt y} are vectors
+and {\tt Z} is a matrix
+\item This is a confusing interface to say the least\\
+ i.e., how does {\tt Z} relate to {\tt x} and {\tt y}?
+\item {\tt lattice} has a more intuitive interface for the
+  corresponding functions: {\tt contourplot}, {\tt levelplot} and {\tt
+    wireframe} as follows (with arguments analogous to {\tt xyplot})
+\item {\tt NAME(z$~$x*y|g1*g2*..., data)} where {\tt x}, {\tt y} and
+{\tt z} are all vectors in the data frame so their relationship is obvious
+%{\tt data} (as are {\tt g1, g2, ...})
+\item Many of the same arguments as {\tt xyplot}
+\item {\tt groups} is a notable exception
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt lattice} package}
+\begin{itemize}
+\item There is a {\tt legend} argument but it seems difficult to use\\
+see {\tt key} instead
+\item {\tt key=list(border="black", x=x, y=y, text=list(...), ..., lines=list(...))}\\
+or {\tt ..., points=list(...))} \\
+where {\tt x} and {\tt y} in [0, 1] of the displayed area
+\item {\tt xlim} and {\tt ylim} are too simplistic for many needs\\
+{\tt scales} is more flexible
+\item {\tt scales=list(\\
+x=list(limits=c(low, high), log=TRUE),
+y=list(at=c(1, 2, 4, 8),\\ \quad labels=c("a", "b", "c", "d")))}
+\item {\tt at} are the tick marks drawn: can be increasing or decreasing
+\item {\tt labels} are the values to display there
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt lattice} package}
+\begin{itemize}
+\item {\tt trellis.par.get()} to show default settings
+\item and {\tt trellis.par.set()} to alter them
+\item for example, slide 13 shows the default for {\tt xyplot}
+is {\tt col = 1}\\
+however, that is NOT right: more complicated than that
+\end{itemize}
+\begin{verbatim}
+trellis.par.get("plot.symbol")
+a$col = 1
+trellis.par.set("plot.symbol", a)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Graphical exploration with R: the {\tt latticeExtra} package}
+\begin{itemize}
+%\item Also see the {\tt latticeExtra} package
+\item You can overlay two or more {\tt trellis} objects
+\item For example, {\tt doubleYScale} to create a second $y$-axis
+\item Combine two objects with the {\tt as.layer} function
+\item Combine multiple objects with the {\tt c} function
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,278 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: arrays}
+\begin{itemize}
+\item Arrays are a temporary construct of the DATASTEP\\
+Their component variables may, or may not, be saved in the 
+{\tt NEW} data set, but the array's definition is NOT
+\item Numeric: {\tt array \_VAR(n) VAR1 ...\ VARn;}\\
+{\tt \_VAR(n)} can be an asterisk: {\tt \_VAR(*)}
+\item Character: {\tt array \_CHAR(m) \$ L CHAR1 ...\ CHARm;}
+%\item The examples below can be either numeric or character
+\item {\tt array \_VAR(n:m) VARn ...\ VARm;} 
+\item Temporary: variables are not named and not saved\\
+{\tt array \_VAR(n) \_TEMPORARY\_;}\\
+{\tt \_VAR(n)} can NOT be an asterisk\
+\item Optionally, with initial values assigned\\
+ {\tt array \_VAR(n) \_TEMPORARY\_ 
+(VALUE1 ...\ VALUEn);}
+\item Two dimension arrays: \textcolor{red}{row major}\\
+{\tt array \_VAR(n, m) VAR1 ...\ VARnm;} \\
+{\tt \_VAR(n, m)} can NOT be an asterisk\\
+\item Multiple dimension arrays\\
+{\tt array \_VAR(n, ..., m) ...;} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: arrays}
+\begin{itemize}
+\item You reference array values like so
+\item For {\tt array \_VAR(n) VAR1 ...\ VARn;} \\
+\textcolor{red}{\tt \_VAR(i)}
+\item However, that is ambiguous since now SAS will NOT call
+the function {\tt \_VAR()}\\
+a reason that I like to use the underscore
+in array names since there are no such functions \\
+(YET: we will re-visit that next lecture)
+\item But, for most flexibility\\
+ (such as in the {\tt PROC FCMP}
+which we will see next time)\\
+use \textcolor{blue}{\tt \_VAR[i]}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: iterative DO loops}
+\begin{itemize}
+\item The {\tt do} loop has a few variants
+\item {\tt do VAR=VALUE1 to VALUE2 by VALUE3; ...; end;}\\
+if {\tt VALUE3} not given, it defaults to 1
+\item {\tt do VAR=VALUE1 to VALUE2 until(CONDITION); ...; end;}\\
+  increments until the {\tt CONDITION} is true or {\tt VALUE2}\\
+  whichever comes first
+\item {\tt do VAR=VALUE1 to VALUE2 while(CONDITION); ...; end;}\\
+  increments until the {\tt CONDITION} is false or {\tt VALUE2}\\
+  whichever comes first
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS formats}
+\begin{itemize}
+\item In Chapters 4 and 5, we saw informats for inputting data
+\item For output, formats end in a period: {\tt FORMAT.}\\
+with an optional WIDTH {\tt FORMATw.} potentially along with\\ 
+a number of DECIMAL places {\tt FORMATw.d}
+\item Common numeric formats:\\ 
+{\tt data NEW; set OLD; format X best12.\ Y 6.4 Z z4.;}
+\item {\tt Zw.} and {\tt Zw.d} are filled with leading zeros
+\item Common character formats: they start with dollar sign\\ 
+{\tt data NEW; set OLD; format X \$40.\ Y \$char200.;}
+\item SAS supplies many formats and informats
+\item You can make your own with {\tt proc format}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS dates}
+\begin{itemize}
+\item There are other data types besides numeric and character\\ 
+the most common is a SAS date\\
+with literals that look like this\\
+{\tt "DD\textcolor{blue}{MON}YYYY"\textcolor{red}{d}} GOOD\\
+ {\tt "DD\textcolor{blue}{MON}YY"\textcolor{red}{d}} BAD\\
+due to Y2K, and other types of 2-digit year errors,\\
+ the former is far preferable to the latter (see below)
+\item For example, {\tt "12OCT2020"\textcolor{red}{d}}
+which is the numeric value 22200: the number of days
+from the SAS origin 01/01/1960 
+(which is the typical choice for IBM mainframes\\
+as opposed to 01/01/1970 of Unix/R)
+\item They are NOT ISO 8601 compliant: dates prior to 1582 generate an error
+\item And a Y2K-like bug/feature\\
+{\tt "12OCT0000"\textcolor{red}{d}}
+  is equivalent to {\tt "12OCT2000"\textcolor{red}{d}}\\
+  {\tt "0000"} is considered to be the two-digit year {\tt "00"} or
+  {\tt "2000"}
+  this behavior is documented so it is a {\it feature}\\
+  (SAS is pretty good about fixing bugs due to their rental fees)\\
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: SAS dates}
+\begin{itemize}
+\item There are many useful SAS features for SAS dates
+\item Such as the SAS format {\tt date9.}
+\item And the automatic macro variable {\tt sysdate9}
+which is formatted as {\tt date9.}
+\item There are several useful SAS data functions
+\item For example, {\tt intnx} and {\tt intck} 
+\item {\tt intnx} creates a date offset into the future or the past
+\item {\tt intck} counts the number of intervals between two dates\\
+useful for calculating age
+\item see {\tt lecture13.sas}
+\item There are also times {\tt "HH:MM:SS"\textcolor{red}{t}}
+\item And datetimes 
+{\tt "DD{MON}YYYY:HH:MM:SS"\textcolor{blue}{dt}}
+\item But these are uncommon except for EMR/clinical trials
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: {\tt SELECT} statement type 1\\
+\textcolor{red}{RED} and
+\textcolor{blue}{BLUE} are optional}
+{\tt select(EXPRESSION);\\
+when(VALUE1) BLOCK1\\
+\textcolor{red}{when(VALUE2) BLOCK2\\
+\qquad $\vdots$\\
+when(VALUEn) BLOCKn}\\
+\textcolor{blue}{otherwise BLOCKO}\\
+end;}
+\begin{itemize}
+\item if {\tt VALUE1, ..., VALUEn} are not exhaustive\\
+AND there is no {\tt otherwise} clause,\\ then errors
+are generated for those observations that remain
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP: {\tt SELECT} statement type 2\\
+\textcolor{red}{RED} and
+\textcolor{blue}{BLUE} are optional}
+{\tt select;\\
+when(CONDITION1) BLOCK1\\
+\textcolor{red}{when(CONDITION2) BLOCK2\\
+\qquad $\vdots$\\
+when(CONDITIONn) BLOCKn}\\
+\textcolor{blue}{otherwise BLOCKO}\\
+end;}
+\begin{itemize}
+\item if {\tt CONDITION1, ..., CONDITIONn} are not exhaustive\\
+AND there is no {\tt otherwise} clause,\\ then errors
+are generated for those observations that remain
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 1: create a date format for the ISO 8601\\
+ Proleptic Gregorian Calendar}
+\begin{itemize}
+\item The details are in lecture 2, slides 3-5
+\item See my example of the Proleptic Julian Calendar
+{\tt julian.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW part 2: NTDB hot-decking}
+\begin{itemize}
+\item Write a SAS DATASTEP program to perform hot-decking\\
+ for the NTDB example:
+see the details in lecture 4, slide 4
+%\item Hints: use arrays and \textcolor{blue}{\tt set ...\ point}\\
+\item Hints: for random number generation from the Uniform
+  distribution, use the {\tt rand("unif")} and {\tt call
+    streaminit(SEED);} to set the seed.
+ \item Use arrays with the {\tt array} statement
+ \item Use the {\tt set} statement with the {\tt point} option to
+   iterate through the data set BEWARE: with {\tt point}, don't forget
+   the {\tt \textcolor{red}{stop;} run;} at the end of the DATASTEP
+\item With many functions you can use an {\tt of} clause with a variable
+list, e.g., \textcolor{blue}{\tt nmiss(of VAR1-VARn)}\\
+instead of \textcolor{red}{\tt nmiss(VAR1, ..., VARn)}
+\item Or with the STARTS-WITH colon operator
+ \textcolor{blue}{\tt nmiss(of VAR:)}
+% \item Use a macro variable for the list of variables to
+% hot-deck like {\tt \%let var=white black other hispanic male sbp pulse rr;}
+% \item To count the number of items in a macro variable, 
+% use the {\tt \%\_count()} macro like {\tt \%let k=\%\_count(\&var);}
+\item Use the {\tt \%\_nobs()} macro to determine how many
+observations are in a data set like {\tt \%\_nobs(data=ntdb.elder)}
+\end{itemize}
+\end{frame}
+
+\end{document}

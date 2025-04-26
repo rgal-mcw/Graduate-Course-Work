@@ -1,0 +1,339 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Hands-on HW: reading data from multiple files of the PTB}
+\begin{itemize}
+\item As we have seen, the ECG information requires reading in multiple files
+\item A header file, {\tt .hea}, a data file for the 12 standard
+  leads, {\tt .dat}, and a data file for the 3 Frank leads, {\tt .xyz}
+\item Let's re-visit: why should we use the {\tt IBw.d} informat?
+\item Create your own SAS library in the directory {\tt
+    $~$/libname/ecg} and read in all of the ECGs for controls into the
+  permanent SAS data set {\tt ecg.controls}
+\item And utilize your two's complement correction\\
+how many ECGs are there for which the sum total is incorrect?
+\item see the example for the cases: {\tt PTB/cases.sas}
+\item BEWARE: the cases data set is quite large with almost 60M observations
+yet still surprisingly fast: run-time is about \\ 5 minutes!
+\item The controls data set will be smaller, but if you have a mistake
+in your SAS code,
+then the error messages can create an ENORMOUS {\tt .log} file
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS and Emacs/ESS[SAS]}
+\begin{itemize}
+\item Let's take a look at {\tt autoexec.sas}\\
+{\tt cp $~$rsparapa/autoexec.sas $~$}
+\item N.B.\ similarly, you have to copy {\tt .sas} files
+to your home directory to edit/submit them (just like {\tt .R} files)
+\item Submit {\tt autoexec} with {\tt F3}, goto the {\tt .log} with
+  {\tt F5}\\ return with {\tt F4} and goto the {\tt *shell*} 
+buffer with {\tt F8}
+\item Test of ESS[SAS] function keys%: {\tt F9} and {\tt import.sas}
+\item see {\tt PTB/ecg.sas} and {\tt PTB/acf.sas}
+\item {\tt F9} opens a SAS data set for viewing
+\item {\tt F12} opens a graphics file for viewing
+\item {\tt C-F10} makes the font smaller
+\item {\tt C-F11} makes the font larger
+\item {\tt TAB} and {\tt C-TAB}
+\item Emacs and {\tt tabbar}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP STATEMENTS}
+\begin{itemize}
+\item {\tt data NEW; set OLD; STATEMENT; ... run;}\\
+the impact of {\tt STATEMENT} is on the creation of {\tt NEW}\\
+ {\tt OLD} is unchanged
+\item {\tt drop VAR1 ... VARn;}\\
+  drop these variables from the data set\\
+  if the variable names actually end in numbers, then you can use a
+  {\it variable list}
+  which can be used in many places\\
+  \textcolor{red}{\tt drop VAR1-VARn;}
+\item {\tt keep VAR1 VAR2 ... VARn;}\\ 
+keep ONLY these variables in the data set
+\item {\tt rename OLD1=NEW1 ... OLDn=NEWn;}\\
+rename these variables in the data set\\
+if you can use a variable list\\
+{\tt rename OLD1-OLDn=NEW1-NEWn;}
+\item {\tt where CONDITION;}\\
+limit to observations from {\tt OLD} satisfying {\tt CONDITION}\\
+many PROCS also accept a {\tt where} statement\\
+\textcolor{blue}{\tt proc NAME data=OLD; where CONDITION; ...\ run;}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS NUMBERS, CHARACTERS and CONDITIONS}
+\begin{itemize}
+\item SAS makes no distinction for integers\\ 
+every number is double-precision floating point\\
+which obviously can represent integers as well\\
+SAS has no concept of {\tt NaN} or {\tt Inf}\\
+Division by zero results in a missing value
+\item if you attempt to perform arithmetic with a character expression,
+SAS will attempt to convert it to number
+\item if a CONDITION is simply a number or a numeric variable, then it is TRUE
+UNLESS the number is 0 \textcolor{blue}{or missing!}\\
+{\tt x=.;} is SAS' missing value for numeric\\
+Also \textcolor{red}{\tt .a ...\ .z .\_}\\
+{\tt y=" ";} is SAS' missing value for character
+\item 
+a CONDITION resulting in a character expression\\ 
+(that can't be converted into a numeric expression)\\ is an error
+\item So these are all TRUE:
+{\tt 1, "1", 2.1}
+\item And these are all FALSE:
+{\tt 0, "0", ., ".", " "}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS NUMBERS, CHARACTERS and CONDITIONS}
+\begin{itemize}
+\item Typically, a CONDITION is a comparison between two variables
+  (or between a variable and a literal)\\
+  \textcolor{blue}{\tt =} or {\tt EQ}; {\tt $<$} or {\tt LT}; {\tt
+    $<$=} or {\tt LE}; {\tt $>$} or {\tt GT}; {\tt $>$=} or {\tt GE};
+  and {\tt \textasciicircum=} or {\tt NE} % for NOT EQUAL
+\item CONDITIONS can be chained together\\
+ by either {\tt \&} 
+  \textcolor{red}{\tt and} for AND; either {\tt |}
+  \textcolor{blue}{\tt or} for OR
+\item you can also chain together interval CONDITIONS like so\\
+{\tt 3<x<=6} for {\tt x} in the interval (3, 6]
+\item you can specify a subset by {\tt x in(3, 4, 5)}
+\item you can compare a variable to missing (unlike R): {\tt x=.}\\
+also {\tt n(ARG1, ..., ARGn)} and {\tt nmiss(ARG1, ..., ARGn)} 
+\item \textcolor{red}{BEWARE:  {\tt .<x} is TRUE unless {\tt x} is also 
+missing}\\
+\textcolor{blue}{In comparisons, missing behaves like negative infinity!}
+\item you can specify STARTS-WITH by the colon operator\\ {\tt y=:"a"}
+  which is TRUE for all character strings starting with {\tt a}
+\item alphabetic comparisons are based on the order of ASCII\\
+"A"$<$"Z" is TRUE and " "$<$"A" is also TRUE\\
+ASCII collating sequence on SbS pg. 204
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP STATEMENTS: {\tt length}}
+\begin{itemize}
+\item The {\tt length} statement can be used for both numeric and
+  character variables\\
+
+\item BEWARE: it is risky to reduce the length of numeric variables\\
+do NOT lessen the length below the default which is 8\\
+can create errors which are VERY difficult to debug
+since no error message is generated\\
+to set, you would do: {\tt length NUMBER 8;}
+\item The default length for character variables is also 8
+\item Typically, longer character variables are either 40 or 200 characters\\
+  {\tt length SHORT \$ 40 LONG \$ 200;}
+\item if you need to change the length of a variable already created\\
+then place the {\tt length} statement BEFORE the {\tt set} statement\\
+\textcolor{blue}{\tt data NEW; length VAR \$ 200; set OLD; ...}\\
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{DATASTEP STATEMENTS: {\tt if-then-else}\\ 
+\textcolor{red}{RED} and 
+\textcolor{blue}{BLUE} lines optional}
+{\tt if IF-CONDITIONAL-EXPRESSION then IF-THEN-BLOCK \\
+\textcolor{blue}{else if ELIF-CONDITIONAL-EXPRESSION-1\\
+then ELSE-IF-BLOCK-1} \\
+$\vdots$ \\
+\textcolor{blue}{else if ELIF-CONDITIONAL-EXPRESSION-M\\
+then ELSE-IF-BLOCK-M} \\
+\textcolor{red}{else ELSE-BLOCK}}
+\begin{itemize}
+\item {\tt BLOCK} can either be a single line followed by a semi-colon
+\item or it can be several lines surrounded by {\tt do;} and {\tt end;}\\
+\end{itemize}
+{\tt do;\\ \qquad LINE1;\\ \qquad $\vdots$\\ \qquad LINEn;\\ end;}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP STATEMENTS: {\tt output}}
+\begin{itemize}
+\item You can selectively remove or save observations
+\item The default is to save each observation when the program
+reaches the {\tt run;} statement\\
+or you can force that behavior with the {\tt output} statement\\
+these are the same\\
+\textcolor{red}{\tt data NEW; set OLD; run;}\\
+\textcolor{blue}{\tt data NEW; set OLD; output; run;}
+\item You can selectively pick the saved observations\\
+{\tt data NEW; set OLD; if CONDITION then output; run;}
+\item You can selectively save observations to different data sets\\
+{\tt data NEW1 NEW2; set OLD;\\
+ if CONDITION1 then output NEW1;\\
+ else if CONDITION2 then output NEW2;\\
+ run;}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DATASTEP STATEMENTS: {\tt delete} and subsetting {\tt if}}
+\begin{itemize}
+\item You can selectively remove observations\\
+if not removed, then they are saved\\
+{\tt data NEW; set OLD; if CONDITION1 then delete; run;}
+\item Similarly, you can use an {\tt if} statement\\ 
+(don't confuse with an {\tt if-then-else})
+\item This is the same as above\\
+{\tt data NEW; set OLD; if CONDITION2; run;}\\
+where {\tt CONDITION2} is equivalent to {\tt not(CONDITION1)}\\
+the {\tt not} function reverses the predicate
+\item Typically, a {\tt where} statement is preferable to an {\tt if} for
+computational efficiency especially with large data sets\\
+a {\tt where} clause omits observations from even being considered\\
+while {\tt if} has to selectively process each one\\
+\textcolor{blue}{\tt data NEW; set OLD; where CONDITION2; run;}\\
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS data set options}
+\begin{itemize}
+\item Operate on a data set: {\tt NAME(OPTION)}\\
+and these can be combined:  {\tt NAME(OPTION1 ...\ OPTIONn)}\\
+\item Generally, can be used anywhere a data set {\tt NAME} can appear\\
+i.e., in PROCS and the DATASTEP (NOT just the DATASTEP like 
+most DATASTEP statements)
+\item {\tt NAME(drop=VAR1 ...\ VARn)}\\ 
+drop these variables from the data set\\
+if you can use a {\it variable list}: 
+\textcolor{red}{\tt NAME(drop=VAR1-VARn)}
+\item {\tt NAME(keep=VAR1 VAR2 ...\ VARn)}\\ 
+keep ONLY these variables in the data set\\
+%if you can use a {\it list}: {\tt NAME(keep=VAR1-VARn)}
+\item {\tt NAME(rename=(OLD1=NEW1 ...\ OLDn=NEWn))}\\
+rename these variables in the data set\\
+or if you can use variable lists\\
+\textcolor{blue}{\tt NAME(rename=(OLD1-OLDn=NEW1-NEWn))}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS data set options}
+\begin{itemize}
+\item {\tt NAME(firstobs=N)}\\
+start with observation number {\tt N} by skipping 1 to {\tt N-1}
+\item {\tt NAME(obs=N)}\\
+limit to observations number 1 to {\tt N}\\
+{\tt NAME(firstobs=M obs=N)}\\
+OR limit to observations number {\tt M} to {\tt N}\\
+\item \textcolor{red}{\tt NAME(where=(CONDITION))}\\
+limit to observations satisfying {\tt CONDITION}\\
+very useful for those PROCS that don't accept a {\tt where} statement
+\item {\tt INDEX=(KEY=(VAR1 ...\ VARn))}\\
+create a new {\tt KEY} to retrieve observations in {\tt KEY} order\\ 
+{\tt INDEX=(KEY=(VAR1 ...\ VARn)/unique)}\\
+use the {\tt unique} keyword if it is a unique key\\
+\textcolor{blue}{What is a unique key?}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Creating output with {\tt proc print}}
+\begin{itemize}
+\item {\tt proc print data=NAME;\\ var VAR1 ...\ VARn;\\ run;}
+\end{itemize}
+\begin{verbatim}
+proc print UNIFORM N data=ntdb.elder;
+    where sbp=0 | pulse=0;
+    var new_doa doa dead sbp pulse;
+run;
+\end{verbatim}
+\end{frame}
+
+\end{document}

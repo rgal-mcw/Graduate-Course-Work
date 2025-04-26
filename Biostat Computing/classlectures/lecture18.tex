@@ -1,0 +1,182 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Custom output with the DATASTEP}
+\begin{itemize}
+\item As we have seen the {\tt put} statement output appears in the {\tt .log}
+by default
+\item However, if you want to create custom output, then the {\tt .log} is
+a poor choice
+\item With the {\tt file} statement, you can specify other locations such 
+as {\tt .lst} or others
+\item \textcolor{red}{\tt file print;} specifies {\tt .lst}
+\item \textcolor{blue}{\tt file "FILENAME";} specifies a new file
+\item The default is to replace the file: the {\tt mod} option appends
+\item \textcolor{red}{\tt file print mod;} 
+\item \textcolor{blue}{\tt file "FILENAME" mod;} 
+\item By default, titles defined are used: {\tt notitles} turns them off
+\item By default, footnotes defined are NOT used: {\tt footnotes} turns them on
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Page size and line size}
+\begin{itemize}
+\item The {\tt options} statement has two options for output
+\item \textcolor{blue}{\tt options ps=LINES;} controls how many lines
+  are on a page
+\item \textcolor{red}{\tt options ls=CHARACTERS;} controls how many
+  characters are in a line
+\item In our {\tt $~$/autoexec.sas}, we have two settings for convenience
+\item For portrait, {\tt options \&portrait;} (which is the default)
+where \textcolor{blue}{\tt \%let portrait = ps=54 ls=76;}
+\item For landscape, {\tt options \&landscape;} \\
+where \textcolor{red}{\tt \%let landscape= ps=49 ls=122;}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The Output Delivery System (ODS)}
+\begin{itemize}
+\item With version 7 (1998), SAS introduced ODS: a more flexible
+  output management system useful for many common tasks
+\item As we have seen, you can choose not to produce
+output with the {\tt \%\_printto} macro (that relies 
+on {\tt proc printto;})
+\item With ODS, you can do the same by \textcolor{blue}{\tt ods
+    listing close;}
+\item And you can turn it back it on by \textcolor{blue}{\tt ods
+    listing;}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The Output Delivery System (ODS)}
+\begin{itemize}
+\item One of the main reasons for ODS' creation is to capture\\ 
+SAS output in a data set for further processing
+\item \textcolor{red}{\tt ods output \textcolor{blue}{ODSTABLENAME}=NEW;} \\
+where {\tt NEW} is the data set created 
+\item But how do we know what \textcolor{blue}{\tt ODSTABLENAME} 
+is supposed to be?
+\item Prior to the PROC statement, place \textcolor{blue}{\tt ods trace on;}
+\item After the {\tt \textcolor{blue}{run;} \textcolor{red}{quit;}}
+  you can turn it off \textcolor{red}{\tt ods trace off;}
+\item Don't forget the {\tt \textcolor{blue}{run;} \textcolor{red}{quit;}}\\
+{\tt \textcolor{red}{quit;}} is generally optional, but it is needed for ODS
+\item You can selectively generate output with\\
+\textcolor{red}{\tt ods select \textcolor{blue}{ODSTABLENAME};}\\
+which will place ONLY the selected choices in your {\tt .lst} 
+\item And you can selectively exclude output with\\
+\textcolor{red}{\tt ods exclude \textcolor{blue}{ODSTABLENAME};}
+\item see example {\tt PTB/acf.sas}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The Output Delivery System (ODS)}
+\begin{itemize}
+\item ODS also controls Statistical Graphics PROCs: SGPROCs
+\item So to capture PDF output\\
+\textcolor{red}{\tt ods graphics on / imagename="\&fnroot" outputfmt=pdf;}
+\item \textcolor{blue}{\tt "\&fnroot"} 
+(which is created by {\tt \%\_fn;} in {\tt $~$/autoexec.sas})\\
+your SAS program is named {\tt \&fnroot..sas}
+so the\\ \textcolor{blue}{FIRST} PDF file is called {\tt \&fnroot..pdf}
+\item Subsequent PDF files are named {\tt \&fnroot.n.pdf}\\
+where {\tt n} is a number: 1, 2, ...
+\item If we call the macro {\tt \%\_pdfjam;}\\ then these files
+are combined into one PDF: {\tt \&fnroot..pdf}
+\item And pressing {\tt F12} will open the \textcolor{blue}{FIRST} PDF
+for viewing by default: you can over-ride this in the mini-buffer
+\item see example {\tt PTB/acf.sas}
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+

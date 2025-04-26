@@ -1,0 +1,306 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer’s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{HW 0: Homework problem for today}
+
+\begin{itemize}
+\item RTFM and increase the font size of your screen
+\item I need to be able to look over your shoulder
+\item And I can't do that if the font size is small
+\item I'm optically challenged
+\item You don't have to submit this: just show me
+\item If not already addressed: who are the teams?
+\item Take turns submitting the HW problems to me
+\item Make them organized so I can easily review
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{HW 1: Homework problem for today}
+
+\begin{itemize}
+\item Create a shell script to find the largest file per directory
+\item Starting in a directory find the largest file\\
+among this directory's file and its sub-directories\\
+for final results: {\tt /data/shared/04224}
+%for final results: {\tt /data/shared/gamma/export/home/klein}
+\item Use recursion: in each directory, return largest file's name 
+\item We can sort these files to find the largest file
+\item Hints: use pipes, {\tt ls}, {\tt head/tail} and ({\tt echo} for debugging) 
+\item {\tt ls -lS \textasciigrave biggest\textasciigrave\ | head -n 1}
+%\item {\tt ls -lSr \textasciigrave biggest\textasciigrave\ | tail -n 1}
+\item add a directory for scripts to {\tt PATH}:\\ 
+{\tt gouda\$ PATH="\${PATH}:\${PWD}"}
+\item white space in shell scripts is very important/inflexible\\
+check docs and pay attention to Emacs' syntax highlighting 
+\item spaces in filenames/directories is tricky\\ 
+{\tt eval FILE="$\diagdown$"\$PWD/\$i$\diagdown$""}
+\item Ignore files with special characters in their names like \$ 
+\item You have to be fault-tolerant/defensive-programming \\
+ {\tt gouda\$ cd "\$NEW" 2$>$ /dev/null \&\& biggest}
+\item Emacs Signals menu useful for debugging: BREAK and KILL
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline for today}
+
+\begin{itemize}
+\item Introduction to bash: Bourne-Again shell
+\item Bash shell initialization
+\item Bash shell scripting
+\item Hands-on with Emacs/ESS and R
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Bash shell initialization}
+\begin{itemize}
+\item {\tt /etc/profile.d/custom.sh }
+\item {\tt $\sim$/.bash\_profile}
+\item {\tt $\sim$/.bashrc}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bash shell scripting}
+\begin{itemize}
+\item Bash shell scripts allow you to create your own commands
+\item Powerful feature that promotes code re-use
+\item We have already seen the example {\tt emacs-26.3}
+\item A very simple example: {\tt /usr/local/bin/path}
+\item The environment variable {\tt PATH} is a list of directories\\
+containing commands to type at the command line:
+ {\tt gouda\$}
+\item Let's look at another example: {\tt /usr/local/bin/hidden }
+\item The first line (if present) is a comment {\tt \#} followed by
+  {\tt !}  called ``shebang'' for {\tt \#!} and the name of the shell
+  like {\tt \#!/bin/bash}
+\item Shell choices (worst to best): {\tt /bin/sh} for the Bourne shell,\\
+{\tt /bin/ksh} for the Korn shell, {\tt /bin/zsh} for the Z shell\\
+and {\tt /bin/bash} for the Bourne-Again shell\\
+\red{Never use the C shell {\tt /bin/csh}}
+\item Return code 0 is a success and 1 is a failure: {\tt \$?}
+\item {gouda\$ hidden $~$/.Rprofile; echo \$?}
+\item {gouda\$ hidden emacs-26.3; echo \$?}
+\item {gouda\$ hidden file-does-not-exist; echo \$?}
+\item And a more complex example: {\tt /usr/local/bin/pf}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bash shell scripting}
+\begin{itemize}
+\item Simple syntax documented in the man page: {\tt M-x man bash}
+\item Let's look at the following entries of \textcolor{red}{built-ins}
+\item {\tt [[ expression ]]}
+%\item {\tt if} command block
+\item CONDITIONAL EXPRESSIONS
+%\item {\tt for} which is also very useful from the command line
+%\item Simple loops: {\tt for i in \{1..3\} }
+%\item {\tt for} example {\tt /data/shared/TorqueCluster/synch/yum-installed}
+\item Other commands often found in scripts: \textcolor{blue}{NOT built-ins} 
+\item the {\tt find} command: {\tt M-x man find}
+\item the {\tt sort} command: {\tt M-x man sort}
+\item white space is very important/inflexible
+\item pay attention to Emacs' syntax highlighting 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{{\tt if} command syntax: \textcolor{red}{RED} and 
+\textcolor{blue}{BLUE} lines optional}
+
+{\tt if IF-CONDITIONAL-EXPRESSION\\
+then IF-THEN-LINE \\
+\textcolor{red}{ADDITIONAL-LINES-AS-NEEDED} \\
+\textcolor{blue}{elif ELIF-CONDITIONAL-EXPRESSION-1\\
+then ELIF-THEN-LINE-1} \\
+\textcolor{red}{ADDITIONAL-LINES-AS-NEEDED}\\
+$\vdots$ \\
+\textcolor{blue}{elif ELIF-CONDITIONAL-EXPRESSION-M\\
+then ELIF-THEN-LINE-M} \\
+\textcolor{red}{ADDITIONAL-LINES-AS-NEEDED}\\
+\textcolor{blue}{else ELSE-LINE}\\
+\textcolor{red}{ADDITIONAL-LINES-AS-NEEDED}\\
+fi}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{{\tt for} command syntax: \textcolor{red}{RED} and 
+\textcolor{blue}{BLUE} clauses are optional}
+
+{\tt for VARIABLE in \textcolor{blue}{VALUE1 VALUE2 \dots}\\
+do LINE\\
+\textcolor{red}{ADDITIONAL-LINES-AS-NEEDED}\\
+done}
+
+\begin{itemize}
+\item Suppose that {\tt VARIABLE} is {\tt i}
+\item Typically, {\tt LINE} and/or 
+{\tt \textcolor{red}{ADDITIONAL-LINES-AS-NEEDED}} will have references 
+to the variable, {\tt \$i}, which loops over {\tt VALUES}
+\item {\tt for} example, see 
+{\tt /data/shared/TorqueCluster/synch/yum-installed}
+\end{itemize}
+
+{\tt for i in x y emacs-* \{1..3\}\\
+do echo \$i\\
+done}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs/ESS and R}
+\begin{itemize}
+\item Launch the latest version of emacs with your script: {\tt emacs-26.3}
+\item From the command line, you can get brief documentation
+\item In the {\tt *shell*} buffer: {\tt gouda\$ emacs --help}
+\item Similarly: {\tt gouda\$ R --help} or  {\tt gouda\$ R -h}
+\item Consult the man page for more: {\tt M-x man emacs}
+\item Or {\tt M-x man R}
+\item For the complete emacs manual: {\tt F1 r}
+\item Or for the other manuals available: {\tt M-x info} or {\tt F1 i}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs/ESS and R}
+\begin{itemize}
+\item Copy my R profile to your home directory: press {\tt F8} \\ 
+{\tt gouda\$ cp $~$rsparapa/.Rprofile $~$}
+\item Open it with {\tt C-x C-f .Rprofile}
+\item Notice the file's title at the top, the menus and the toolbar
+\item Check out the mode-line at the bottom
+\item Create a directory for your personal library: press {\tt F8} \\
+{\tt gouda\$ mkdir -p $~$/R/4.0.4/lib64/R/library}
+\item Let's create an R program: {\tt C-x C-f lecture2.R}
+\item Launch the default version, 4.0.4, of R: {\tt M-x R}
+\item If you wanted the previous version 3.6.2: {\tt M-x R-3.6.2}
+% \item In the {\tt *R:$~$*} at the {\tt $>$}, type {\tt ??} for 
+% \textcolor{red}{help on help}
+% \item To search R help and installed packages help,\\
+%  type {\tt $>$ help.start()}\\
+%  VERY SLOW IF LOTS OF PACKAGES ARE INSTALLED
+%\item type {\tt \$ R} to start from the command line (without emacs)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs/ESS and R}
+\begin{itemize}
+\item There used to be {\tt <-} keys on old keyboards\\
+\item Even before my time and I go back to the mid-80s
+\item But, what key should we use for assignment today?
+\item Now, we should just use {\tt =}
+\item Since {\tt ==} is used to test for equivalence (as we'll see)
+\item R snobs still use {\tt <-} but it is an anachronism
+\item Type in a simple R program (don't type the comments {\tt \#})
+\item Or copy it from the shared directory: {\tt lecture2.R}
+\end{itemize}
+{\tt a = installed.packages() \# first line} \\
+{\tt \# = creates an object to the left} \\
+%{\tt str(a)} \\
+{\tt table(a[ , "LibPath"])} \\
+{\tt b $<$- a} \\
+{\tt \# $<$- creates an object to the left like =} \\
+{\tt b -$>$ c} \\
+{\tt \# -$>$ creates an object to the right} \\
+{\tt ls()} \\
+%{\tt a['BART', ] \# last line}
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs/ESS and R}
+\begin{itemize}
+\item In order of likely use and importance
+\item To submit a paragraph (code block bounded by blank lines):\\
+ {\tt C-c C-p}
+\item To submit the whole buffer: {\tt C-c C-b}
+\item To submit a single line: {\tt C-Enter}
+\item To submit a region (a highlighted area):\\
+ {\tt C-c C-r}
+\end{itemize}
+\end{frame}
+
+\end{document}

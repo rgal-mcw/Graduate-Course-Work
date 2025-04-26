@@ -1,0 +1,377 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C and C++}
+
+\begin{itemize}
+\item On the TIOBE Index of Programming Language Popularity:
+currently, C is first and C++ is fourth
+\item C is a mid-level language designed for hardware portability
+\item C developed by Bell Labs in 1972 % file extension {\tt .c}
+\item Recent C standards (reaching maturity): \textcolor{red}{C99} in 1999;\\ 
+C11 in 2011; and C18 in 2018
+\item C++ is backwards compatible with C
+\item Recent C++ standards (still evolving): C++11 in 2011;\\
+ \textcolor{blue}{C++14} in 2014; C++17 in 2017 and C++20 in 2020
+\item C++ developed by Bell Labs in 1982 %: file extension {\tt .cpp}
+\item C++ a high-level multi-paradigm language with four flavors:
+C, Object-oriented C++, Template C++ and\\ 
+the Standard Template Library (STL)
+\item C/C++ are compiled languages: The GNU Compiler Collection (GCC)
+provides open source compilers 
+\item GCC docs: \url{https://gcc.gnu.org/onlinedocs/gcc-9.2.0}
+\item Excellent C++ documentation: \url{https://cppreference.com}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C and C++}
+
+\begin{itemize}
+\item R relies on the system's C/C++ compiler setup via\\ {\tt R CMD \dots}
+\item %File extension naming convention\\
+R requires the following: {\tt .c} for C and {\tt .cpp} for C++
+\item Statically typed languages that require variable definitions\\
+{\tt double} for double-precision numbers and {\tt int} for integers\\
+{\tt double x, y=0.; int i, j=0;}
+\item Unlike R, C/C++ have {\it block} comments\\
+\textcolor{red}{RED} is commented out\\
+{\tt \textcolor{blue}{/*} 
+\textcolor{red}{double x, y=0.;\\ 
+\quad integer i, j=0;} \textcolor{blue}{*/} \\}
+\item C++ also has single line comments: {\tt \textcolor{blue}{//} 
+\textcolor{red}{double x, y=0.;}}
+\item Additional functionality provided by C pre-processor 
+header files: don't confuse the C pre-processor command, {\tt cpp}, 
+with C++, {\tt .cpp} filename extension\\
+%File extension naming convention\\
+\item C++ expressions are followed by semi-colons\\
+but C pre-processor commands do NOT end in semi-colons 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C and C++ header files}
+
+\begin{itemize}
+\item Added functionality like R add-on packages
+\item C: header files and compiled libraries
+\item C++: uncompiled source header-only class libraries\\
+the R/Rcpp recognizes the following extensions:\\
+ {\tt .h} or none at all (we will talk about build\\
+{\tt \#include $<$Rcpp.h$>$ // Rcpp header}\\ 
+{\tt \#include $<$complex$>$ // complex number header}
+\item {\tt \#include $<$FILENAME$>$} used for headers in the
+  compiler's path of header files: typically, within the {\tt
+    /usr/include} directories/sub-directories or within R's
+package library
+\item {\tt \#include "FILENAME"} used for headers that are elsewhere
+\item The C/C++ headers are documentation all by themselves
+since they define the application programming interface (API)\\
+you can find them at {\tt /usr/include/c++/9.2.0}
+\item For R packages, you can find their headers
+ with the {\tt system.file} function\\
+{\tt $>$ system.file("include", package="Rcpp")}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C/C++ expressions}
+
+\begin{itemize}
+\item R and C/C++ expressions are similar: R is written in C
+\item Each expression returns a value and ends in a semi-colon
+\item You can group several expressions in curly brackets:\\ 
+{\tt \{ expr$_1$; \dots; expr$_m$; \}}\\
+where the return value comes from the last: {\tt expr$_m$; }
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile] 
+\frametitle{C/C++ {\tt if} command syntax:\\  \textcolor{red}{RED} and
+\textcolor{blue}{BLUE} lines optional}
+R and C/C++ if commands are similar\\
+{\tt if( cond$_1$ ) expr$_1$; \\
+\textcolor{red}{else if( cond$_2$ ) expr$_2$;} \\
+$\vdots$ \\
+\textcolor{red}{else if( cond$_m$ ) expr$_{m}$;} \\
+\textcolor{blue}{else expr$_{m+1}$};}
+\begin{itemize}
+\item you can combine conditions with {\tt ||} for OR
+and/or\\ {\tt \&\&} for AND
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C/C++ {\tt for} command syntax}
+\begin{itemize}
+\item {\tt for(INITIALIZATION; CONDITION; ITERATOR) expr;}
+\item There is also a \textcolor{blue}{\tt break} statement like R
+\item However, there is NO \textcolor{blue}{\tt next} statement\\
+rather it is {\tt continue}
+\item But, conveniently, the {\tt CONDITION} can be more complex 
+\item Example:\\
+{\tt for(int k=0; k<n; ++k) expr;}
+%\item \textcolor{blue}{size\_t} is a type for counting, i.e., 
+%the integers 0, 1, \dots
+\item This example iterates \textcolor{red}{\tt k=0, \dots, n-1}
+\item These are C/C++ vector indices as opposed to\\
+R indices like \textcolor{red}{\tt 1, \dots, n}
+\item \textcolor{blue}{In my experience, the 0-based indices are the
+    biggest transitional challenge to learning C/C++ vs.\ other
+    languages}
+\item It is based on memory pointer address arithmetic\\
+an area where C++ is much more user-friendly\\
+but it inherits the 0-basis and other C-isms
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Writing your own C++ functions }
+
+{\tt TYPE NAME1(TYPE$_1$ name$_1$, \dots, TYPE$_m$ name$_m$) 
+\textcolor{red}{\{ expr \}} } 
+\begin{itemize}
+\item the value of {\tt expr} is NOT automatically returned like R
+\item You return a value at any place within {\tt expr}
+via the {\tt return} command: {\tt return expr$_r$;}
+\item Call this function via {\tt NAME1(expr$_1$, \dots, expr$_m$);}\\
+you must supply all of the arguments unless they have defaults
+\item Some, or all, arguments can have default values so that you do not 
+have to supply every single argument
+\end{itemize}
+{\tt TYPE NAME2(TYPE$_1$  name$_1$=expr$_1$,\dots,TYPE$_m$ name$_m$=expr$_{m}$)} \\
+But you still have to call {\tt NAME2}
+with the \textcolor{blue}{ arguments in order}: 
+{\tt NAME2 ( expr$_1$, \dots, expr$_{m-n}$ )  } \\
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Rcpp and R}
+
+\begin{itemize}
+\item The {C++} interface to
+{R} is seamlessly provided by the {Rcpp} package
+ which efficiently passes object references from
+{R} to {C++} (and vice versa) as well as providing
+direct access to the {R} random number generator
+\item Rcpp is mainly an Object-oriented C++ flavor\\
+but behind the scenes it utilizes Template C++ and\\ it was heavily
+influenced by the STL
+\item see EddeFran11 in the lit directory for an intro
+\item The Rcpp Gallery has lots of examples \url{https://gallery.rcpp.org}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{An example of the C interface to R}
+\begin{verbatim}
+SEXP a;
+PROTECT(a = allocVector(REALSXP, 2));
+REAL(a)[0] = 123.45;
+REAL(a)[1] = 67.89;
+UNPROTECT(1);
+\end{verbatim}
+\begin{itemize}
+\item The C interface is \textcolor{red}{NOT user-friendly} unless you
+  are intimately familiar with the R source code
+\item There is documentation, but it is written {\it by programmers for
+other programmers} to read
+%\item Every line of C/C++ source code ends in a semi-colon
+\item \textcolor{blue}{\tt SEXP} is a C pointer, or memory address, corresponding to an R object which can also be useful with Rcpp
+\item 
+the {\tt Rcpp::wrap} function returns a \textcolor{blue}{\tt SEXP}
+generally back to R as a return value from a function call
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Same example of the C++ interface to R provided by Rcpp}
+\begin{verbatim}
+Rcpp::NumericVector a(2); // a new length 2 numeric vector 
+                          // created in R's memory space
+a[0] = 123.45;
+a[1] = 67.89;
+\end{verbatim}
+\begin{itemize}
+\item The C++ interface is \textcolor{blue}{very user-friendly}
+\item Notice that C/C++ vector indices range from 0 to n-1\\
+as opposed to R vector indices that range from 1 to n
+\item {\tt Rcpp::} is a C++ namespace and you reference 
+Rcpp classes by {\tt Rcpp::CLASS}\\
+similar to the way you can reference {\it visible} 
+R functions by specifying their packages, i.e., {\tt parallel::detectCores}
+\item there is also an {\tt R::} C++ namespace that you can
+use to reference R-like C functions such as {\tt R::dxxx}, {\tt R::pxxx},
+{\tt R::qxxx} and {\tt R::rxxx} from what is known as\\ 
+the Standalone Rmath Library which is part of the R project\\
+we will see the {\tt Rcpp\_rnorm} example later
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R and Rcpp: vectors, matrices, lists and random numbers}
+\begin{center}
+\begin{tabular}{l|l}
+R code & Rcpp code \\ \hline
+{\tt a = numeric(n)} & {\tt Rcpp::NumericVector a(n);}\\
+{\tt a[i]}           & {\tt a[i-1]} is a \textcolor{blue}{\tt double}\\
+\textcolor{blue}{\tt a = rnorm(n)}  & {\tt Rcpp::RNGScope state;}\\
+\textcolor{red}{\tt for(i in 1:n)} & {\tt for(int k=0; k<n; ++k)}\\
+\textcolor{red}{\tt\quad a[i]=rnorm(1)} & {\tt\quad a[k]=R::rnorm(0., 1.);}\\
+{\tt b = integer(n)} & {\tt Rcpp::IntegerVector b(n);}\\
+{\tt c = logical(n)} & {\tt Rcpp::LogicalVector c(n);}\\
+{\tt d = character(n)} & {\tt Rcpp::CharacterVector d(n);} \\
+{\tt A = matrix(nrow=m, ncol=n)} & {\tt Rcpp::NumericMatrix A(m, n);}\\
+{\tt A[i, j]}       & {\tt A(i-1, j-1)} is a \textcolor{blue}{\tt double}\\
+{\tt B = matrix(nrow=m, ncol=n)} & {\tt Rcpp::IntegerMatrix B(m, n);}\\
+{\tt x = list()}    & {\tt Rcpp::List x;}\\
+{\tt x\$NAME}       & {\tt x["NAME"]}\\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{R {\tt numeric} vs.\ Rcpp {\tt Numeric}}
+\begin{itemize}
+\item R's {\tt numeric} is the default atomic and matrix type\\
+  but it is a hybrid of \textcolor{red}{\tt integer} and
+  \textcolor{blue}{\tt double} (for floating point)
+\item If the object is equally well represented by an integer
+  expression, then an \textcolor{red}{\tt integer} object is created\\
+a literal ending in \textcolor{red}{\tt L} is automatically
+an \textcolor{red}{\tt integer}: {\tt 0L}
+\item However, if any operations performed on the object require
+  floating point operations, then it is automatically changed to
+  \textcolor{blue}{\tt double} which is {\tt numeric}'s alter-ego
+\item There are conversion functions {\tt as.numeric}, 
+\textcolor{blue}{\tt as.double} and \textcolor{red}{\tt as.integer}
+\item \textcolor{red}{\tt as.integer} truncates the decimal portion
+  TOWARDS ZERO\\
+like {\tt floor(object)} for positive or zero values\\
+with {\tt -floor(-object)} for negative values
+\item Rcpp's {\tt NumericVector} and {\tt NumericMatrix}
+are not ambidextrous: they are made of \textcolor{blue}{\tt double} elements
+\item Use {\tt IntegerVector} and {\tt IntegerMatrix} as needed\\
+they are made of \textcolor{red}{\tt int} elements
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Rcpp examples}
+\begin{itemize}
+\item {\tt fibonacci.R} and {\tt fibonacci.cpp}
+\item {\tt Rcpp\_rnorm.R} and {\tt Rcpp\_rnorm.cpp}
+\item These use the {\tt sourceCpp} function
+\item Common debugging options are {\tt verbose=TRUE}
+and {\tt rebuild=TRUE}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW hands-on: Rcpp and the Mandelbrot set}
+\begin{itemize}
+\item With Rcpp, we can make an extremely fast version of
+the {\tt mandelbrot} function: far faster than multi-threading\\ 
+see {\tt RcppMandelbrot.R}
+\item You need to create {\tt RcppMandelbrot.cpp}
+\item Hints:  R and C++ have similar structure so it is convenient to 
+start with {\tt mandelbrot.R} as a guide
+\item The {\tt complex} header is required to
+create complex numbers so you need to {\tt \#include <complex>}
+\item The class/type and constructor line looks like this\\
+{\tt std::complex<double> c(x[i], y[j]), d(0., 0.);}
+\item The {\tt std::pow} function is used for exponentiation
+and it works with complex numbers as well as other types\\
+(C/C++ has no exponentiation operator like the caret in R)
+\item There is no modulus/magnitude function: instead they
+provide the {\tt std::norm} function which is the square of
+the modulus/magnitude
+\item email me two files: your C++ program and your PDF file
+\end{itemize}
+\end{frame}
+
+\end{document}

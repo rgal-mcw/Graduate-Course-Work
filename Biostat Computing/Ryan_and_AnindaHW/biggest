@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#This is for homework 1 in BIOS 04224, submitted by Ryan Gallagher and Aninda Roy. 
+ 
+
+echo Executing the ~~biggest~~ script
+
+#This script should:
+#0. Reach into other directories in /data/shared/04224
+#1. Identify if the string is a file -> -f
+#2. Or Identify if it is a directory -> -d
+#2. QUESTION: If it is a file, do i just print? Or should I compare? 
+#2. If it is a directory, I should open and find the largest file.
+#3. Compare the size to other files in the directory
+#4. Print the largest file in the directory (to a .txt?)
+#5. Do this for every directory)
+
+#Enter this in the command line: PATH="$PATH:~/04224/bin:/data/shared/04224:/bin"
+#Run this script in the /data/shared/04224 directory, then enter
+# $ sort -rn filesizes.txt | head -n 1 from the ~/04224/bin directory
+
+for file in *; do
+    if [ -f "$file" ]; then wc -c $file >> ~/04224/bin/filesizes.txt
+    elif [ -d "$file" ]; then 
+	if [ -f "$file/*" ]; then wc -c $file/* >> ~/04224/bin/filesizes.txt
+	elif [ -d "$file/*" ]; then echo '$file/* is a directory'
+    fi
+   fi
+done
+
+. cd
+
+. cd ~/04224/bin
+
+echo 'below are your largest files:'
+sort -rn filesizes.txt | head -n 5
+
+
+
+#can copy files by using the "cp" command in the terminal
+
+#size n[FILE]  where n is k for kilobytes, M for megavytes, or G for gigbytes
+
+#type c where c is the type of files: d = directory, f = regular file
+
+# chmod +x 04224/bin/biggest was put into the terminal to allow it exectuable
+
+

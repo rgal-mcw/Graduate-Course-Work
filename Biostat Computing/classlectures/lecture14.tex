@@ -1,0 +1,286 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{ISO 8601 and the Proleptic Gregorian Calendar Again}
+\begin{itemize}
+\item Creating a SAS format for ISO 8601 dates seemed like a logical
+approach
+\item However, this created a rather large formats catalog with 2.3M
+records and containing 169MB
+\item SAS is fairly good at handling large data sets, but this seems
+very inefficient
+\item So, we are going to create new SAS functions instead
+\item Typically, SAS macros have filled this niche
+\item However, SAS macros mainly generate SAS code to be run\\
+Creating text and performing 
+integer arithmetic \textcolor{blue}{which is fast}
+\item Recently (circa 2004) SAS added a function compiler with\\
+ PROC FCMP so we can write our own DATASTEP functions, 
+but \textcolor{red}{they are relatively slow}
+\item Now, we have some options to consider
+\item N.B. you can create functions in C/C++ and
+link to them with {\tt PROC PROTO} (circa 2004): see {\tt protolibs.sas}\\
+(but {\tt PROC PROTO} is restricted in v9.4 unlike 9.0 to 9.3)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS macros}
+\begin{itemize}
+\item You can create macro variables by {\tt \%let VAR=VALUE;}
+\item Access their values by {\tt \&VAR} 
+which generates {\tt VALUE}\\
+quotes are not typically used so if you need quotes\\
+\textcolor{blue}{double quotes allow expansion: {\tt "\&VAR"} yields {\tt "VALUE"}}\\
+\textcolor{red}{but single quotes don't: {\tt '\&VAR'} yields {\tt '\&VAR'}}
+which can be useful if you need to generate a literal with an ampersand
+\item You can create array-like macro variables like so\\
+{\tt \%let VAR\&i=VALUEi;}\\
+{\tt \&\&VAR\&i} yields {\tt VALUEi}\\
+ when the macro variable {\tt \&i} is the number {\tt i}
+\item Macro variable are often lists\\
+{\tt \%let var=dead male black other hispanic sbp;}\\
+and you access them all at once by {\tt \&var} or individually by
+{\tt \%let var\&i=\%scan(\&var, \&i, \%str( ));}\\
+with {\tt \&\&var\&i}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{SAS macros: {\tt \%if-\%then-\%else}\\ 
+\textcolor{red}{RED} and 
+\textcolor{blue}{BLUE} lines optional}
+{\tt \%if IF-CONDITIONAL-EXPRESSION \%then IF-THEN-BLOCK \\
+\textcolor{blue}{\%else \%if ELIF-CONDITIONAL-EXPRESSION-1\\
+\%then ELSE-IF-BLOCK-1} \\
+$\vdots$ \\
+\textcolor{blue}{\%else \%if ELIF-CONDITIONAL-EXPRESSION-M\\
+\%then ELSE-IF-BLOCK-M} \\
+\textcolor{red}{\%else ELSE-BLOCK}}
+\begin{itemize}
+\item {\tt BLOCK} can either be a single line followed by a semi-colon
+\item or it can be several lines surrounded by {\tt \%do;} and {\tt \%end;}\\
+\end{itemize}
+{\tt \%do;\\ \qquad LINE1;\\ \qquad $\vdots$\\ \qquad LINEn;\\ \%end;}
+\end{frame}
+
+\begin{frame}
+\frametitle{SAS macros: macro expressions}
+\begin{itemize}
+\item Simpler expressions than DATASTEP expressions,\\
+but follow somewhat similar rules so it is relatable
+\item Numeric: only integer expressions by default\\
+the {\tt \%eval()} function performs integer arithmetic\\
+{\tt \%eval(\&i+1)} produces 11 if {\tt \&i} is 10\\
+instead of {\tt \&i+1} which produces 10+1\\
+{\tt \%if \%eval(\&i+1)=11 \%then ...;} is TRUE/executed
+\item {\tt \%sysevalf()} for floating point expressions\\
+{\tt \%if \%sysevalf(2.5=(age/10), boolean) \%then ...;}
+\item Character: often helpful to place these in quotes\\
+{\tt \%if "\&\&var\&i"="dead" \%then ...;}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS macros: \%DO loops}
+\begin{itemize}
+\item The {\tt \%do} statement has other variants besides a block
+%\item A block of code {\tt \%do; ...; \%end;}
+\item {\tt \%do VAR=VALUE1 \%to VALUE2 \%by VALUE3; ...; \%end;}\\
+if {\tt VALUE3} not given, it defaults to 1\\
+{\tt \%let var=dead male black other hispanic sbp;}\\
+{\tt \%do i=1 \%to \%\_count(\&var);\\ 
+\%let var\&i=\%scan(\&var, \&i, \%str( )); \%end;}
+\item {\tt \%do \%until(CONDITION); ...; \%end;}\\
+  executes until the {\tt CONDITION} is true
+\item {\tt \%do \%while(CONDITION); ...; \%end;}\\
+  executes until the {\tt CONDITION} is false 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS macros}
+\begin{itemize}
+\item You can create macros as follows\\
+{\tt \%macro NAME; ...; \%mend NAME;}\\
+and call it by {\tt \%NAME;}
+\item These macros can have arguments as well\\
+{\tt \%macro NAME(ARG1, ..., ARGn); ...; \%mend NAME;}\\
+and call it by {\tt \%NAME(VALUE1, ..., VALUEn);}\\
+\textcolor{blue}{within the macro, the argument values are accessed
+as {\tt \&ARGi}}
+\item These arguments can have defaults 
+\textcolor{red}{which is very convenient}\\
+{\tt \%macro NAME(ARG1, ..., ARGn,\\ 
+\qquad ARGn+1=VALUE1, ..., ARGn+m=VALUEm);\\
+\qquad ...;\\
+ \%mend NAME;}\\
+and call it by {\tt \%NAME(VALUE1, ..., VALUEn,
+ARGn+i=VALUEi, ARGn+j=VALUEj, ...);}\\
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS macros}
+\begin{itemize}
+\item Our SAS installation can be found in the directory
+{\tt /usr/local/sas/SAS18w47/SASHome/SASFoundation/9.4}
+\item And the SAS macros can be found in the {\tt sasautos}
+sub-directory
+\item However, there are big gaps in their capabilities
+\item I have created a supplementary library called RASmacro\\
+(my middle name is Allen) that is GPL free software
+\item Most of them are on {\tt github} (or can be soon\\
+I haven't uploaded recently): {\tt https://github.com/rsparapa/rasmacro}
+\item Most of them start with an underscore so that they are distinct
+from what SAS provides
+\item On gouda they are installed in {\tt /usr/local/sasmacro}
+and the documentation is provided within the files themselves\\
+it cannot get separated from the SAS program that way
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{RASmacro}
+\begin{itemize}
+\item We have seen some of these already
+\item {\tt \%\_nobs} returns the number of observations in a data set
+\item {\tt \%\_list} creates a SAS list with slightly more general rules
+than {\tt VAR1-VARn}
+\item Let's take a look {\tt \%\_julian} and {\tt \%\_gregory}
+\item These provide a mathematical formula to calculate ISO 8601
+dates with the SAS origin of 01/01/1960
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{PROC FCMP: the function compiler}
+\begin{itemize}
+\item \textcolor{red}{A SAS macro is impractical for ISO 8601 dates
+    since the arguments would have to be integer literals}
+\item \textcolor{blue}{We would like to have the flexibility for the
+  arguments to be DATASTEP variables}
+\item See my example of doing just that by creating the
+function {\tt \_julian} with the SAS program {\tt \_julian.sas}
+based on the {\tt \%\_julian} RASmacro
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW 1: create the DATASTEP function {\tt \_gregory}}
+\begin{itemize}
+\item Hint: base this on the RASmacro {\tt \%\_gregory}
+\item Verify that this function is creating ISO 8601
+compatible dates by comparing it with the SAS format
+that you created for ISO 8601
+\item \textcolor{blue}{BEWARE}: user-defined functions are
+  comparatively slow which is magnified by the size of the data set
+like we have here with \textcolor{red}{2.3M} observations
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW 2: create the DATASTEP subroutine: {\tt call \_permute}}
+\begin{itemize}
+\item This subroutine will generate random permutations
+since such capability does not appear to exist within 
+SAS currently
+\item It just needs to take 1 argument: the max
+value {\tt M}\\ i.e., create random permutations of 
+{\tt 1, \dots, M}
+\item Hint: base this on your stratified random sampling code
+\item Test to make sure that the seed value works the way it should
+\item It is easier if we consider {\tt M} has some maximum
+value like 100
+\item You can use {\tt M=5} for testing
+\item \textcolor{blue}{\tt subroutine \_permute(\_w[*]) varargs; outargs \_w;} 
+\item For array initialization of the uniform random variables, 
+use the {\tt \_repeat} macro
+\end{itemize}
+\begin{verbatim}
+%let strata=100;
+array _u(&strata) u1-u&strata (%_repeat(%str( 1), &strata));
+\end{verbatim}
+\end{frame}
+
+\end{document}

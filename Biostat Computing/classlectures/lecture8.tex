@@ -1,0 +1,275 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Eigen C++ class library and RcppEigen}
+
+\begin{itemize}
+\item Eigen is C++ header-only class library that provides
+linear algebra calculations with objects like vectors and matrices
+\item RcppEigen is the R package that provides Eigen within Rcpp
+\item R is quite fast for linear algebra, but there are occasions
+where something faster like Eigen is needed
+\item The Eigen documentation can be found at\\
+\url{https://eigen.tuxfamily.org/dox/GettingStarted.html}
+%however, I have been unable to access this site recently
+\item And RcppEigen is documented in BateEdde13
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Two-stage least squares}
+
+\begin{itemize}
+\item Suppose that we a continuous treatment, T, (like the dosage
+of a drug infusion); and a continuous outcome, Y, (like the size of a
+myocardial infarct) 
+\item In randomized experiments, the patient's treatment is assigned 
+at random, i.e., ignoring the patient's characteristics
+\item In non-randomized experiments, we assume that the patient's
+  treatment is NOT assigned at random, i.e., the patient's
+  characteristics likely influence the decision
+\item Such characteristics are known as \textcolor{red}{\it confounders}
+\item If these confounders are observed, then they can be adjusted for
+  by linear regression to estimate the treatment effect
+\item However, in many cases, these confounders are unobserved,
+therefore, you can NOT adjust for them by linear regression
+\item There is a causal inference method known as\\
+two-stage least squares or 2SLS which can still estimate the
+treatment effect in the presence of unobserved confounding
+provided \textcolor{blue}{\it instruments} are observed
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Causal diagrams and 2SLS}
+\begin{center}
+\begin{tabular}{rcl}
+\textcolor{red}{Confounders}  & & \textcolor{blue}{Instruments} \\
+\textcolor{red}{X}            & & \textcolor{blue}{Z} \\
+$\downarrow$ & $\searrow$ & $\downarrow$ \\
+Y            & $\leftarrow$ & T \\
+Outcome      & & Treatment
+\end{tabular}
+\end{center}
+\begin{align*}
+t_i & = \alpha_0 + \textcolor{blue}{\bm{z}_i'}\bm{\alpha_z}+
+\textcolor{red}{\bm{x}_i'}\bm{\alpha_x}+\epsilon_{1_i} & \mbox{Stage 1} \\
+ y_i & = \beta_0 + \hat{t}_i \beta_t+ \textcolor{red}{\bm{x}_i'}\bm{\beta_x}+
+\epsilon_{2_i} & \mbox{Stage 2} \\
+\beta_t & \mbox{\ is the treatment effect} \\
+& \where  \hat{t}_i = \hat{\alpha}_0 + 
+\textcolor{blue}{\bm{z}_i'}\bm{\hat{\alpha}_z}+
+\textcolor{red}{\bm{x}_i'}\bm{\hat{\alpha}_x}
+\end{align*}
+But, what is the variance estimate of ${\hat{\beta}_t}$:
+$\V{\hat{\beta}_t}$?\\
+It is based on $\V{\hat{\gamma}_t}$ as in
+$y_i = \gamma_0 + \textcolor{blue}{{t}_i \gamma_t}+
+\textcolor{red}{\bm{x}_i'}\bm{\gamma_x}+
+\epsilon_{0_i}$: Stage 0.\\
+%That is beyond the scope of this lecture.\\
+H. Theil. Repeated least squares applied to complete equation
+systems. The Hague: Central Planning Bureau, 1953.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The US National Longitudinal Survey of Young Men
+     (NLSYM)}
+
+\begin{itemize}
+\item This data set is contained in the {\tt nlsym} data frame:
+{\tt /data/shared/04224/nlsym.rds}
+\item This data set contains 3613 observations for men in 1976
+\item NLSYM began in 1966 with 5525 men aged 14:24 and
+     continued with follow-up surveys through 1981
+\item The question here is:\\
+Are there monetary returns of post-secondary education?
+\item See the R program {\tt /data/shared/04224/nlsym.R}
+which organizes the data for analysis
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The US National Longitudinal Survey of Young Men
+     (NLSYM)}
+
+\begin{itemize}
+%\item The variables of interest
+\item Treatment, T: {\tt ed76} years of education in 1976
+\item \textcolor{red}{Confounders, X}: 
+{\tt exp76} years of experience in 1976,\\
+{\tt exp762} centered years of experience squared in 1976,\\
+{\tt black} African-American,\\
+{\tt smsa76r} residing in an SMSA 1976 and\\ 
+{\tt reg76r} residing in the south 1976
+\item Outcome, Y: {\tt lwage76} log wages in 1976 (outliers trimmed)
+\item \textcolor{blue}{Instruments, Z}:
+ {\tt nearc2} grew up near 2-year college\\
+and {\tt nearc4} grew up near 4-year college
+\end{itemize}
+\begin{align*}
+w_i & = \exp y_i & & \mbox{Wages} \\
+\E{y_i} & = \beta_0 + \hat{t}_i \beta_t+ \textcolor{red}{\bm{x}_i'}\bm{\beta_x} \\
+ u_{i} & = \exp [\hat{t}_i \beta_t] \exp[\beta_0 + \textcolor{red}{\bm{x}_i'}\bm{\beta_x}]  & & \mbox{$\hat{t}_i$ years of education} \\
+ w_{i} & = \exp [(\hat{t}_i+1) \beta_t] \exp[\beta_0 + \textcolor{red}{\bm{x}_i'}\bm{\beta_x}]  & & \mbox{$\hat{t}_i+1$ years} \\
+{w_{i}} & = \exp  \beta_t {u_{i}} & & \mbox{Multiple for $+1$ years}
+%{w_{i1}}/{w_{i0}} & = \exp  \beta_t
+\end{align*}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Matrix inversion of real-valued square matrices}
+
+\begin{itemize}
+\item $ A_{n \times n} A^{-1}_{n \times n}=I_{n \times n}$
+\item The R function to compute $A^{-1}$ is {\tt $>$ solve(A) }
+\item But, singular matrices have no unique matrix inverse
+\item The {\it condition number} is an indicator of how
+numerically unstable the matrix inversion is likely to be\\
+or, how close to a singular matrix do we have here?\\
+very large condition numbers suggest singularity
+\item The R function to compute the condition number is\\
+ {\tt $>$ kappa(A) }
+\item For example, the condition number of a singular
+matrix in the {\tt kappa} function documentation is
+about $10^{17}$
+\item By way of comparison, the current Big Bang model suggests that
+  the universe is 13.8 billion years old or $4.4\times 10^{17}$ seconds
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Cholesky Decomposition of real-valued square matrices}
+
+\begin{itemize}
+\item For symmetric, positive definite matrices: a matrix {\it square root}
+\item Cholesky decomposition: $A_{n \times n} = L L'$\\
+ where $L_{n \times n}$ is a lower triangular matrix\\
+(all of the elements above the diagonal are zero)
+\item Provided by the {\tt chol} function which produces the 
+alternative representation: $A = R' R$ where $R'=L$
+\item And it is useful for calculating 
+the matrix inverse in a numerically stable way: $A^{-1} = (L^{-1})' L^{-1}
+= R^{-1} (R^{-1})'$
+\item The formula for calculating $L$ is as follows
+\end{itemize}
+\begin{align*}
+L_{ij} & = L_{jj}^{-1} \wrap{A_{ij} - \sum_{k=1}^{j-1} L_{ik} L_{jk}} 
+\where i>j \\
+L_{jj} & = \sqrt{A_{jj} - \sum_{k=1}^{j-1} L_{jk}^2} 
+\end{align*}
+See {\tt cholesky.R}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Linear regression with linear algebra}
+
+\begin{align*}
+y_i & = \beta_0 + {\bm{x}_i'}\bm{\beta_x}+ \epsilon_{i} \\ 
+\epsilon_{i} & ~ \N{0}{\sd^2} \where i=1, \dots, n \\
+X & = \wrap{\begin{array}{cc}
+1 & {\bm{x}_1'} \\ 
+\vdots & \vdots \\
+1 & {\bm{x}_n'} \end{array}} 
+& \beta  = \wrap{\begin{array}{c} \beta_0 \\ \beta_x \end{array}} \\
+\hat{\beta} & = (X'X)^{-1} X' y \\
+\widehat{\V{\hat{\beta}}} & = \hat{\sd}^2 (X'X)^{-1}
+\end{align*}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{HW: 2SLS with RcppEigen}
+\begin{itemize}
+\item In BateEdde13, there is a nice example of linear regression
+with matrix inversion via Cholesky decomposition
+\item see the RcppEigen source code {\tt lmEigen.h} and {\tt lmEigen.cpp}
+and its call at the bottom of {\tt nlsym.R} (commented out)
+\item We will adapt this code to perform 2SLS by creating a new function:
+{\tt TSLS}
+\item We can compare the results that we get from the {\tt tsls}
+function from the {\tt sem} package (also at the bottom of {\tt nlsym.R})
+\item What is the income multiplier for an additional year of education?
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,335 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{HW 3: Probability distributions}
+
+\begin{enumerate}
+\item[0.] Normal {\tt norm} Example:
+  $Z~\N{\mbox{mean}=10}{\mbox{sd}=25}, \P{Z<c}=0.025$: what is $c$?
+\item[1.] Beta {\tt beta} (the incomplete Beta function):
+  $Z~\Beta{\mbox{shape1}=10}{\mbox{shape2}=25}, \P{Z<c}=0.025,
+  \P{Z<d}=0.975$: what is $c$ and $d$?
+\item[2.] Gamma {\tt gamma} (the incomplete Gamma function):
+  $Z~\Gam{\mbox{shape}=10}{\mbox{rate}=25}, \P{Z<c}=0.025,
+  \P{Z<d}=0.975$: what is $c$ and $d$?
+\item[3.] F {\tt f}:
+  $Z~\F{\mbox{df1}=10}{\mbox{df2}=25}, \P{Z<c}=0.025, \P{Z<d}=0.975$:
+  what is $c$ and $d$?
+\item[4.] Poisson {\tt pois}:
+  $Z~\Poi{\mbox{lambda}=25}, \P{Z \le 15}=p$: what is $p$?
+\item[5.] Normal {\tt norm}: $Z~\N{\mbox{mean}=10}{\mbox{sd}=25}$\\
+  Generate 10000 random $Z$ and graphically compare the empirical CDF,
+  {\tt ecdf()}, with the true CDF.  And calculate $\sd^2$ by
+Monte Carlo integration to compare with the true value.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Matrices}
+Mathematically, a matrix is represented as follows.
+\begin{align*}
+A=\wrap{\begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots& \vdots & \ddots & \vdots \\
+a_{m1} & a_{m2} & \cdots & a_{mn} \\
+\end{array}}
+\end{align*}
+{R} is a column-major language, i.e., matrices are laid out
+in consecutive memory locations by traversing the columns:
+$\wrap{a_{11}, a_{21}, \., a_{12}, a_{22}, \.}$.  {R} is written in
+{C} and {Fortran} where {Fortran} is a column-major language as well.
+However, {C} and {C++} are row-major languages, i.e., matrices are
+laid out in consecutive memory locations by traversing the rows:
+$\wrap{a_{11}, a_{12}, \., a_{21}, a_{22}, \.}$.  So, if you have
+written an {R} function in {C}/{C++}, then pass it $A$ transpose
+rather than $A$ itself, i.e., {\tt t(A)} as {\tt t()} is the
+R transpose function.
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.7: Matrices (two-dimensional arrays)}
+
+\begin{itemize}
+\item {\tt A=matrix(DATA, nrow=n, ncol=p)} creates {\tt A$_{n\times p}$}\\
+{\tt DATA} goes down the columns filling in column-major order
+\item {\tt A=matrix(DATA, nrow=n, ncol=p, byrow=TRUE)}\\
+{\tt DATA} goes across the rows filling in row-major order\\
+but {\tt A$_{n\times p}$} is still a column-major matrix!
+\item {\tt diag(n)} creates an identity matrix {\tt n} by {\tt n}
+%\item {\tt state.x77} is a matrix 50 by 8
+%\item {\tt Matrix} package is one of the Recommended packages that
+%  comes with your R installation
+\item {\tt A \%*\% B} is matrix multiplication
+\item {\tt crossprod(A, B)} is the cross-product\\
+like {\tt t(A) \%*\% B} but more efficient
+\item {\tt crossprod(A)} is like {\tt t(A) \%*\% A}
+\item {\tt solve(A, b)} solves the equation {\tt b = A \%*\% x } for {\tt x}
+\item {\tt solve(A)} creates {\tt A$^{-1}$}, but matrix inversion can be unstable
+\item For example, when calculating {\tt b \%*\% A$^{-1}$ \%*\% b}, it is 
+more numerically stable as {\tt b \%*\% solve(A, b) }
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.4: The recycling rule for mixed vector and array
+  (or matrix) arithmetic} 
+
+The precise rule affecting element by element mixed calculations with
+vectors and arrays is somewhat quirky and hard to find in the
+references.
+\begin{itemize}
+\item The expression is scanned from left to right.
+\item Any short vector operands are extended by recycling their values
+  until they match the size of any other operands.
+\item As long as short vectors and arrays only are encountered, the
+  arrays must all have the same dim attribute or an error results.
+\item Any vector operand longer than a matrix or array operand
+  generates an error.
+\item If array structures are present and no error or coercion to
+  vector has been precipitated, the result is an array structure with
+  the common dim attribute of its array operands.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.4: The recycling rule for mixed vector and array
+  (or matrix) arithmetic} 
+Examples
+\begin{align*}
+A_{n\times p} - b_n & = A-B \where B=\wrap{b_n^1, \dots, b_n^p}_{n \times p} \\
+& \mbox{Recycling is what you likely intended} \\
+A_{n\times p} - b_p & = A-C %\where C=\wrap{b^1, \dots, b^n}_{n \times p} \\
+\mbox{\ difficult to demonstrate in general}\\
+& \mbox{so assume $n=4,\ p=3$ and\ } b=\wrap{b_1, b_2, b_3}\\
+& \mbox{which results in\ } C=\wrap{\begin{array}{ccc} 
+b_1 & b_2 & b_3 \\
+b_2 & b_3 & b_1 \\
+b_3 & b_1 & b_2 \\
+b_1 & b_2 & b_3
+\end{array}} \\
+& \mbox{\red{Recycling is NOT what you likely intended}} \\
+A^t_{p \times n} - b_p & = A^t- D \where D=\wrap{b_p^1, \dots, b_p^n}_{p \times n} \\
+& \mbox{Recycling is what you likely intended} \\
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 6: Lists}
+
+%{\tt $>$ Lst = list(husband="Fred", wife="Mary", no.children=3,\\
+%\qquad child.ages=c(4, 7, 9))}
+{\tt case = list(type="breast", ICDO="C50.3", stage="IIA",\\
+\qquad sex="F", side="L", birth=as.Date("1970/04/05"),\\
+\qquad diag=as.Date("2019/12/05"), \\
+\qquad surg=as.Date("2020/03/02"), \\
+\qquad T=list(P="T1a", size=0.45),\\
+\qquad N=list(P="N1", C="N0", surg="SLNB",\\
+\qquad positive=3, removed=7, max=0.25), M="M0")}
+\begin{itemize}
+\item A {\it list} is an object consisting of an ordered collection of
+  objects of singular or diverse types known as {\it components}
+\item Components are {\it numbered} and can always be referred to as such:
+{\tt case[[1]], case[[2]], case[[3]], \dots}
+\item Components of lists may also be {\it named}, and in this case
+  the component may be referred to either by giving the component name
+  or as a character string
+\item So, the first component can be referenced by
+{\tt case[[1]]} or {\tt case\$type} or {\tt case\$"type"}
+\item Or, rarely, as a list itself called a {\it sublist}: {\tt case[1]}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Comma separated values (CSV) files}
+
+\begin{itemize}
+\item CSV files are a standard that arose from Fortran data files
+evolving late-60s to mid-70s: roughly what we have today
+\item Sadly, subject matter experts (SME) LOVE Excel and CSVs\\ 
+(we tell them to stop, but they don't listen)
+\item So CSV files are the de facto standard for data exchange
+\item But CSVs from spreadsheets are \textcolor{red}{not type safe}\\
+ e.g., a numeric column can have text entries, etc.
+\item In the column for weights, they can type {\tt deceased} in a cell
+\item So the {\tt weight} column will be character instead of numeric
+\item Although, theoretically, they are trivial to import,\\
+the practice of SMEs will make your life difficult
+\item There does not appear to be a complete solution to this problem
+with R (other than manual editing)
+\item SAS has a few tricks that might help as we will see later
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Section 8: Probability distributions }
+
+\begin{itemize}
+\item Consider a discrete random variable (RV): $Y \in \{a, \ldots, b\} $
+\item Probability density function (PDF):
+  $f(c) = \P{Y=c}\I{c \in \{a, \ldots, b\}} \in [0, 1]$
+\item Cumulative density function (CDF): $F(c) = \P{Y\le c}= 
+\sum_{y \in \{a, \ldots, b\} \cap y\le c} f(y) \in [0, 1]$
+\item $\P{c<Y \le d}=\P{Y \le d}-\P{Y \le c}=F(d)-F(c)$
+\item Consider a continuous RV: $Y \in (a, b)$
+\item PDF: $f(c)\I{c \in (a, b)} \ge 0 $
+\item CDF: $F(c) = %\P{Y\le c}= 
+\P{Y < c}=
+\I{a < c} \int_{a}^{\min(b,c)} f(y) \mathrm{d} y \in [0, 1]$
+\item $\P{c<Y < d}=\P{Y < d}-\P{Y < c}=F(d)-F(c)$
+\item For either a discrete or a continuous RV $Y$\\
+Inverse CDF: $p=F(c) \Rightarrow c = F^{-1}(p) = F^{-1}(F(c))$
+\end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Pseudo-random numbers and Monte Carlo integration }
+
+\begin{itemize}
+\item CDFs can be used for many integral/summation calculations
+\item The Expectation of a function of a random variable, $g(Y)$\\ 
+Discrete RV: $\E{g(Y)} = \sum_{y \in \{a, \ldots, b\}} g(y) f(y)$\\ 
+Continuous RV: $\E{g(Y)} = \int_{a}^{b} g(y) f(y) \mathrm{d} y$
+\item Mean $=\E{Y}=\mu$, i.e., $g(Y)=Y$, the identity function
+\item Variance $=\E{Y^2}-\E{Y}^2=\sd^2$
+\item For some $g(Y)$ functions, there is no closed form solution
+\item Monte Carlo Integration: 
+generate a {\it large} sample of pseudo-random numbers $Y_1, \dots, Y_N$
+and approximate \\
+$\E{g(Y)} \approx N^{-1}\sum_{i=1}^N g(Y_i)$ 
+\end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Section 8: Probability distributions }
+
+\begin{itemize}
+\item The PDF R function is {\tt dxxx} for density
+\item The CDF R function is {\tt pxxx} for probability
+\item The Inverse CDF R function is {\tt qxxx} for quantiles
+\item The Random Number R function is {\tt rxxx} for random\\
+(paired with \textcolor{red}{\tt set.seed} for reproducibility)
+\item {\tt xxx} is one of the following suffixes:\\
+{\tt beta, binom, cauchy, chisq, exp, f, gamma, geom, hyper, lnorm, logis, nbinom, norm, pois, signrank, t, unif, weibull, wilcox}
+\item These functions mean that we don't need all of those tables at
+  the end of our textbooks
+\item We can calculate probabilities,
+  summations/integrals, etc.\ for these distributions with R
+ \end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Probability and discrete RVs: sports examples}
+\begin{itemize}
+\item Coach K and the Duke Blue Devils college basketball team
+have been to 13 NCAA Final Fours
+\item During these appearances, they have won 5 NCAA Championships
+\item What is the probability that they would have won less than 5?
+\item Aaron Rodgers and the Green Bay Packers football team are\\ 
+1 for 4 in the NFC Championship Playoff Game?
+\item What is the probability that they would have won more than 1 game?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 8.3: Hypothesis testing}
+
+\begin{itemize}
+\item This course is a co-requisite with\\
+ Statistical Models and Methods I
+\item The intent is not to teach you statistics, but to be prepared
+\item For example, what hypothesis tests are available?
+\item Here's a list of those in the {\tt stats} package
+\item {\tt $>$ ls("package:stats", pattern="test\$")}
+ \end{itemize}
+
+\end{frame} 
+
+\end{document}

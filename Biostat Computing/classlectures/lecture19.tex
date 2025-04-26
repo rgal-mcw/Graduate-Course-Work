@@ -1,0 +1,413 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item 
+\textcolor{blue}{SAS 9.3: \url{https://support.sas.com/en/documentation/documentation-for-SAS-93-and-earlier.html}}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Cheese cluster SAS program recovery system}
+\begin{itemize}
+\item Since SAS programs are run, debugged, re-run, etc., it is very
+  easy to make a programming error (whether syntactically or
+  semantically) between runs or even accidentally to delete your
+  program entirely (these dangers seem less pronounced for R
+  programming although they do exist to some extent)
+\item On the server, all of our data files are backed up nightly
+\item However, if you create a new SAS program today and make an error,
+  then it won't be backed up until later so you will not be able to
+  recover it since a backup copy does not yet exist
+\item Also, even if it is backed up, it may take several hours to
+get the sysadmin to recover your SAS program which might be too late
+if you have an impending deadline
+\item Therefore, we have an automated system that 
+\textcolor{blue}{saves the last 9 versions of
+your SAS program, your {\tt .log}, {\tt .lst}, etc.}
+\item There is a hidden sub-directory {\tt .USERNAME} where
+these are saved \textcolor{red}{triggered by each run
+of the SAS program}
+\item You can see how these are created by shell scripts: {\tt
+    /usr/local/bin} directory with 
+\textcolor{blue}{\tt sas} and {\tt backup.ksh}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+\textcolor{blue}{SG}PROCs }
+\begin{itemize}
+\item The legacy \textcolor{red}{G}PROCs remain for old code and some edge cases\\
+we will not be discussing these further
+\item The new \textcolor{blue}{SG}PROCs largely cover the same
+  territory and have many advantages in ease-of-use and superior
+  capabilities
+\item There are two \textcolor{blue}{SG}PROCs in particular
+\item \textcolor{blue}{SG}PLOT will create many of the graphical displays
+that we are accustomed to: scatter plots, bar charts, histograms, box plots,
+heatmaps, time series and more
+\item \textcolor{blue}{SG}PANEL has many of the same capabilities with 
+the added ability to create panels for multiple displays on the same page
+\item Each of these have many opportunities for customization within the
+\textcolor{blue}{SG}PROCs themselves
+\item In addition, there is an \textcolor{blue}{SG}ANNOTATE facility
+so that you can overlay text, points, lines, etc.
+\item We will need to use the latest documentation for SAS 9.4 since
+the \textcolor{blue}{SG}PROCs are still developing (sometime buggy)
+\item SAS has recently made the 9.4 documentation easier to navigate
+(9.4 documentation is now on par with 9.3 or earlier)
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+\textcolor{blue}{SG}PROCs }
+\begin{itemize}
+\item In {\tt $~$/autoexec.sas}, we have this line commented out\\
+{\tt ods graphics on / reset imagename="\&fnroot" imagefmt=pdf;
+\textcolor{red}{footnote;}}
+\item You place this line before your \textcolor{blue}{SG}PROC
+to create\\ Adobe Portable Document Format graphics stream files
+\item if your SAS program is {\tt NAME.sas}, then the first page of
+your plot is {\tt NAME.pdf}, the second page is {\tt NAME1.pdf}, etc.\\
+since the {\tt \&fnroot} macro variable resolves to {\tt NAME}\\
+(created by the {\tt \%\_fn;} macro called in {\tt $~$/autoexec.sas})\\
+and turn off the footnote it creates which is ugly for graphics
+\item For publication/presentations, it is helpful to have each page
+  in a separate file.  But, for programming and debugging, it is OFTEN
+  easier to have them all in one file.
+\item So place the line {\tt \%\_pdfjam;} after the \textcolor{blue}{SG}PROC
+which will utilize the {\tt pdfjam} utility (from TeX Live) to create
+a single PDF: {\tt NAME.pdf} (see the man page: {\tt man pdfjam})
+\item Press {\tt F12} to view it
+\item Once you are happy, then comment it out: {\tt \%*\_pdfjam;}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT }
+\begin{itemize}
+\item You can get multiple plots on one page:
+\textcolor{red}{RED} are optional\\
+{\tt %\textcolor{red}{ods trace on;}\\
+proc sgplot data=NAME;\\
+STATEMENT1 ...;\\
+\textcolor{red}{STATEMENT2 ...;}\\
+$\vdots$\\
+\textcolor{red}{STATEMENTn ...;}\\
+run;}\\
+where {\tt STATEMENT1 ...\ STATEMENTn} are {\it compatible}
+\item Similarly, there is a {\tt \textcolor{blue}{group=VAR}}
+where \textcolor{blue}{BLUE} is optional\\
+{\tt proc sgplot data=NAME;\\
+STATEMENT1 ... / \textcolor{blue}{group=VAR1};\\
+\textcolor{red}{STATEMENT2 ... / \textcolor{blue}{group=VAR2};}\\
+$\vdots$\\
+\textcolor{red}{STATEMENTn ... / \textcolor{blue}{group=VARn};}\\
+run;}
+\item You can mix and match {\tt \textcolor{blue}{STATEMENT}s}
+with and without a {\tt \textcolor{blue}{group}} option
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT }
+\begin{itemize}
+\item Two {\tt STATEMENTs} are compatible if they are the same
+\item The {\tt STATEMENTs} that produce graphical output that 
+we will consider are {\tt HISTOGRAM},  {\tt DENSITY}, {\tt VBOX/HBOX},
+{\tt HEATMAP}, {\tt SERIES} and {\tt SCATTER} (N.B. there
+are others: see the docs)
+\item There are compatible statments that are NOT the same\\
+  such as {\tt DROPLINE}, {\tt INSET}, {\tt KEYLEGEND/LEGENDITEM},
+  {\tt REFLINE}, {\tt STYLEATTRS}, {\tt SYMBOLCHAR},
+{\tt XAXIS} and {\tt YAXIS}
+\item As well as the usual SAS statements like
+{\tt FOOTNOTEn/TITLEn}, {\tt FORMAT}, {\tt LABEL} and {\tt WHERE}
+\item And ODS statements like those about output data sets\\
+{\tt \textcolor{red}{ods trace on;}\\
+\textcolor{blue}{ods output NAME=NEW;}\\
+proc sgplot data=OLD;\\
+STATEMENT ...;\\
+run;\\
+\textcolor{red}{ods trace off;}}\\
+VERY useful to understand what is being displayed
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt HISTOGRAM}}
+\begin{itemize}
+\item \textcolor{red}{RED} and \textcolor{blue}{BLUE} are optional\\
+{\tt proc sgplot data=NAME;\\
+histogram X1 ...  / \textcolor{blue}{group=Y1};\\
+\textcolor{red}{histogram X2 ... / \textcolor{blue}{group=Y2};}\\
+$\vdots$\\
+\textcolor{red}{histogram Xn ... / \textcolor{blue}{group=Yn};}\\
+run;}
+\item The default is \textcolor{blue}{\tt scale=percent}
+which is usually what you want, but not always
+\item The alternative is \textcolor{blue}{\tt scale=count}\\
+see {\tt NTDB/sas/histogram.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt DENSITY}}
+\begin{itemize}
+\item BEWARE: The default is {\tt type=normal} for Normality\\
+THIS IS EXTREMELY DANGEROUS! NEVER USE THE DEFAULT
+  EVEN IF YOU THINK NORMALITY MAKES SENSE.  LET THE DATA BE YOUR GUIDE.\\
+USE THE OPTION {\tt type=kernel} 
+\item \textcolor{red}{RED} and \textcolor{blue}{BLUE} are optional\\
+{\tt proc sgplot data=NAME;\\
+density X1  / type=kernel ... \textcolor{blue}{GROUP=Y1};\\
+\textcolor{red}{density X2 / type=kernel ... \textcolor{blue}{GROUP=Y2};}\\
+$\vdots$\\
+\textcolor{red}{density Xn / type=kernel ... \textcolor{blue}{GROUP=Yn};}\\
+run;}
+\item see {\tt NTDB/sas/density.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt VBOX}}
+\begin{itemize}
+\item Box-plots are a standard way to summarize continuous outcomes
+often for two or more discrete categories
+\item You can overlay box-plots, but this is usually not
+visually appealing
+\item The {\tt VBOX} statement creates vertical box-plots
+\item There is also {\tt HBOX} for horizontal box-plots
+\item \textcolor{red}{RED} are optional\\
+{\tt proc sgplot data=NAME;\\
+vbox VAR1 \textcolor{red}{/ group=VAR2};\\
+run;}
+\item Let's see the documentation to see how a box-plot is defined
+\item And {\tt NTDB/sas/vbox.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt HEATMAP}}
+\begin{itemize}
+\item A heat-map is a 2D plot of a 3D relationship with variables,\\
+  {\tt X} and {\tt Y}, where the color plotted represents the height
+  of the joint density in an {\tt NXBINS $\times$ NYBINS} grid of cells
+\item Generally, the two variables are continuous
+\item {\tt HEATMAP} supports categorical variables BADLY with options\\  
+{\tt discretex} for {\tt X} and/or {\tt discretey} for {\tt Y}\\
+the support is a little buggy at the moment
+\item Although you can overlay multiple heat-maps, typically that
+  will NOT be a good idea\\
+{\tt proc sgplot data=NAME;\\
+heatmap X=VAR1 Y=VAR2 \textcolor{red}{/ nxbins=N nybins=M};\\
+run;}
+\item GO TO SGANNOTATE AND RETURN HERE
+\item See {\tt NTDB/sas/heatmap.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt SERIES}}
+\begin{itemize}
+\item \textcolor{red}{RED} and \textcolor{blue}{BLUE} are optional\\
+{\tt proc sgplot data=NAME;\\
+series X=VARX Y=VARY  / ... \textcolor{blue}{GROUP=VAR1};\\
+\textcolor{red}{series X=VARX Y=VARY / ... \textcolor{blue}{GROUP=VAR2};}\\
+$\vdots$\\
+\textcolor{red}{series X=VARX Y=VARY / ... \textcolor{blue}{GROUP=VARn};}\\
+run;}
+\item see {\tt EHR/sas/series.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt SCATTER}}
+\begin{itemize}
+\item \textcolor{red}{RED} and \textcolor{blue}{BLUE} are optional\\
+{\tt proc sgplot data=NAME;\\
+scatter X=VARX Y=VARY  / ... \textcolor{blue}{GROUP=VAR1};\\
+\textcolor{red}{scatter X=VARX Y=VARY / ... \textcolor{blue}{GROUP=VAR2};}\\
+$\vdots$\\
+\textcolor{red}{scatter X=VARX Y=VARY / ... \textcolor{blue}{GROUP=VARn};}\\
+run;}
+\item see {\tt EHR/sas/scatter.sas}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+\textcolor{blue}{SG}ANNOTATE {\tt \%sganno} macro START HERE }
+\begin{itemize}
+\item The ANNOTATE facility is to further customize graphics 
+stream files with text, lines, etc.
+\item There are two versions
+\item The legacy \textcolor{red}{G}PROC ANNOTATE facility
+\item And the new \textcolor{blue}{SG}ANNOTATE facility
+\item In {\tt $~$/autoexec.sas}, we call two ANNOTATE macros:
+{\tt \%annomac;} to load the legacy \textcolor{red}{G}PROC ANNOTATE
+facility which we will not discuss further
+\item And {\tt \%sganno;} to load the new \textcolor{blue}{SG}ANNOTATE
+  facility which we will describe
+\item Each of these macros start with {\tt \textcolor{blue}{\%SG}name}
+\item The most common arguments are\\
+ {\tt x1=VARX} for the $x$-axis\\
+ {\tt y1=VARY} for the $y$-axis\\
+and {\tt drawspace="DATAVALUE"} for drawing in the {\it data} space
+\item Typically, the most important arguments for a macro are at 
+the top of the help and the rest have reasonable defaults
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+\textcolor{blue}{SG}ANNOTATE {\tt \%sganno} macro }
+\begin{itemize}
+\item So in your {\tt .log} you will see the following near the top
+\end{itemize}
+\begin{verbatim}
+ Following macros are available 
+     %SGANNO_HELP 
+     %SGARROW 
+     %SGIMAGE 
+     %SGLINE 
+     %SGOVAL 
+     %SGPOLYCONT 
+     %SGPOLYGON 
+     %SGPOLYLINE 
+     %SGRECTANGLE 
+     %SGTEXT 
+     %SGTEXTCONT 
+Enter %SGANNO_HELP(macroname) for details 
+   or %SGANNO_HELP(ALL) for details on all SGANNO macros.
+\end{verbatim}
+See {\tt PTB/ecgleadi.sas}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PANEL}
+\begin{itemize}
+\item PROC \textcolor{blue}{SG}PANEL follows roughly the same syntax
+as\\ PROC \textcolor{blue}{SG}PLOT
+\item But, it allows you to create {\it panels} of your data
+\item Use the {\tt PANELBY} statement\\
+typically with the {\tt ONEPANEL} option to place
+them on one page \\
+and the {\tt COLUMNS=m} option for the number of panel columns
+{\tt 
+proc sgpanel data=NAME;\\
+PANELBY VAR1 ...\ VARn / onepanel columns=m;\\ 
+STATEMENT1 ...;\\
+\textcolor{red}{STATEMENT2 ...;}\\
+$\vdots$\\
+\textcolor{red}{STATEMENTn ...;}\\
+run;}\\
+\end{itemize}
+See {\tt PTB/ecgpanel.sas}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{SAS \textcolor{blue}{S}tatistical \textcolor{blue}{G}raphics:
+PROC \textcolor{blue}{SG}PLOT {\tt STYLEATTRS}}
+\begin{itemize}
+\item Controls the colors of the lines/markers\\
+{\tt styleattrs\\ datacontrastcolors=(black darkgray lightgray);}
+\item Controls the colors of the {\it fill} pattern\\
+{\tt styleattrs\\ datacolors=(black darkgray lightgray);}
+\item You can see the SAS colors and their associated names
+by running the following\\ (see {\tt /data/shared/04224/colors.sas}) 
+\end{itemize}
+\begin{verbatim}
+proc registry list startat="COLORNAMES";
+run;
+\end{verbatim}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,704 @@
+\documentclass[11pt,pdftex,dvipsnames,usenames,helvetica]{beamer}
+\setbeameroption{show notes}
+\usepackage[round]{natbib}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.ps,.eps,.pdf,.jpg,.png}
+\usefonttheme[onlymath]{serif}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usetheme{default}
+\usecolortheme{dove}
+
+\usepackage{cancel}
+\usepackage{tikz}
+\usepackage[english]{babel}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{pgf} %portable graphics format
+\usepackage[autobold]{statex2}
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \setbeamertemplate{navigation symbols}{}
+  \usefonttheme[onlysmall]{structurebold}
+  %\usefonttheme{structurebold}
+}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+  \setbeamertemplate{navigation symbols}{}
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\newcommand*{\red}[1]{\textcolor{red}{#1}}
+\newcommand*{\blue}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+\boldmath
+% 0. Intro
+
+\begin{frame}
+\frametitle{Graduate School Class Reminders}
+
+\begin{itemize}
+% \item Keep your facial covering on, including over your nose
+\item Maintain six feet of distancing
+\item Please sit in the same chair each class time
+\item Observe entry/exit doors as marked
+\item Use hand sanitizer when you enter/exit the classroom
+\item Use a disinfectant wipe/spray to wipe down your learning space
+  before and after class
+\item Media Services: 414 955-4357 option 2
+%\item START RECORDING
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Documentation on the web}
+
+\begin{itemize}
+\item CRAN: \url{http://cran.r-project.org}
+\item R manuals: \url{https://cran.r-project.org/manuals.html}
+\item SAS: \url{http://support.sas.com/documentation}
+\item Step-by-Step Programming with Base SAS 9.4 (SbS): \\
+\url{https://documentation.sas.com/api/docsets/basess/9.4/content/basess.pdf}
+\item SAS 9.4 Programmer s Guide: Essentials (PGE): \\
+\url{https://documentation.sas.com/api/docsets/lepg/9.4/content/lepg.pdf}
+\item Wiki: \url{https://wiki.biostat.mcw.edu} 
+\textcolor{red}{(MCW/VPN)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{HW 2: ISO 8601 and the Proleptic Gregorian Calendar}
+\begin{itemize}
+\item ISO 8601 dictates that the Proleptic Gregorian Calendar be used
+for dates prior to the start of the Gregorian Calendar
+\item Is the R {\tt Date} class ISO 8601 compliant?
+\item If not, then at what date does it diverge?
+\item Unix/R define 1970-01-01 as date 0 counting for-/back-wards
+\item The Julian Period covers all of written human history
+starting on Monday 4713BCE-01-01 which is \\
+ISO 8601 date -2,440,588
+\item What Year-Month-Day is this in the corresponding\\
+Proleptic Gregorian Calendar?
+\item Hints: do this without {\tt for} loops\\
+the R interpreter will take a long time for 2.4M iterations\\
+%i.e., multiply the amount of time for each operation by 2.4M\\
+using {\tt data.frames} and vectorization this is pretty fast\\
+for example, in {\tt julian.R} see my implementation of the 
+Proleptic Julian Calendar
+\item Use two {\tt data.frames}: one for each Calendar\\
+and combine them (but you can't use {\tt merge} for 2.4M records)
+%\item But don't try to {\tt merge} two 2M record {\tt data.frame}
+\item Use {\tt sprintf} to concatenate character vectors
+%\item More slides follow on ISO 8601 and other details
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Calendars, dates and ISO 8601: see Wikipedia}
+\begin{itemize}
+\item The {\tt Date} class represents dates
+%\item Much of this information is from Wikipedia
+\item The Egyptian Calendar had 365 days/year circa 3000BCE
+\item Leap days were added haphazardly as seen fit
+\item Emperor Julius Caesar solidified the calendar
+\item The Julian Calendar created a leap day once every 
+4 years (with some initial issues and corresponding corrections)
+\item The first leap year of the Julian Calendar (as planned) 41BCE
+\item The first day of the Julian Calendar is 45BCE-01-01 
+\item The last day of the Julian Calendar is 1582-10-4 (Thursday)
+\item The first day of the Gregorian Calendar is 1582-10-15 (Friday)
+\item In 1582, dates 10-5 through 10-14 didn't occur
+in Roman Catholic countries (it is named after Pope Gregory XIII)
+\item This change returned the equinoxes to the same days as
+the first year of the Julian Calendar
+\item Gregorian Calendar Leap Year Rule\\
+Every year that is divisible by four is a leap year\\
+Except for years that are divisible by 100\\ 
+Unless they are divisible by 400, e.g., Y2K
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{The Julian Period, Proleptic Calendars and ISO 8601}
+\begin{itemize}
+\item Proleptic Calendars adopt the rules of a Calendar\\
+ and they run backwards in time before that Calendar starts
+\item The Julian Period starts with Proleptic Julian Date 4713BCE-01-01
+and covers all known recorded human history
+\item ISO 8601 dictates a Proleptic Gregorian Calendar
+\item The Julian and Gregorian Calendars have no year zero
+\item \dots, 2BCE, 1BCE, 1CE, 2CE, \dots
+\item But ISO 8601 dicates the following definition of year
+ %(note CE is suppressed)
+%\item \dots, (year=-1, 2BCE), (year=0, 1BCE), (year=1, 1), \dots
+\end{itemize}
+\begin{tabular}{lrl}
+Year & ISO 8601 & Julian \\
+& -4712         & 4713BCE \\
+& \vdots        & \vdots \\
+& -1            & 2BCE \\
+& 0             & 1BCE \\
+& 1             & 1CE \\
+& \vdots        & \vdots
+\end{tabular}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{A brief overview of R}
+\begin{itemize}
+\item Interpreted language (very slow as opposed to compiled)
+\item Interpreter written in C and Fortran
+\item Considered a multi-paradigm language
+\item For example, it is considered to be object-oriented and
+  functional (as well as other paradigms)
+\item Object-oriented and vectorized for user-friendliness: vectors
+  and matrices are natural choices for {\it objects}
+\item ``Everything is an object''
+\item Dynamically Typed (as opposed to Statically Typed)\\
+implicitly typed by first usage\\
+rather than explicitly by definition/declaration 
+\item Provides multi-threading by {\it forking} \red{EXCEPT on Windows}\\
+Windows does not have this capability so no multi-threading\\
+An odd choice since MS was an early licensee of UNIX\\
+Pioneering the port of UNIX to many CPUs as XENIX\\
+And MS-DOS was a ``dumbed-down'' Unix-like system\\
+If GNU Linux can clone forking, then why not MS?
+\end{itemize}
+\end{frame}
+
+\begin{frame} 
+\frametitle{A brief overview of R}
+\begin{itemize}
+\item Much R functionality is written in R itself\\
+with calls to compiled C/C++/Fortran as needed (very fast)
+\item Mainly, these are R {\it add-on} packages as explained in\\
+ the R FAQ;
+see section 5.1 in \url{https://cran.r-project.org/doc/FAQ/R-FAQ.html}
+\item There are two groups of packages distributed with R
+\item The 14 so-called {\it base} packages: \textcolor{blue}{base},
+  compiler, datasets, grDevices, graphics, grid, methods,
+  \textcolor{red}{parallel}, splines, stats, stats4, tcltk, tools and
+  utils\\
+{\tt $>$ installed.packages(priority="base")}\\
+%% VERY SLOW IF LOTS OF PACKAGES ARE INSTALLED
+\item The 15 so-called {\it recommended} packages: KernSmooth, MASS,
+  Matrix, boot, class, cluster, codetools, foreign,
+  \textcolor{red}{lattice}, mgcv, nlme, nnet, rpart, spatial and
+  survival\\
+{\tt $>$ installed.packages(priority="recommended")}
+\item Comprehensive R Archive Network: 18558 packages
+\url{https://cran.r-project.org/web/packages/index.html}\\
+Task Views \url{https://cran.r-project.org/web/views}
+\end{itemize}
+\end{frame}
+
+\begin{frame} 
+\frametitle{Introduction to R by Venables and Smith: R-intro}
+
+\begin{itemize}
+\item Without emacs, to launch R: {\tt \$ module load R/4.0.4; R}  
+\item With emacs, launch the latest version of R: {\tt M-x R-4.0.4}\\
+or simply {\tt M-x R}
+\item The R quit command: {\tt q()}
+\item Getting help: {\tt $>$ ?q} or {\tt $>$ help("q")}
+\item In the {\tt *R:$~$*} at the {\tt $>$}, type {\tt ??} for 
+\textcolor{red}{help on help}
+\item Almost everything is an object (except keywords)
+\item To see the definition of {\tt q}, type {\tt $>$ q}
+\item To search R help and installed packages help\\
+ type {\tt $>$ help.start()}\\
+ VERY SLOW IF LOTS OF PACKAGES ARE INSTALLED
+\item Double quotes vs.\ single quotes: the docs
+shows double quotes in most places, but single quotes seem to work fine
+and they are easier to type: I will try to use double in my notes
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Section 1: Storing and re-loading objects}
+
+\begin{itemize}
+\item Names contain alphanumeric characters, underscore or period
+\item If they start with period, the second character must be a letter
+\item A case-sensitive language, i.e., distinct variables {\tt a} and {\tt A}
+\item The {\tt source} function is convenient for loading objects like
+data, functions, etc.
+\item {\tt source("lecture2.R")}
+\item However, re-creating some objects (like large data sets or
+  complex analyses) might be very time-consuming
+\item DON'T DO THIS: R-intro describes saving R objects in {\tt
+    .RData} which is automatically re-loaded when you re-launch R in
+  that directory: IT IS TOO EASY TO FORGET/MISUSE
+\item Save the objects that you want to keep and re-load as needed
+\item {\tt saveRDS(object, "object.rds")}
+\item {\tt object = readRDS("object.rds")}
+\item R loads all objects into memory so be cognizant of their size
+\item {\tt object.size(object)}
+\item {\tt rm(object); gc()}
+\item {\tt ?gc}
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Section 1: View-/edit-ing objects}
+
+\begin{itemize}
+\item You can view an object just by typing its name at the
+prompt: {\tt $>$ object}
+\item However, for large objects, this is not very user-friendly
+\item For large objects, it might be better to view/edit them
+\item If you just want to view (and NOT edit):\\
+%{\tt $>$ write(object, "object.R")}\\
+{\tt $>$ sink("object.Rout"); object; sink()}\\
+{\tt C-x C-f object.Rout}
+\item To edit, start an {\tt emacsclient} by {\tt M-x server-start}
+\item {\tt $>$ sink("/dev/null") \#\# shut off the R console}
+\item {\tt $>$ ls() \#\# notice that it produces NO output}
+\item {\tt $>$ edit(object, "object.R")}
+\item When you are done: \textcolor{red}{\tt C-x \#}
+\item {\tt $>$ sink() \#\# restore the R console}
+\item {\tt $>$ ls() \#\# now produces output as usual}
+\item N.B. the file {\tt object.R} remains for your viewing
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Section 2: R is naturally vectorized}
+
+\begin{itemize}
+\item All {\tt atomic} types are vectors of length zero or more:\\
+numeric, logical, character, complex and raw
+\item Roughly in that order of importance
+\item {\tt length} function returns their current length
+\item Vectors can easily expand by allocatting beyond it
+\item {\tt $>$ x = 1} creates a vector of length 1
+\item {\tt $>$ (x = 1)} parentheses echo assignment values
+\item Like {\tt  $>$ x = 1; x}
+\item Or to echo any expression {\tt $>$ 1/x}
+\item {\tt  $>$ x[2]=0} expands to length of 2
+\item {\tt $>$ x = c(10.4, 5.6, 3.1, 6.4, 21.7)} creates a vector
+\item {\tt $>$ ?c}
+\item see {\tt lecture3.R}
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Section 2.3: Sequences}
+
+\begin{itemize}
+\item Integer sequences: {\tt 1:30} same as {\tt c(1, 2, \dots, 29, 30)}
+\item General sequences: {\tt seq(-5, 5, by=0.2)} same as \\
+{\tt c(-5.0, -4.8, -4.6, \dots, 4.6, 4.8, 5.0)}
+\item See {\tt $>$ ?seq} for all of the possibilities
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 2.4: Logical vectors}
+
+\begin{itemize}
+\item Three possible values: \blue{TRUE}, \red{FALSE} and NA (BEWARE!)
+\item The comparison operators: {\tt $<$, $<$=, $>$, $>$=, ==, !=}
+\item Two equal signs for equality like C
+\item Combining expressions with {\tt |, ||, \&, \&\&}
+\item N.B. the difference between ORs {\tt |} and {\tt ||}\\
+and the difference between ANDs {\tt \&} and {\tt \&\&}
+\item {\tt ||} and {\tt \&\&} SHOULD ONLY BE USED WITH SCALARS\\
+they stop evaluating once the result is known\\
+so very useful for conditional expressions\\
+{\tt FALSE || \textcolor{blue}{TRUE} || FALSE}\\
+{\tt TRUE \&\& \textcolor{red}{FALSE} \&\& TRUE}\\
+\item {\tt |} and {\tt \&} are for vector operations 
+(similar to addition/etc.)
+\item Functions that return a scalar from vectors: {\tt any} and {\tt all}
+\item {\tt TRUE} can be coerced to 1 and {\tt FALSE} can be coerced to 0\\
+% \red{BEWARE: this can be dangerous for indices\\
+% consider {\tt a = (x<6)}\\
+% {\tt x[a] = c(5.6, 3.1)} uncoerced and {\tt x[1]=10.4} coerced}\\
+% \blue{Or make the right coercion: {\tt a = which(x<6)}}
+\item see {\tt lecture3.R}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 2.6: Character vectors}
+
+\begin{itemize}
+\item Working with character strings is NOT one of R's strengths
+\item But this is true of most languages that statistician's use
+\item The focus of statistics is largely on numerical computing
+\item Many functions inherited from the AWK language\\
+(mainly New AWK or NAWK) from the UNIX family\\
+(cloned by the GNU as GAWK)
+\item For example, see {\tt sub}, {\tt gsub} and {\tt substr}
+\item Three functions commonly used (NOT inherited from AWK):\\ 
+{\tt paste0}, {\tt paste}, \textcolor{red}{\tt nchar}
+and \textcolor{blue}{\tt sprintf}
+\item see {\tt lecture3.R}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 2.7: Vector indices}
+
+\begin{itemize}
+\item Integer indices: {\tt x[1:3]} returns the first three items
+\item If there are fewer, then returns {\tt NA}
+\item {\tt x[0]} returns nothing
+\item {\tt x[-1]} returns everything EXCEPT {\tt x[1]} 
+\item Logical indices: {\tt x[!is.na(x)]}
+\item BEWARE: due to coercion of complex expressions you can
+  accidentally request TRUE as index 1 and FALSE as index 0 
+(which is nothing): can be very difficult to debug because
+it happens without warning
+\item You can protect yourself by enclosing all logical index
+expressions within {\tt which} function. See {\tt ?which}
+\item {\tt x[which(!is.na(x))]}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 3: Object attributes}
+
+\begin{itemize}
+\item All objects have a {\it mode}: {\tt $>$ mode(x)}
+\item But mainly of interest for atomic vectors
+\item Some objects have a {\it class}: {\tt $>$ class(x)}
+\item A capable function for object structure: {\tt $>$ str(x)}
+\item {\tt as.} functions for manual coercion between types
+\item {\tt $>$ as.integer(x)}
+\item {\tt $>$ as.character(x)}
+\item All of an object's attributes, if any, can be listed:
+{\tt attributes(x)}
+\item They can be extracted: {\tt attr(x, "names")}
+\item And set: {\tt attr(x, "names")=letters[1:5]}
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Appendices}
+
+\begin{itemize}
+\item Appendix A lists a lot of interesting functions that we will learn about
+\item But, {\tt attach} is generally frowned upon today
+\item A short version of the help provided in Appendix B.1 \\
+%(R from Unix command line) 
+is generated by {\tt \$ R --help}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame} 
+\frametitle{Appendix B.4: Scripting with R}
+
+\begin{itemize}
+\item It is not about ``Scripting'' per se
+\item Rather, asynchronous/background/batch R jobs\\
+ i.e., NOT interactive
+\item It does provide useful information (which is why it is assigned)
+\item Particularly, the function {\tt commandArgs} and {\tt stdin} discussion
+\item Generally, I do something like the following 
+\item the standard Unix way of doing things with re-direction\\
+building on what is shown in Appendix B.1
+\item {\tt stdin} is comming from {\tt trees.R}
+\item {\tt stdout} and {\tt stderr} are going to {\tt trees.Rout}
+\end{itemize}
+
+{ \tt nohup R --no-save $<$ trees.R $>$\& trees.Rout \&}
+\end{frame}
+\end{document}
+
+\begin{frame}
+\frametitle{Matrices}
+Mathematically, a matrix is represented as follows.
+\begin{align*}
+A=\wrap{\begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots& \vdots & \ddots & \vdots \\
+a_{m1} & a_{m2} & \cdots & a_{mn} \\
+\end{array}}
+\end{align*}
+{R} is a column-major language, i.e., matrices are laid out
+in consecutive memory locations by traversing the columns:
+$\wrap{a_{11}, a_{21}, \., a_{12}, a_{22}, \.}$.  {R} is written in
+{C} and {Fortran} where {Fortran} is a column-major language as well.
+However, {C} and {C++} are row-major languages, i.e., matrices are
+laid out in consecutive memory locations by traversing the rows:
+$\wrap{a_{11}, a_{12}, \., a_{21}, a_{22}, \.}$.  So, if you have
+written an {R} function in {C}/{C++}, then pass it $A$ transpose
+rather than $A$ itself, i.e., {\tt t(A)} as {\tt t()} is the
+R transpose function.
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.7: Matrices (two-dimensional arrays)}
+
+\begin{itemize}
+\item {\tt A=matrix(DATA, nrow=n, ncol=p)} creates {\tt A$_{n\times p}$}\\
+{\tt DATA} goes down the columns filling in column-major order
+\item {\tt A=matrix(DATA, nrow=n, ncol=p, byrow=TRUE)}\\
+{\tt DATA} goes across the rows filling in row-major order\\
+but {\tt A$_{n\times p}$} is still a column-major matrix!
+\item {\tt diag(n)} creates an identity matrix {\tt n} by {\tt n}
+%\item {\tt state.x77} is a matrix 50 by 8
+%\item {\tt Matrix} package is one of the Recommended packages that
+%  comes with your R installation
+\item {\tt A \%*\% B} is matrix multiplication
+\item {\tt crossprod(A, B)} is the cross-product\\
+like {\tt t(A) \%*\% B} but more efficient
+\item {\tt crossprod(A)} is like {\tt t(A) \%*\% A}
+\item {\tt solve(A, b)} solves the equation {\tt b = A \%*\% x } for {\tt x}
+\item {\tt solve(A)} creates {\tt A$^{-1}$}, but matrix inversion can be unstable
+\item For example, when calculating {\tt b \%*\% A$^{-1}$ \%*\% b}, it is 
+more numerically stable as {\tt b \%*\% solve(A, b) }
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.4: The recycling rule for mixed vector and array
+  (or matrix) arithmetic} 
+
+The precise rule affecting element by element mixed calculations with
+vectors and arrays is somewhat quirky and hard to find in the
+references.
+\begin{itemize}
+\item The expression is scanned from left to right.
+\item Any short vector operands are extended by recycling their values
+  until they match the size of any other operands.
+\item As long as short vectors and arrays only are encountered, the
+  arrays must all have the same dim attribute or an error results.
+\item Any vector operand longer than a matrix or array operand
+  generates an error.
+\item If array structures are present and no error or coercion to
+  vector has been precipitated, the result is an array structure with
+  the common dim attribute of its array operands.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 5.4: The recycling rule for mixed vector and array
+  (or matrix) arithmetic} 
+Examples
+\begin{align*}
+A_{n\times p} - b_n & = A-B \where B=\wrap{b_n^1, \dots, b_n^p}_{n \times p} \\
+& \mbox{Recycling is what you likely intended} \\
+A_{n\times p} - b_p & = A-C %\where C=\wrap{b^1, \dots, b^n}_{n \times p} \\
+\mbox{\ difficult to demonstrate in general}\\
+& \mbox{so assume $n=4,\ p=3$ and\ } b=\wrap{b_1, b_2, b_3}\\
+& \mbox{which results in\ } C=\wrap{\begin{array}{ccc} 
+b_1 & b_2 & b_3 \\
+b_2 & b_3 & b_1 \\
+b_3 & b_1 & b_2 \\
+b_1 & b_2 & b_3
+\end{array}} \\
+& \mbox{Recycling is NOT what you likely intended} \\
+A^t_{p \times n} - b_p & = A^t- D \where D=\wrap{b_p^1, \dots, b_p^n}_{p \times n} \\
+& \mbox{Recycling is what you likely intended} \\
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 6: Lists}
+
+%{\tt $>$ Lst = list(husband="Fred", wife="Mary", no.children=3,\\
+%\qquad child.ages=c(4, 7, 9))}
+{\tt case = list(type="breast", ICDO="C50.3", stage="IIA",\\
+\qquad sex="F", side="L", birth=as.Date("1970/04/05"),\\
+\qquad diag=as.Date("2019/12/05"), \\
+\qquad surg=as.Date("2020/03/02"), \\
+\qquad T=list(P="T1a", size=0.45),\\
+\qquad N=list(P="N1", C="N0", surg="SLNB",\\
+\qquad positive=3, removed=7, max=0.25), M="M0")}
+\begin{itemize}
+\item A {\it list} is an object consisting of an ordered collection of
+  objects of singular or diverse types known as {\it components}
+\item Components are {\it numbered} and can always be referred to as such:
+{\tt case[[1]], case[[2]], case[[3]], \dots}
+\item Components of lists may also be {\it named}, and in this case
+  the component may be referred to either by giving the component name
+  or as a character string
+\item So, the first component can be referenced by
+{\tt case[[1]]} or {\tt case\$type} or {\tt case\$"type"}
+\item Or, rarely, as a list itself called a {\it sublist}: {\tt case[1]}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Comma separated values (CSV) files}
+
+\begin{itemize}
+\item CSV files are a standard that arose from Fortran data files
+evolving late-60s to mid-70s: roughly what we have today
+\item Sadly, subject matter experts (SME) LOVE Excel and CSVs\\ 
+(we tell them to stop, but they don't listen)
+\item So CSV files are the de facto standard for data exchange
+\item But CSVs from spreadsheets are \textcolor{red}{not type safe}\\
+ e.g., a numeric column can have text entries, etc.
+\item In the column for weights, they can type {\tt deceased} in a cell
+\item So the {\tt weight} column will be character instead of numeric
+\item Although, theoretically, they are trivial to import,\\
+the practice of SMEs will make your life difficult
+\item There does not appear to be a complete solution to this problem
+with R (other than manual editing)
+\item SAS has a few tricks that might help as we will see later
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{American College of Surgeons National Trauma Data Bank (NTDB)}
+
+In the US Code of Federal Regulations (CFR), 45 CFR 46.101 (title 45,
+Public Welfare, section 46.101),
+%Per 45 Code of Federal Regulations (CFR) 46.101, 
+research using certain publicly available data sets does not involve
+``human subjects''. The data contained within these specific data sets
+are neither identifiable nor private and thus do not meet the federal
+definition of ``human subject'' as defined in 45 CFR 46.102.  These
+research projects do not need to be reviewed and approved by the
+Institutional Review Board, (IRB). MCW's Human Research Protection
+Program (HRPP) has a list of their recognized ``publicly available data sets''.\\
+% or ``restricted use data sets''.\\
+\url{https://www.mcw.edu/departments/human-research-protection-program/researchers/smartform-instructions/public-data-sets}
+\end{frame}
+
+\begin{frame}
+\frametitle{NTDB and data frames}
+
+\begin{itemize}
+\item the NTDB has all de-identified trauma admissions for those\\
+ aged 65 and older (restricted to 89 or less here)\\
+at all designated trauma center hospitals in the US\\
+about 1,000,000 admissions in the 2014 edition
+\item the NTDB does NOT come as a CSV
+\item but I created a CSV for the first 18 trauma centers\\
+{\tt /data/shared/04224/NTDB/NTDB18.csv}\\
+about 50,000 admissions:
+there is an (incomplete) data dictionary in the same directory
+\item this is for educational purposes ONLY (HIPAA exception)
+\item the {\tt read.csv} function creates a {\tt data.frame}
+\item a {\tt data.frame} is the typical R data set object\\ 
+essentially a list of vectors of the same length
+\item like a matrix where the rows are lists\\
+and the columns are vectors of \textcolor{red}{potentially diverse types}
+\item the {\tt subset} function creates a subset {\tt data.frame} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 8: Probability distributions }
+
+\begin{itemize}
+\item Consider a discrete random variable (RV): $Y \in \{a, \ldots, b\} $
+\item Probability density function (PDF):
+  $f(c) = \P{Y=c}\I{c \in \{a, \ldots, b\}} \in [0, 1]$
+\item Cumulative density function (CDF): $F(c) = \P{Y\le c}= 
+\sum_{y \in \{a, \ldots, b\} \cap y\le c} f(y) \in [0, 1]$
+\item $\P{c<Y \le d}=\P{Y \le d}-\P{Y \le c}=F(d)-F(c)$
+\item Consider a continuous RV: $Y \in (a, b)$
+\item PDF: $f(c)\I{c \in (a, b)} \ge 0 $
+\item CDF: $F(c) = %\P{Y\le c}= 
+\P{Y < c}=
+\I{a < c} \int_{a}^{\min(b,c)} f(y) \mathrm{d} y \in [0, 1]$
+\item $\P{c<Y < d}=\P{Y < d}-\P{Y < c}=F(d)-F(c)$
+\item For either a discrete or a continuous RV $Y$\\
+Inverse CDF: $p=F(c) \Rightarrow c = F^{-1}(p) = F^{-1}(F(c))$
+\end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Pseudo-random numbers and Monte Carlo integration }
+
+\begin{itemize}
+\item CDFs can be used for many integral/summation calculations
+\item The Expectation of a function of a random variable, $g(Y)$\\ 
+Discrete RV: $\E{g(Y)} = \sum_{y \in \{a, \ldots, b\}} g(y) f(y)$\\ 
+Continuous RV: $\E{g(Y)} = \int_{a}^{b} g(y) f(y) \mathrm{d} y$
+\item Mean $=\E{Y}=\mu$, i.e., $g(Y)=Y$, the identity function
+\item Variance $=\E{Y^2}-\E{Y}^2=\sd^2$
+\item For some $g(Y)$ functions, there is no closed form solution
+\item Monte Carlo Integration: 
+generate a {\it large} sample of pseudo-random numbers $Y_1, \dots, Y_N$
+and approximate \\
+$\E{g(Y)} \approx N^{-1}\sum_{i=1}^N g(Y_i)$ 
+\end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Section 8: Probability distributions }
+
+\begin{itemize}
+\item The PDF R function is {\tt dxxx} for density
+\item The CDF R function is {\tt pxxx} for probability
+\item The Inverse CDF R function is {\tt qxxx} for quantiles
+\item The Random Number R function is {\tt rxxx} for random\\
+(paired with \textcolor{red}{\tt set.seed} for reproducibility)
+\item {\tt xxx} is one of the following suffixes:\\
+{\tt beta, binom, cauchy, chisq, exp, f, gamma, geom, hyper, lnorm, logis, nbinom, norm, pois, signrank, t, unif, weibull, wilcox}
+\item These functions mean that we don't need all of those tables at
+  the end of our textbooks
+\item We can calculate probabilities,
+  summations/integrals, etc.\ for these distributions with R
+ \end{itemize}
+
+\end{frame} 
+
+\begin{frame}
+\frametitle{Probability and discrete RVs: sports examples}
+\begin{itemize}
+\item Coach K and the Duke Blue Devils college basketball team
+have been to 12 NCAA Final Fours
+\item During these appearances, they have won 5 NCAA Championships
+\item What is the probability that they would have won less than 5?
+\item Aaron Rodgers and the Green Bay Packers football team are\\ 
+1 for 4 in the NFC Championship Playoff Game?
+\item What is the probability that they would have won more than 1 game?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Section 8.3: Hypothesis testing}
+
+\begin{itemize}
+\item This course is a co-requisite with\\
+ Statistical Models and Methods I
+\item The intent is not to teach you statistics, but to be prepared
+\item For example, what hypothesis tests are available?
+\item Here's a list of those in the {\tt stats} package
+\item {\tt $>$ ls("package:stats", pattern="test\$")}
+ \end{itemize}
+
+\end{frame} 
+
+\end{document}
